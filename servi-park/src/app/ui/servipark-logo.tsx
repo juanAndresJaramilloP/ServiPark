@@ -9,7 +9,7 @@ export default function ServiParkLogo() {
                     width: '100%',
                     height: '100%',
                 }}
-                className="md:block"
+                className="md:block max-w-lg h-auto"
                 alt="Servipark Logo"
             />
     );

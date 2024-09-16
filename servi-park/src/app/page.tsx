@@ -8,7 +8,7 @@ import ServiParkLogo from '@/app/ui/servipark-logo'
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">
-      <div className="w-44 md:w-1/3">
+      <div className="w-44 md:w-96">
         <ServiParkLogo />
       </div>
       <Link
