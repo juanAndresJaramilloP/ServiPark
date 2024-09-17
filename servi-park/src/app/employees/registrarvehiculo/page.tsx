@@ -19,11 +19,22 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="card-body">
-                    <h2 className="card-title">Shoes!</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                    <div className="card-actions justify-end">
-                        <button className="btn btn-primary">Buy Now</button>
-                    </div>
+                    <form action="" className="space-y-3 h-[250px]">
+                        <div className='flex flex-row justify-between items-center'>
+                            <label className="text-lg md:text-2xl font-medium text-gray-950" htmlFor="placa">Placa</label>
+                            <input className="peer block rounded-md border border-gray-200 py-[9px] text-base text-center outline-2 placeholder:text-gray-500" type="text" id="placa" name="placa" placeholder='AAA123' />
+                        </div>
+                        <div className='flex flex-row justify-between items-center'>
+                            <label className="text-lg md:text-2xl font-medium text-gray-950" htmlFor='tipovehiculo'>Tipo Vehículo</label>
+                            <select className="block select select-bordered text-lg py-[9px]" defaultValue={"Automóvil"}>
+                                <option>Automóvil</option>
+                                <option>Motocicleta</option>
+                            </select>
+                        </div>
+                        <div className="card-actions justify-end absolute bottom-8 right-8">
+                            <button className="btn btn-primary">Ingresar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
