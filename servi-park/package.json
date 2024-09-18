@@ -12,9 +12,11 @@
     "@heroicons/react": "^2.1.5",
     "@vercel/postgres": "^0.10.0",
     "clsx": "^2.1.1",
+    "heroicons": "^2.1.5",
     "next": "14.2.11",
     "next-auth": "^4.24.7",
     "react": "^18",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18",
     "zod": "^3.23.8"
   },

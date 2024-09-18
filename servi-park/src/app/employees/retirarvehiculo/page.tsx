@@ -28,10 +28,7 @@ export default function Page() {
                                     <button className="btn btn-primary join-item">Ingresar</button>
                                 </div>
                             </div>
-
                         </div>
-
-
                     </form>
                 </div>
             </div>

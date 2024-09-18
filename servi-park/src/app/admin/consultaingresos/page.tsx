@@ -1,15 +1,16 @@
 import Image from 'next/image';
-
+import CalendarDatePicker from '@/app/ui/calendardatepicker';
+//"flex flex-col items-center gap-8 max-h-screen overflow-auto"
 export default function Page() {
 
     return (
         <div className='flex justify-center'>
-            <div className="flex flex-col items-center gap-16 max-h-screen overflow-auto place-content-center place-items-center">
-                <div className='container bg-orange-500 rounded-lg max-w-3xl'>
+            <div className="flex flex-col place-content-center max-h-screen overflow-auto max-w-[1000px] place-items-center">
+                <div className='container bg-yellow-600 rounded-lg max-w-3xl mb-7'>
                     <div className='flex flex-row items-center'>
                         <figure className=' p-2'>
                             <Image
-                                src="/sheet.png"
+                                src="/history.png"
                                 className="rounded-xl"
                                 alt={`Consultar Historial del Turno`}
                                 width={56}
@@ -17,13 +18,22 @@ export default function Page() {
                             />
                         </figure>
                         <div className="flex-grow text-center">
-                            <p className="text-3xl font-medium text-white">Historial de Turno</p>
+                            <p className="text-3xl font-medium text-white">Consultar Ingresos por Rango de Fechas</p>
                         </div>
+                    </div>
+                </div>
+                <div className='flex flex-row -ml-[340px] gap-7'>
+                    <div className='flex flex-row items-center'>
+                        <label className="text-base md:text-lg font-medium text-gray-950 mr-4">Desde</label>
+                        <CalendarDatePicker />
+                    </div>
+                    <div className='flex flex-row items-center'>
+                        <label className="text-base md:text-lg font-medium text-gray-950 mr-4">Hasta</label>
+                        <CalendarDatePicker />
                     </div>
                 </div>
                 <div className="overflow-auto h-[500px]">
                     <table className="table table-zebra text-lg table-pin-rows">
-                        {/* head */}
                         <thead className='text-lg'>
                             <tr>
                                 <th>Placa</th>
@@ -37,7 +47,6 @@ export default function Page() {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* row 1 */}
                             <tr>
                                 <th>USD123</th>
                                 <td>14-08-2024</td>
@@ -223,5 +232,6 @@ export default function Page() {
                 </div>
             </div>
         </div>
+
     );
 }
