@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import CalendarDatePicker from '@/app/ui/calendardatepicker'
+import Link from 'next/link';
 
 export default function Page() {
     return (
@@ -17,7 +18,7 @@ export default function Page() {
                     </figure>
                     <div className="card-body items-center justify-center">
                         <div className="card-actions">
-                            <button className="btn btn-lg bg-yellow-600 hover:bg-yellow-700 rounded-xl text-white text-base max-w-52 h-fit">Consultar Ingresos por Rango de Fechas</button>
+                            <Link href="/admin/consultaingresos" className="btn btn-lg bg-yellow-600 hover:bg-yellow-700 rounded-xl text-white text-base max-w-52 h-fit">Consultar Ingresos por Rango de Fechas</Link>
                         </div>
                     </div>
                 </div>
@@ -33,7 +34,7 @@ export default function Page() {
                     </figure>
                     <div className="card-body items-center justify-center">
                         <div className="card-actions">
-                            <button className="btn btn-lg bg-green-700 hover:bg-green-800 rounded-xl text-white text-base max-w-52 h-fit">Consultar Ingresos por Rango de Fechas</button>
+                            <Link href="/admin/consultareportes" className="btn btn-lg bg-green-700 hover:bg-green-800 rounded-xl text-white text-base max-w-52 h-fit">Consultar Reportes Financieros</Link>
                         </div>
                     </div>
                 </div>
@@ -49,7 +50,7 @@ export default function Page() {
                     </figure>
                     <div className="card-body items-center justify-center">
                         <div className="card-actions">
-                            <button className="btn btn-lg bg-blue-800 hover:bg-blue-950 rounded-xl text-white text-base max-w-52 h-fit">Consultar Ingresos por Rango de Fechas</button>
+                            <Link href="/admin/configurartarifas" className="btn btn-lg bg-blue-800 hover:bg-blue-950 rounded-xl text-white text-base max-w-52 h-fit">Configurar Tarifas y Horarios</Link>
                         </div>
                     </div>
                 </div>

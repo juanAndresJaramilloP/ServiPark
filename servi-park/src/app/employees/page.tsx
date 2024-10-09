@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Page() {
   return (
@@ -15,7 +16,7 @@ export default function Page() {
         </figure>
         <div className="card-body items-center text-center">
           <div className="card-actions">
-            <button className="btn bg-violet-950 hover:bg-violet-800 rounded-xl text-white">Ingresar Vehículo</button>
+            <Link href="/employees/registrarvehiculo" className="btn bg-violet-950 hover:bg-violet-800 rounded-xl text-white">Ingresar Vehículo</Link>
           </div>
         </div>
       </div>
@@ -31,7 +32,7 @@ export default function Page() {
         </figure>
         <div className="card-body items-center text-center">
           <div className="card-actions">
-            <button className="btn bg-blue-600 hover:bg-blue-500 rounded-xl text-white">Retirar Vehículo</button>
+            <Link href="/employees/retirarvehiculo" className="btn bg-blue-600 hover:bg-blue-500 rounded-xl text-white">Retirar Vehículo</Link>
           </div>
         </div>
       </div>
@@ -47,7 +48,7 @@ export default function Page() {
         </figure>
         <div className="card-body items-center text-center">
           <div className="card-actions">
-            <button className="btn bg-orange-500 hover:bg-orange-400 rounded-xl text-white"> Consultar Historial Turno</button>
+            <Link href="/employees/historial" className="btn bg-orange-500 hover:bg-orange-400 rounded-xl text-white"> Consultar Historial Turno</Link>
           </div>
         </div>
       </div>
@@ -63,7 +64,7 @@ export default function Page() {
         </figure>
         <div className="card-body items-center text-center">
           <div className="card-actions">
-            <button className="btn bg-yellow-600 hover:bg-yellow-500 rounded-xl text-white">Reportar Incidente</button>
+            <Link href="/employees/incidente" className="btn bg-yellow-600 hover:bg-yellow-500 rounded-xl text-white">Reportar Incidente</Link>
           </div>
         </div>
       </div>
