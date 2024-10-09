@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from 'next/link';
-import { lusitana } from '@/app/ui/fonts';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import ServiParkLogo from '@/app/ui/servipark-logo'
 
