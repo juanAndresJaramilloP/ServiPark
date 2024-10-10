@@ -8,7 +8,7 @@ export default function Footer() {
                 <div className="w-20 md:w-28 h-auto ml-4">
                     <ServiParkLogo />
                 </div>
-                <p className="hidden md:block text-sm md:text-xl font-medium text-gray-900 ml-4 md:ml-16" >{new Date().toLocaleString()}</p>
+                <p className="block text-sm md:text-xl font-medium text-gray-900 ml-4 md:ml-16" >{new Date().toLocaleString()}</p>
             </aside>
             <nav className="grid-flow-col md:place-self-center md:justify-self-end items-center">
                 <Image
