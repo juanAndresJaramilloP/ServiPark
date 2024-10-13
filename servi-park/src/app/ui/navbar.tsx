@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ServiParkLogo from '@/app/ui/servipark-logo';
+import Link from "next/link";
 
 export default function NavBar() {
     return (
@@ -30,10 +31,9 @@ export default function NavBar() {
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                         <li>
-                            <a className="justify-between">
+                            <Link className="justify-between" href="/profile">
                                 Perfil
-                                <span className="badge">New</span>
-                            </a>
+                            </Link>
                         </li>
                         <li><a>Cerrar Sesión</a></li>
                     </ul>
