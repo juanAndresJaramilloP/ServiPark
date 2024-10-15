@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { UploadDropzone } from '@/utils/uploadthing';
 import "@uploadthing/react/styles.css";
 
