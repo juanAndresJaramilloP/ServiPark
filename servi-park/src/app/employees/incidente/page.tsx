@@ -6,16 +6,16 @@ import { UploadDropzone } from '@/utils/uploadthing';
 import "@uploadthing/react/styles.css";
 
 export default function Page() {
-    const [files, setFiles] = useState<FileList | null>(null);
+    // const [files, setFiles] = useState<FileList | null>(null);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        setFiles(files);
-    }
+    // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const files = e.target.files;
+    //     setFiles(files);
+    // }
 
-    const isImageFile = (file: File) => {
-        return file && file['type'].split('/')[0] === 'image';
-    }
+    // const isImageFile = (file: File) => {
+    //     return file && file['type'].split('/')[0] === 'image';
+    // }
 
     return (
         <div className='flex justify-center'>

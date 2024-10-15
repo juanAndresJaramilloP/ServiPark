@@ -1,8 +1,9 @@
 import { db } from '@vercel/postgres';
 import { users, events, incidents } from '../lib/placeholder-data';
 import { PaymentCard, Transaction, Incident} from '../lib/definitions';
+import bcrypt from "bcrypt";
 
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const client = await db.connect();
 
