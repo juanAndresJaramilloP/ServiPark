@@ -222,15 +222,19 @@
 //   return insertedIncidents;
 // }
 
-// export async function GET() {
-//   try {
-//     await client.sql`BEGIN`;
-//     await seedIncidentsAndGallery();
-//     await client.sql`COMMIT`;
+export async function GET() {
+  return Response.json({
+    message:
+      'Uncomment this file and remove this line to seed the db.',
+  });
+  // try {
+  //   await client.sql`BEGIN`;
+  //   await seedIncidentsAndGallery();
+  //   await client.sql`COMMIT`;
 
-//     return Response.json({ message: 'Success' });
-//   } catch (error) {
-//     await client.sql`ROLLBACK`;
-//     return Response.json({ error }, { status: 500 });
-//   }
-// }
+  //   return Response.json({ message: 'Success' });
+  // } catch (error) {
+  //   await client.sql`ROLLBACK`;
+  //   return Response.json({ error }, { status: 500 });
+  // }
+}
