@@ -17,7 +17,6 @@ export type Event = {
     fecha_hora_ingreso: string;
     fecha_hora_salida: string;
     duracion: string | null;
-    tarifa: 'ESTANDAR' | 'MENSUALIDAD';
     valor_base: number | null;
     iva: number | null;
     total: number | null;

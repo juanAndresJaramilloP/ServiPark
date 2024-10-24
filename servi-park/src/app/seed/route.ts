@@ -1,11 +1,25 @@
 // import { db } from '@vercel/postgres';
-// import { users, events, incidents } from '../lib/placeholder-data';
-// import { PaymentCard, Transaction, Incident} from '../lib/definitions';
+// import { users, events, incidents, weekDays, parkingFees } from '../lib/placeholder-data';
+// import { PaymentCard, Transaction, Incident } from '../lib/definitions';
 // import bcrypt from "bcrypt";
 
-// // const bcrypt = require('bcrypt');
-
 // const client = await db.connect();
+
+// /**
+//  * Hay un orden para crear las tablas (revisar esquema de la base de datos en la carpeta docs)
+//  * uno de los posibles ordenes es:
+//  * 1. payment_cards
+//  * 2. transactions
+//  * 3. users
+//  * 4. incident
+//  * 5. gallery
+//  * 6. week_days
+//  * 7. parking_fee
+//  * 8. events
+//  * 
+//  * Para poblar la base de datos, ejecute localmente y navegue a: localhost:3000/seed
+//  */
+
 
 // async function createTableUsers() {
 //   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -96,6 +110,50 @@
 //     );
 //   `;
 // }
+
+// async function createTableParkingFee() {
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS parking_fee (
+//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+//       user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+//       week_days_id TEXT REFERENCES week_days(business_id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       nombre_tarifa TEXT NOT NULL UNIQUE,
+//       tipo_vehiculo TEXT NOT NULL,
+//       valor_hora NUMERIC NOT NULL,
+//       incremento_primer_hora NUMERIC NOT NULL,
+//       incremento_segunda_hora NUMERIC NOT NULL,
+//       valor_dia NUMERIC NOT NULL,
+//       primera_hora_a_partir_minuto NUMERIC NOT NULL,
+//       hora_adicional_a_partir_minuto NUMERIC NOT NULL,
+//       vigencia_desde TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//       vigencia_hasta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//       exclusivo_mensualidad BOOLEAN DEFAULT FALSE,
+//       exclusivo_administracion BOOLEAN DEFAULT FALSE,
+//       tarifa_activa BOOLEAN DEFAULT TRUE,
+//       nuevo_dia TEXT NOT NULL
+//     );
+//   `;
+// }
+
+// async function createTableWeekDays() {
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS week_days (
+//       id UUID DEFAULT uuid_generate_v4(),
+//       business_id TEXT PRIMARY KEY,
+//       lunes BOOLEAN DEFAULT FALSE,
+//       martes BOOLEAN DEFAULT FALSE,
+//       miercoles BOOLEAN DEFAULT FALSE,
+//       jueves BOOLEAN DEFAULT FALSE,
+//       viernes BOOLEAN DEFAULT FALSE,
+//       sabado BOOLEAN DEFAULT FALSE,
+//       domingo BOOLEAN DEFAULT FALSE
+//     );
+//   `;
+
+// }
+
 
 // // --------------------------- SEED TABLES ---------------------------
 
@@ -222,6 +280,31 @@
 //   return insertedIncidents;
 // }
 
+// async function seedWeekDays() {
+//   const insertedWeekDays = await Promise.all(
+//     weekDays.map((weekdays) => {
+//       return client.sql`
+//         INSERT INTO week_days (business_id, lunes, martes, miercoles, jueves, viernes, sabado, domingo)
+//         VALUES (${weekdays.business_id}, ${weekdays.lunes}, ${weekdays.martes}, ${weekdays.miercoles}, ${weekdays.jueves}, ${weekdays.viernes}, ${weekdays.sabado}, ${weekdays.domingo});
+//       `;
+//     })
+//   );
+
+//   return insertedWeekDays;
+// }
+
+// async function seedParkingFee() {
+//   const insertedParkingFees = await Promise.all(
+//     parkingFees.map((fee) => {
+//       return client.sql`
+//         INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_hasta, nuevo_dia)
+//         VALUES (${fee.user_id}, ${fee.week_days_id}, ${fee.nombre_tarifa}, ${fee.tipo_vehiculo}, ${fee.valor_hora}, ${fee.incremento_primer_hora}, ${fee.incremento_segunda_hora}, ${fee.valor_dia}, ${fee.primera_hora_a_partir_minuto}, ${fee.hora_adicional_a_partir_minuto}, ${fee.vigencia_hasta}, ${fee.nuevo_dia});
+//       `;
+//     })
+//   );
+
+// }
+
 export async function GET() {
   return Response.json({
     message:
@@ -229,7 +312,7 @@ export async function GET() {
   });
   // try {
   //   await client.sql`BEGIN`;
-  //   await seedIncidentsAndGallery();
+  //   await seedParkingFee();
   //   await client.sql`COMMIT`;
 
   //   return Response.json({ message: 'Success' });

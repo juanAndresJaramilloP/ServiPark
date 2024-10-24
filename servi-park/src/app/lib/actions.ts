@@ -26,3 +26,13 @@
 //         throw error;
 //     }
 // }
+
+
+// EMPLOYEE RELATED ACTIONS
+
+// Register a vehicle
+// Update vehicle By plate
+// - Para registrar su salida 
+// - Para registrar tiquete a perdida
+// - Para registrar placa en lista negra
+// Reportar un incidente
