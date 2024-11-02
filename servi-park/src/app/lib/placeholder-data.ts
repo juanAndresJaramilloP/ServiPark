@@ -20,14 +20,14 @@ const users = [
 const events = [
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        tarifa_id: '79f1f3e0-bf21-4415-88ec-313f8e7fd63a',
         placa: 'ABC123',
-        tarifa: 'ESTANDAR',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
         placa: 'DEF456',
-        tarifa: 'MENSUALIDAD',
         tipo_vehiculo: 'CAMIONETA'
     }
 ]
@@ -40,19 +40,6 @@ const incidents = [
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
         descripcion: 'Se esta filtrando el agua por el techo de la oficina del administrador'
-    }
-]
-
-const transactions = [
-    {
-        event_id:'8688466c-cccf-4625-a88f-56a00db3c5dd',
-        metodo_pago:'CONTADO',
-        valor:'13800'
-    },
-    {
-        event_id:'5b1489a6-c56d-4376-aef6-06abcf359c0e',
-        metodo_pago:'TARJETA',
-        valor:'13800'
     }
 ]
 
@@ -92,7 +79,7 @@ const parkingFees = [
         primera_hora_a_partir_minuto: 15,
         hora_adicional_a_partir_minuto: 15,
         vigencia_hasta: '2025-01-08T04:05:06',
-        nuevo_dia: 'Nuevo dia calendario'
+        nuevo_dia: 'NUEVO_DIA_CALENDARIO'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
@@ -106,9 +93,31 @@ const parkingFees = [
         primera_hora_a_partir_minuto: 15,
         hora_adicional_a_partir_minuto: 15,
         vigencia_hasta: '2025-01-08T04:05:06',
-        nuevo_dia: 'Nuevo dia calendario'
+        nuevo_dia: '12_HORAS'
+    }
+]
+
+const incidentPlate = [
+    {
+        incident_id: '42a1e91a-46f4-4b53-8b70-0b012b3ca811',
+        placa: 'ABC123'
+    },
+    {
+        incident_id: '42a1e91a-46f4-4b53-8b70-0b012b3ca811',
+        placa: 'BAC123'
+    },
+    {
+        incident_id: 'cf1f3dc0-adfd-4194-9ee4-d907557967f2',
+        placa: 'BAC123'
+    }
+]
+
+const blackPlates = [
+    {
+        user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        placa: 'BAC123'
     }
 ]
 
 
-export { users, events, incidents, transactions, parkingFees, weekDays };
+export { users, events, incidents, parkingFees, weekDays, incidentPlate, blackPlates };

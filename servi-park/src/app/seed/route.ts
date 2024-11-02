@@ -1,24 +1,26 @@
 // import { db } from '@vercel/postgres';
-// import { users, events, incidents, weekDays, parkingFees } from '../lib/placeholder-data';
+// import { users, events, incidents, weekDays, parkingFees, blackPlates, incidentPlate } from '../lib/placeholder-data';
 // import { PaymentCard, Transaction, Incident } from '../lib/definitions';
 // import bcrypt from "bcrypt";
 
 // const client = await db.connect();
 
-// /**
-//  * Hay un orden para crear las tablas (revisar esquema de la base de datos en la carpeta docs)
-//  * uno de los posibles ordenes es:
-//  * 1. payment_cards
-//  * 2. transactions
-//  * 3. users
-//  * 4. incident
-//  * 5. gallery
-//  * 6. week_days
-//  * 7. parking_fee
-//  * 8. events
-//  * 
-//  * Para poblar la base de datos, ejecute localmente y navegue a: localhost:3000/seed
-//  */
+/**
+ * Hay un orden para crear las tablas (revisar esquema de la base de datos en la carpeta docs)
+ * uno de los posibles ordenes es:
+ * 1. payment_cards
+ * 2. transactions
+ * 3. users
+ * 4. incidents
+ * 5. incident_plate
+ * 6. black_plates
+ * 7. gallery
+ * 8. week_days
+ * 9. parking_fee
+ * 10. events
+ * 
+ * Para poblar la base de datos, ejecute localmente y navegue a: localhost:3000/seed
+ */
 
 
 // async function createTableUsers() {
@@ -41,13 +43,13 @@
 //   await client.sql`
 //     CREATE TABLE IF NOT EXISTS events (
 //       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
 //       transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
 //       placa TEXT NOT NULL,
 //       fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //       fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //       duracion INTERVAL,
-//       tarifa TEXT NOT NULL,
 //       valor_base NUMERIC,
 //       iva NUMERIC,
 //       total NUMERIC,
@@ -63,9 +65,31 @@
 //   await client.sql`
 //     CREATE TABLE IF NOT EXISTS incidents (
 //       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
 //       descripcion TEXT NOT NULL,
 //       fecha_hora_suceso TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//     );
+//   `;
+
+// }
+
+// async function createTableIncidentPlate() {
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS incident_plate (
+//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+//       incident_id UUID REFERENCES incidents(id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       placa TEXT NOT NULL
+//     );
+//   `;
+// }
+
+// async function createTableBlackPlates() {
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS black_plates (
+//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       placa TEXT PRIMARY KEY
 //     );
 //   `;
 
@@ -88,7 +112,7 @@
 //   await client.sql`
 //     CREATE TABLE IF NOT EXISTS transactions (
 //       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       payment_card_id UUID REFERENCES payment_cards(id) ON DELETE CASCADE ON UPDATE CASCADE,
+//       payment_card_id UUID REFERENCES payment_cards(id) ON DELETE SET NULL ON UPDATE CASCADE,
 //       fecha_hora_transaccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //       metodo_pago TEXT NOT NULL,
 //       valor NUMERIC NOT NULL
@@ -116,7 +140,7 @@
 //   await client.sql`
 //     CREATE TABLE IF NOT EXISTS parking_fee (
 //       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
 //       week_days_id TEXT REFERENCES week_days(business_id) ON DELETE SET NULL ON UPDATE CASCADE,
 //       nombre_tarifa TEXT NOT NULL UNIQUE,
 //       tipo_vehiculo TEXT NOT NULL,
@@ -142,41 +166,41 @@
 //     CREATE TABLE IF NOT EXISTS week_days (
 //       id UUID DEFAULT uuid_generate_v4(),
 //       business_id TEXT PRIMARY KEY,
-//       lunes BOOLEAN DEFAULT FALSE,
-//       martes BOOLEAN DEFAULT FALSE,
-//       miercoles BOOLEAN DEFAULT FALSE,
-//       jueves BOOLEAN DEFAULT FALSE,
-//       viernes BOOLEAN DEFAULT FALSE,
-//       sabado BOOLEAN DEFAULT FALSE,
-//       domingo BOOLEAN DEFAULT FALSE
+//       lunes TEXT NOT NULL,
+//       martes TEXT NOT NULL,
+//       miercoles TEXT NOT NULL,
+//       jueves TEXT NOT NULL,
+//       viernes TEXT NOT NULL,
+//       sabado TEXT NOT NULL,
+//       domingo TEXT NOT NULL
 //     );
 //   `;
 
 // }
 
 
-// // --------------------------- SEED TABLES ---------------------------
+// // // --------------------------- SEED TABLES ---------------------------
 
-// async function seedUsers() {
-//   const insertedUsers = await Promise.all(
-//     users.map(async (user) => {
-//       const hashedPassword = await bcrypt.hash(user.contrasena, 10);
-//       return client.sql`
-//         INSERT INTO users (nombre_usuario, nombre_cargo, celular, cedula, contrasena)
-//         VALUES (${user.nombre_usuario}, ${user.nombre_cargo}, ${user.celular}, ${user.cedula}, ${hashedPassword});
-//       `;
-//     }),
-//   );
+// // async function seedUsers() {
+// //   const insertedUsers = await Promise.all(
+// //     users.map(async (user) => {
+// //       const hashedPassword = await bcrypt.hash(user.contrasena, 10);
+// //       return client.sql`
+// //         INSERT INTO users (nombre_usuario, nombre_cargo, celular, cedula, contrasena)
+// //         VALUES (${user.nombre_usuario}, ${user.nombre_cargo}, ${user.celular}, ${user.cedula}, ${hashedPassword});
+// //       `;
+// //     }),
+// //   );
 
-//   return insertedUsers;
-// }
+// //   return insertedUsers;
+// // }
 
 // async function seedEvents() {
 //   const insertedEvents = await Promise.all(
 //     events.map((event) => {
 //       return client.sql`
-//         INSERT INTO events (user_id, placa, fecha_hora_salida, tarifa, tipo_vehiculo)
-//         VALUES (${event.user_id}, ${event.placa}, ${null}, ${event.tarifa}, ${event.tipo_vehiculo});
+//         INSERT INTO events (user_id, tarifa_id, placa, fecha_hora_salida, tipo_vehiculo)
+//         VALUES (${event.user_id}, ${event.tarifa_id}, ${event.placa}, ${null}, ${event.tipo_vehiculo});
 //       `;
 //     }),
 //   );
@@ -185,7 +209,7 @@
 // }
 
 // async function simulateCarExitCashPayment() {
-//   const eventId = '8688466c-cccf-4625-a88f-56a00db3c5dd'; //actualizar por un id valido (si se borra la tabla).
+//   const eventId = '30f32f54-dd9b-4f2f-abb6-ed92948cfda4'; //actualizar por un id valido (si se borra la tabla).
 
 //   const valor_base = 5800;
 //   const iva = valor_base * 0.19;
@@ -217,7 +241,7 @@
 // }
 
 // async function simulateCarExitCardPayment() {
-//   const eventId = '5b1489a6-c56d-4376-aef6-06abcf359c0e'; //actualizar por un id valido (si se borra la tabla).
+//   const eventId = '10671de7-bee6-4887-9d04-5b723594c32d'; //actualizar por un id valido (si se borra la tabla).
 
 //   const valor_base = 5800;
 //   const iva = valor_base * 0.19;
@@ -305,6 +329,31 @@
 
 // }
 
+// async function seedBlackPlates() {
+
+//   const insertedBlackPlates = await Promise.all(
+//     blackPlates.map((bp) => {
+//       return client.sql`
+//         INSERT INTO black_plates (user_id, placa)
+//         VALUES (${bp.user_id}, ${bp.placa});
+//       `;
+//     })
+//   );
+// }
+
+// async function seedIncidentPlate() {
+
+//   const insertedIncidentPlate = await Promise.all(
+//     incidentPlate.map((ip) => {
+//       return client.sql`
+//         INSERT INTO incident_plate (incident_id, placa)
+//         VALUES (${ip.incident_id}, ${ip.placa});
+//       `;
+//     })
+//   );
+
+// }
+
 export async function GET() {
   return Response.json({
     message:
@@ -312,7 +361,7 @@ export async function GET() {
   });
   // try {
   //   await client.sql`BEGIN`;
-  //   await seedParkingFee();
+  //   await seedIncidentPlate();
   //   await client.sql`COMMIT`;
 
   //   return Response.json({ message: 'Success' });

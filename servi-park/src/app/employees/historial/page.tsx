@@ -1,6 +1,11 @@
 import Image from 'next/image';
+import {testFetchAllEvents, fetchIncidents, fetchUsers} from '@/app/lib/data';
 
-export default function Page() {
+export default async function Page() {
+
+    // const events = await testFetchAllEvents();
+
+    const events = await testFetchAllEvents();
 
     return (
         <div className='flex justify-center'>
@@ -30,14 +35,26 @@ export default function Page() {
                                 <th>Entrada</th>
                                 <th>Salida</th>
                                 <th>Tiempo</th>
-                                <th>Forma Pago</th>
+                                <th>Tipo Vehiculo</th>
                                 <th>Valor Base</th>
                                 <th>IVA</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {/* {events.map(e => (
+                                <tr key={e.id}>
+                                    <td>{e.placa}</td>
+                                    <td>{e.fecha_hora_ingreso}</td>
+                                    <td>{e.fecha_hora_salida}</td>
+                                    <td>{e.duracion}</td>
+                                    <td>{e.tipo_vehiculo}</td>
+                                    <td>{e.valor_base}</td>
+                                    <td>{e.iva}</td>
+                                    <td>{e.total}</td>
+                                </tr>
+                            ))} */}
+                            {/* <tr>
                                 <td>USD123</td>
                                 <td>14-08-2024</td>
                                 <td>14-08-2024</td>
@@ -46,7 +63,7 @@ export default function Page() {
                                 <td>$7,290</td>
                                 <td>$1,710</td>
                                 <td>$9,000</td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                 </div>

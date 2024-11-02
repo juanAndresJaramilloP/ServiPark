@@ -27,6 +27,17 @@ class Incident {
 
 - descripcion: String
 - fechaHoraSuceso: String
+}
+
+class IncidentPlate {
+
+- placa: String
+
+}
+
+class BlackPlate {
+
+- placa: String
 
 }
 
@@ -136,8 +147,9 @@ Event "1: event" -- "1: transaction" Transaction
 Event "0..*" --- "1: appliedFee" ParkingFee
 Transaction "1: transaction" -- "0..1: paymentCard" PaymentCard
 Incident "1: incident" -- "0..*: gallery" Gallery
+Incident "1: incident" -- "0..*: licensePlates" IncidentPlate
 User "1: user" --- "0..*: incidents" Incident
+User "1: user" -- "0..*" BlackPlate
 User "1: user" ---- "0..*: tarifas" ParkingFee
 ParkingFee "1..*" -- "1: diasAplicable" WeekDays
-
 @enduml

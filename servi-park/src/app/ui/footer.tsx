@@ -3,7 +3,7 @@ import ServiParkLogo from '@/app/ui/servipark-logo';
 
 export default function Footer() {
     return (
-        <footer className="footer bg-base-100 items-center p-4 shadow-inner grid-flow-col">
+        <footer className="footer bg-base-100 items-center p-2 shadow-inner grid-flow-col">
             <aside className="grid-flow-col items-center">
                 <div className="w-20 md:w-28 h-auto ml-4">
                     <ServiParkLogo />

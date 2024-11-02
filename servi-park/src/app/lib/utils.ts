@@ -33,3 +33,19 @@ export const formatPostgresInterval = (interval: {
 
     return formattedDuration;
 };
+
+export const formatActiveDays = (daysString: string): string => {
+    const daysOfWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+
+    const activeDays = daysString
+        .split("")
+        .map((char, index) => (char === "1" ? daysOfWeek[index] : null))
+        .filter(day => day !== null);
+
+    return activeDays.join(", ");
+};
+
+export const formatBoolean = (value: boolean): string => {
+
+    return value ? "Si" : "No";
+};
