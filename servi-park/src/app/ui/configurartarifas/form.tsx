@@ -158,7 +158,7 @@ export default function ConfigurarTarifasForm() {
                                 <div className="relative">
                                     <div className="container border border-gray-200 rounded-md p-2 w-[200px] mx-2">
                                         <div className='!w-40 z-50' style={{ width: '160px' }}>
-                                            <CalendarDatePicker setSelectedDate={setSelectedDateStart} />
+                                            <CalendarDatePicker setSelectedDate={setSelectedDateEnd} />
                                         </div>
                                     </div>
                                 </div>
@@ -306,7 +306,7 @@ export default function ConfigurarTarifasForm() {
                                 </label>
                             </div>
                         </div>
-                        <div className='mt-4'>
+                        <div>
                             <button className="btn btn-neutral">Agregar Tarifa</button>
                         </div>
                     </div>

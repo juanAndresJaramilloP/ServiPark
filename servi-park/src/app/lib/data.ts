@@ -39,10 +39,10 @@ export async function downloadEventsCSV(startDate: string, endDate: string) {
 
 }
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE_EVENTS = 10;
 export async function testFetchFilteredEvents(query: string, currentPage: number) {
 
-    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE_EVENTS;
 
     try {
         // borrar promesa al final.. es solo para simular la carga de los datos
@@ -55,7 +55,7 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
             SELECT *
             FROM events
             ORDER BY fecha_hora_ingreso DESC
-            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+            LIMIT ${ITEMS_PER_PAGE_EVENTS} OFFSET ${offset}
             `;
         } else {
             data = await sql<Event>`
@@ -63,7 +63,7 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
             FROM events
             WHERE placa ILIKE ${`%${query}%`}
             ORDER BY fecha_hora_ingreso DESC
-            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+            LIMIT ${ITEMS_PER_PAGE_EVENTS} OFFSET ${offset}
             `;
         }
 
@@ -89,7 +89,6 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
 
 export async function fetchEventsPages(query: string) {
     try {
-
         let count;
         if (query === '') {
             count = await sql`SELECT COUNT(*)
@@ -99,12 +98,12 @@ export async function fetchEventsPages(query: string) {
             count = await sql`SELECT COUNT(*)
             FROM events
             WHERE
-            placa = ${query}
+            placa ILIKE ${`%${query}%`}
             `;
         }
 
         console.log('DEBUG: Total events:', count.rows[0].count);
-        const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE_EVENTS);
         return totalPages;
     } catch (error) {
         console.error('Database Error:', error);
@@ -137,26 +136,69 @@ export async function fetchUsers() {
     }
 }
 
-export async function fetchParkingFees() {
+const ITEMS_PER_PAGE_PARKING_FEES = 5;
+export async function fetchParkingFees(query: string, currentPage: number) {
     try {
 
+        const offset = (currentPage - 1) * ITEMS_PER_PAGE_PARKING_FEES;
+
         // borrar promesa al final.. es solo para simular la carga de los datos
-        console.log('Fetching parking fee data...');
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        console.log('DEBUG: Fetching parking fee data...');
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        const data = await sql<ParkingFee>`
-        SELECT * FROM parking_fee
-        `;
+        let data;
+        if (query === '') {
+            data = await sql<ParkingFee>`
+            SELECT *
+            FROM parking_fee
+            ORDER BY vigencia_desde DESC
+            LIMIT ${ITEMS_PER_PAGE_PARKING_FEES} OFFSET ${offset}
+            `;
+        } else {
+            data = await sql<ParkingFee>`
+            SELECT *
+            FROM parking_fee
+            WHERE nombre_tarifa ILIKE ${`%${query}%`}
+            ORDER BY vigencia_desde DESC
+            LIMIT ${ITEMS_PER_PAGE_PARKING_FEES} OFFSET ${offset}
+            `;
+        }
 
-        console.log("Parking fee data fetched successfully.");
+        console.log("DEBUG: Parking fee data fetched successfully.");
 
         return data.rows;
     } catch (error) {
-        console.error('Database Error:', error);
-        throw new Error('Failed to fetch parkings fees.');
+        console.error('DEBUG: Database Error:', error);
+        throw new Error('DEBUG: Failed to fetch parkings fees.');
     }
 }
 
+export async function fetchParkingFeePages(query: string) {
+    try {
+        let count;
+        if (query === '') {
+            count = await sql`
+            SELECT COUNT(*)
+            FROM parking_fee
+            `;
+        }else{
+            count = await sql`
+            SELECT COUNT(*)
+            FROM parking_fee
+            WHERE
+            nombre_tarifa ILIKE ${`%${query}%`}
+            `;
+        }
+
+        console.log('DEBUG: Total parking fees:', count.rows[0].count);
+
+        const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE_PARKING_FEES);
+        return totalPages;
+    } catch (error) {
+        console.error('DEBUG: Database Error:', error);
+        throw new Error('DEBUG: Failed to fetch total number of parking fees.');
+    }
+}
 
 // EMPLOYEE RELATED QUERIES
 

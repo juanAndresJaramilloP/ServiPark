@@ -1,9 +1,17 @@
 import { formatDateToLocal, formatCurrency, formatActiveDays, formatBoolean } from "@/app/lib/utils";
 import { fetchParkingFees } from "@/app/lib/data";
 
-export default async function ConfigurarTarifasTable() {
+export default async function ConfigurarTarifasTable(
+    {
+        query,
+        currentPage,
+    }: {
+        query: string;
+        currentPage: number;
+    }
+) {
 
-    const fees = await fetchParkingFees();
+    const fees = await fetchParkingFees(query, currentPage);
 
     return (
         <div className="overflow-auto h-[250px] z-0">

@@ -2,9 +2,9 @@ import Image from 'next/image';
 import HistorialTable from '@/app/ui/historial/historialtable';
 import { Suspense } from 'react';
 import { HistorialTableSkeleton } from '@/app/ui/skeletons';
-import Pagination from '@/app/ui/historial/pagination';
+import Pagination from '@/app/ui/pagination';
 import { fetchEventsPages } from '@/app/lib/data';
-import Search from '@/app/ui/historial/search';
+import Search from '@/app/ui/search';
 
 export default async function Page(
     { searchParams }: { searchParams?: { query?: string; page?: string; } }
