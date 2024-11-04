@@ -1,9 +1,9 @@
-// import { db } from '@vercel/postgres';
-// import { users, events, incidents, weekDays, parkingFees, blackPlates, incidentPlate } from '../lib/placeholder-data';
-// import { PaymentCard, Transaction, Incident } from '../lib/definitions';
-// import bcrypt from "bcrypt";
+import { db } from '@vercel/postgres';
+import { users, events, incidents, weekDays, parkingFees, blackPlates, incidentPlate, serviPark } from '../lib/placeholder-data';
+import { PaymentCard, Transaction, Incident } from '../lib/definitions';
+import bcrypt from "bcrypt";
 
-// const client = await db.connect();
+const client = await db.connect();
 
 /**
  * Hay un orden para crear las tablas (revisar esquema de la base de datos en la carpeta docs)
@@ -179,7 +179,39 @@
 // }
 
 
-// // // --------------------------- SEED TABLES ---------------------------
+// async function createTableServiPark() {
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS servi_park (
+//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+//       nombre TEXT NOT NULL,
+//       celdas SMALLINT NOT NULL,
+//       direccion TEXT NOT NULL
+//     );
+//   `;
+// }
+
+// async function createTableAnalytics(){
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS analytics (
+//       aaaa_mm DATE PRIMARY KEY,
+//       ocupacion_promedio SMALLINT DEFAULT 0,
+//       tiempo_medio_duracion INTERVAL,
+//       rotacion_espacios_prom_dia SMALLINT DEFAULT 0,
+//       porc_vehiculos_recurrentes SMALLINT DEFAULT 0,
+//       ingresos NUMERIC DEFAULT 0,
+//       nomina NUMERIC DEFAULT 0,
+//       imp_predial NUMERIC DEFAULT 0,
+//       servicios_publicos NUMERIC DEFAULT 0,
+//       mantenimiento NUMERIC DEFAULT 0,
+//       iva NUMERIC DEFAULT 0,
+//       otros NUMERIC DEFAULT 0
+//     );
+//   `;
+// }
+
+// --------------------------- SEED TABLES ---------------------------
 
 // // async function seedUsers() {
 // //   const insertedUsers = await Promise.all(
@@ -195,18 +227,18 @@
 // //   return insertedUsers;
 // // }
 
-// async function seedEvents() {
-//   const insertedEvents = await Promise.all(
-//     events.map((event) => {
-//       return client.sql`
-//         INSERT INTO events (user_id, tarifa_id, placa, fecha_hora_salida, tipo_vehiculo)
-//         VALUES (${event.user_id}, ${event.tarifa_id}, ${event.placa}, ${null}, ${event.tipo_vehiculo});
-//       `;
-//     }),
-//   );
+async function seedEvents() {
+  const insertedEvents = await Promise.all(
+    events.map((event) => {
+      return client.sql`
+        INSERT INTO events (user_id, tarifa_id, placa, fecha_hora_salida, tipo_vehiculo)
+        VALUES (${event.user_id}, ${event.tarifa_id}, ${event.placa}, ${null}, ${event.tipo_vehiculo});
+      `;
+    }),
+  );
 
-//   return insertedEvents;
-// }
+  return insertedEvents;
+}
 
 // async function simulateCarExitCashPayment() {
 //   const eventId = '30f32f54-dd9b-4f2f-abb6-ed92948cfda4'; //actualizar por un id valido (si se borra la tabla).
@@ -354,19 +386,31 @@
 
 // }
 
-export async function GET() {
-  return Response.json({
-    message:
-      'Uncomment this file and remove this line to seed the db.',
-  });
-  // try {
-  //   await client.sql`BEGIN`;
-  //   await seedIncidentPlate();
-  //   await client.sql`COMMIT`;
 
-  //   return Response.json({ message: 'Success' });
-  // } catch (error) {
-  //   await client.sql`ROLLBACK`;
-  //   return Response.json({ error }, { status: 500 });
-  // }
+// async function seedServiPark() {
+//   const insertedServiPark = await Promise.all(
+//     serviPark.map((sp) => {
+//       return client.sql`
+//         INSERT INTO servi_park (nombre, celdas, direccion)
+//         VALUES (${sp.nombre}, ${sp.celdas}, ${sp.direccion});
+//       `;
+//     })
+//   );
+// }
+
+export async function GET() {
+  // return Response.json({
+  //   message:
+  //     'Uncomment this file and remove this line to seed the db.',
+  // });
+  try {
+    await client.sql`BEGIN`;
+    await seedEvents();
+    await client.sql`COMMIT`;
+
+    return Response.json({ message: 'Success' });
+  } catch (error) {
+    await client.sql`ROLLBACK`;
+    return Response.json({ error }, { status: 500 });
+  }
 }

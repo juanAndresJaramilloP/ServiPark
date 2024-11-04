@@ -7,7 +7,7 @@ export default async function ConfigurarTarifasTable() {
 
     return (
         <div className="overflow-auto h-[250px] z-0">
-            <table className="table table-zebra md:text-md table-pin-rows">
+            <table className="table table-zebra table-pin-rows">
                 <thead className='md:text-lg z-0'>
                     <tr>
                         <th>Nombre Tarifa</th>
@@ -27,7 +27,7 @@ export default async function ConfigurarTarifasTable() {
                         <th>Cobro Nuevo Dia</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="text-sm">
                     {fees?.map((fee) => (
                         <tr key={fee.id}>
                             <td>{fee.nombre_tarifa}</td>

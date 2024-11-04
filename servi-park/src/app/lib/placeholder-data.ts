@@ -29,6 +29,84 @@ const events = [
         tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
         placa: 'DEF456',
         tipo_vehiculo: 'CAMIONETA'
+    },
+    {
+        user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'GHI789',
+        tipo_vehiculo: 'AUTOMOVIL'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'JKL012',
+        tipo_vehiculo: 'CAMIONETA'
+    },
+    {
+        user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'MNO345',
+        tipo_vehiculo: 'AUTOMOVIL'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'PQR678',
+        tipo_vehiculo: 'CAMIONETA'
+    },
+    {
+        user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'B001',
+        tipo_vehiculo: 'BICICLETA'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'VWX234',
+        tipo_vehiculo: 'MOTOCICLETA'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'YZA456',
+        tipo_vehiculo: 'CAMIONETA'
+    },
+    {
+        user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'B002',
+        tipo_vehiculo: 'BICICLETA'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'EFG012',
+        tipo_vehiculo: 'MOTOCICLETA'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'VWX234',
+        tipo_vehiculo: 'MOTOCICLETA'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'YZA456',
+        tipo_vehiculo: 'CAMIONETA'
+    },
+    {
+        user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'B003',
+        tipo_vehiculo: 'BICICLETA'
+    },
+    {
+        user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
+        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        placa: 'EFG012',
+        tipo_vehiculo: 'MOTOCICLETA'
     }
 ]
 
@@ -119,5 +197,13 @@ const blackPlates = [
     }
 ]
 
+const serviPark = [
+    {
+        nombre: "ServiPark",
+        celdas: 100,
+        direccion: "Calle 123 # 45-67",
+    }
+]
 
-export { users, events, incidents, parkingFees, weekDays, incidentPlate, blackPlates };
+
+export { users, events, incidents, parkingFees, weekDays, incidentPlate, blackPlates, serviPark };

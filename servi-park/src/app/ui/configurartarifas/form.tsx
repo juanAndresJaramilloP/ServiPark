@@ -165,9 +165,9 @@ export default function ConfigurarTarifasForm() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row gap-4 mt-4">
-                        <fieldset>
-                            <div className='flex flex-row items-center gap-2'>
+                    <div className="flex flex-row mt-4 gap-4">
+                        <fieldset className='min-w-fit'>
+                            <div className='flex flex-row items-center gap-2 min-w-fit'>
                                 <legend className="md:text-md md:font-medium text-gray-950 min-w-fit">
                                     Aplicar Tarifa los días
                                 </legend>
@@ -252,9 +252,26 @@ export default function ConfigurarTarifasForm() {
                                 </div>
                             </div>
                         </fieldset>
+                        <div className='flex flex-row gap-2 items-center'>
+                            <label className="md:text-md md:font-medium text-gray-950" htmlFor="CobrarNuevoDiaCada">Cobrar nuevo dia cada</label>
+                            <div className="relative rounded-md">
+                                <div className="relative">
+                                    <select
+                                        id="CobrarNuevoDiaCada"
+                                        name="CobrarNuevoDiaCada"
+                                        className="peer block w-full cursor-pointer border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
+                                        <option value="" disabled>Seleccione una opcion</option>
+                                        <option>Nuevo día calendario</option>
+                                        <option>24 horas</option>
+                                        <option>12 horas</option>
+                                        <option>8 horas</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className='flex flex-row gap-4 mt-4'>
-                        <div className='flex flex-row container gap-3 w-full items-center'>
+                    <div className='flex flex-row mt-4 justify-between'>
+                        <div className='flex flex-row gap-3 items-center'>
                             <div className='container min-w-fit'>
                                 <input
                                     id='ExclusivoMensualidad'
@@ -288,27 +305,10 @@ export default function ConfigurarTarifasForm() {
                                     Tarifa activa
                                 </label>
                             </div>
-                            <div className='container flex flex-row min-w-fit gap-2 items-center'>
-                                <label className="md:text-md md:font-medium text-gray-950" htmlFor="CobrarNuevoDiaCada">Cobrar nuevo dia cada</label>
-                                <div className="relative rounded-md">
-                                    <div className="relative">
-                                        <select
-                                            id="CobrarNuevoDiaCada"
-                                            name="CobrarNuevoDiaCada"
-                                            className="peer block w-full cursor-pointer border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
-                                            <option value="" disabled>Seleccione una opcion</option>
-                                            <option>Nuevo día calendario</option>
-                                            <option>24 horas</option>
-                                            <option>12 horas</option>
-                                            <option>8 horas</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                    <div className='flex flex-row-reverse mt-4'>
-                        <button className="btn btn-neutral">Agregar Tarifa</button>
+                        <div className='mt-4'>
+                            <button className="btn btn-neutral">Agregar Tarifa</button>
+                        </div>
                     </div>
                 </div>
             </div>

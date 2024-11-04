@@ -101,3 +101,74 @@ export function FeeTableSkeleton() {
     );
 }
 
+export function HistorialTableSkeleton() {
+
+    return (
+        <div className="overflow-auto h-[500px]">
+            <table className="table table-zebra text-lg table-pin-rows">
+                <thead className='text-lg'>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Tiempo</th>
+                        <th>Tipo Vehiculo</th>
+                        <th>Valor Base</th>
+                        <th>IVA</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <HistorialTableRowSkeleton />
+                    <HistorialTableRowSkeleton />
+                    <HistorialTableRowSkeleton />
+                    <HistorialTableRowSkeleton />
+                    <HistorialTableRowSkeleton />
+                    <HistorialTableRowSkeleton />
+                    <HistorialTableRowSkeleton />
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+export function HistorialTableRowSkeleton() {
+
+    return (
+        <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+            {/* Placa */}
+            <td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Entrada */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Salida */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Tiempo */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Tipo Vehiculo */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-32 rounded bg-gray-100"></div>
+            </td>
+            {/* Valor Base */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* IVA */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Total */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+        </tr>
+    );
+}
+

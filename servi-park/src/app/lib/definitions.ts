@@ -17,7 +17,7 @@ export type Event = {
     placa: string;
     fecha_hora_ingreso: string;
     fecha_hora_salida: string;
-    duracion: string | null;
+    duracion: any;
     valor_base: number | null;
     iva: number | null;
     total: number | null;

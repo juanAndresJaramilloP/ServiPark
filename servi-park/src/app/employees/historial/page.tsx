@@ -1,16 +1,24 @@
 import Image from 'next/image';
-import {testFetchAllEvents, fetchIncidents, fetchUsers} from '@/app/lib/data';
+import HistorialTable from '@/app/ui/historial/historialtable';
+import { Suspense } from 'react';
+import { HistorialTableSkeleton } from '@/app/ui/skeletons';
+import Pagination from '@/app/ui/historial/pagination';
+import { fetchEventsPages } from '@/app/lib/data';
+import Search from '@/app/ui/historial/search';
 
-export default async function Page() {
+export default async function Page(
+    { searchParams }: { searchParams?: { query?: string; page?: string; } }
+) {
 
-    // const events = await testFetchAllEvents();
+    const query = searchParams?.query || '';
+    const currentPage = Number(searchParams?.page) || 1;
 
-    const events = await testFetchAllEvents();
+    const totalPages = await fetchEventsPages(query);
 
     return (
         <div className='flex justify-center'>
-            <div className="flex flex-col items-center gap-16 max-h-screen overflow-auto place-content-center place-items-center">
-                <div className='container bg-orange-500 rounded-lg max-w-3xl'>
+            <div className="flex flex-col items-center max-h-screen overflow-auto place-content-center place-items-center">
+                <div className='container bg-orange-500 rounded-lg max-w-3xl mb-8'>
                     <div className='flex flex-row items-center'>
                         <figure className=' p-2'>
                             <Image
@@ -26,46 +34,12 @@ export default async function Page() {
                         </div>
                     </div>
                 </div>
-                <div className="overflow-auto h-[500px]">
-                    <table className="table table-zebra text-lg table-pin-rows">
-                        {/* head */}
-                        <thead className='text-lg'>
-                            <tr>
-                                <th>Placa</th>
-                                <th>Entrada</th>
-                                <th>Salida</th>
-                                <th>Tiempo</th>
-                                <th>Tipo Vehiculo</th>
-                                <th>Valor Base</th>
-                                <th>IVA</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* {events.map(e => (
-                                <tr key={e.id}>
-                                    <td>{e.placa}</td>
-                                    <td>{e.fecha_hora_ingreso}</td>
-                                    <td>{e.fecha_hora_salida}</td>
-                                    <td>{e.duracion}</td>
-                                    <td>{e.tipo_vehiculo}</td>
-                                    <td>{e.valor_base}</td>
-                                    <td>{e.iva}</td>
-                                    <td>{e.total}</td>
-                                </tr>
-                            ))} */}
-                            {/* <tr>
-                                <td>USD123</td>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr> */}
-                        </tbody>
-                    </table>
+                <Search placeholder='Busque por placa...' />
+                <Suspense key={query + currentPage} fallback={<HistorialTableSkeleton />}>
+                    <HistorialTable query={query} currentPage={currentPage} />
+                </Suspense>
+                <div className="flex w-full justify-center">
+                    <Pagination totalPages={totalPages} />
                 </div>
             </div>
         </div>
