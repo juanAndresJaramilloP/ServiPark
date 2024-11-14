@@ -17,7 +17,7 @@ export type Event = {
     placa: string;
     fecha_hora_ingreso: string;
     fecha_hora_salida: string;
-    duracion: any;
+    duracion: any; // PostresInterval object.
     valor_base: number | null;
     iva: number | null;
     total: number | null;
@@ -87,6 +87,11 @@ export type ParkingFee = {
     nuevo_dia: 'NUEVO_DIA_CALENDARIO' | '24_HORAS' | '12_HORAS' | '8_HORAS';
 };
 
+export type ParkingFeeField = {
+    id: string;
+    nombre_tarifa: string;
+};
+
 export type WeekDays = {
     id: string;
     business_id: string;
@@ -98,3 +103,27 @@ export type WeekDays = {
     sabado: '1' | '0';
     domingo: '1' | '0';
 };
+
+export type Stats = {
+
+    id: string;
+    aaaa_mm: string;
+    ocupacion_promedio: number;
+    tiempo_medio_duracion: any; // PostresInterval object.
+    rotacion_espacios_prom_dia: number;
+    porc_vehiculos_recurrentes: number;
+    ingresos: number;
+    nomina: number;
+    imp_predial: number;
+    servicios_publicos: number;
+    mantenimiento: number;
+    iva: number;
+    otros: number;
+};
+
+export type CardStats = {
+    ocupacion_promedio: number;
+    tiempo_medio_duracion: any; // PostresInterval object.
+    rotacion_espacios_prom_dia: number;
+    porc_vehiculos_recurrentes: number;
+}

@@ -3,6 +3,7 @@
 import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 import CalendarDatePicker from '@/app/ui/calendardatepicker';
 import { useState } from 'react';
+import { createParkingFee } from '@/app/lib/actions';
 
 export default function ConfigurarTarifasForm() {
 
@@ -10,7 +11,7 @@ export default function ConfigurarTarifasForm() {
     const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(new Date());
 
     return (
-        <form action={""}>
+        <form action={createParkingFee}>
             <div className="rounded-md bg-gray-100 p-4">
                 <div className="flex flex-col">
                     <div className="flex flex-row justify-between gap-2">
@@ -148,6 +149,7 @@ export default function ConfigurarTarifasForm() {
                                         <div className='!w-40 z-50' style={{ width: 160 }}>
                                             <CalendarDatePicker setSelectedDate={setSelectedDateStart} />
                                         </div>
+                                        <input hidden id="VigenciaDesde" name="VigenciaDesde" value={selectedDateStart?.toISOString() || ''} readOnly></input>
                                     </div>
                                 </div>
                             </div>
@@ -160,6 +162,7 @@ export default function ConfigurarTarifasForm() {
                                         <div className='!w-40 z-50' style={{ width: '160px' }}>
                                             <CalendarDatePicker setSelectedDate={setSelectedDateEnd} />
                                         </div>
+                                        <input hidden id="VigenciaHasta" name="VigenciaHasta" value={selectedDateEnd?.toISOString() || ''} readOnly></input>
                                     </div>
                                 </div>
                             </div>

@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import { Event, Incident, User, ParkingFee } from './definitions';
+import { Event, Incident, User, ParkingFee, ParkingFeeField, CardStats } from './definitions';
 import { formatPostgresInterval } from '@/app/lib/utils';
 import { Parser } from 'json2csv';
 
@@ -168,8 +168,8 @@ export async function fetchParkingFees(query: string, currentPage: number) {
 
         return data.rows;
     } catch (error) {
-        console.error('DEBUG: Database Error:', error);
-        throw new Error('DEBUG: Failed to fetch parkings fees.');
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch parkings fees.');
     }
 }
 
@@ -181,7 +181,7 @@ export async function fetchParkingFeePages(query: string) {
             SELECT COUNT(*)
             FROM parking_fee
             `;
-        }else{
+        } else {
             count = await sql`
             SELECT COUNT(*)
             FROM parking_fee
@@ -195,8 +195,50 @@ export async function fetchParkingFeePages(query: string) {
         const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE_PARKING_FEES);
         return totalPages;
     } catch (error) {
-        console.error('DEBUG: Database Error:', error);
-        throw new Error('DEBUG: Failed to fetch total number of parking fees.');
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch total number of parking fees.');
+    }
+}
+
+export async function fetchActiveParkingFeesList() {
+
+    try {
+
+        const data = await sql<ParkingFeeField>`
+        SELECT
+        id,
+        nombre_tarifa
+        FROM parking_fee
+        WHERE vigencia_desde <= NOW() AND vigencia_hasta >= NOW()
+        ORDER BY vigencia_hasta DESC
+        `;
+
+        return data.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Ocurrio un error al intentar obtener la lista de tarifas activas.');
+    }
+
+}
+
+export async function fetchStatsCard(startDate: string, endDate: string) {
+    try {
+
+        console.log("DEBUG: startDate:", startDate, "endDate:", endDate);
+
+        const data = await sql<CardStats>`
+        SELECT 
+        AVG(ocupacion_promedio) as ocupacion_promedio,
+        AVG(tiempo_medio_duracion) as tiempo_medio_duracion,
+        AVG(rotacion_espacios_prom_dia) as rotacion_espacios_prom_dia,
+        AVG(porc_vehiculos_recurrentes) as porc_vehiculos_recurrentes
+        FROM analytics
+        WHERE aaaa_mm BETWEEN ${startDate} AND ${endDate}
+        `;
+        return data.rows[0];
+    } catch (error) {
+        console.error('The following error occured:', error);
+        throw new Error('Failed to fetch statistics data.');
     }
 }
 

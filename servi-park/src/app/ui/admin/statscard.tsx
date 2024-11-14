@@ -1,27 +1,50 @@
 'use client';
 
-import CalendarDatePicker from '@/app/ui/calendardatepicker'
 import { lusitana } from '@/app/ui/fonts';
-import { useState } from 'react';
+import { formatPercentage, formatRotacionEspacios, formatPostgresIntervalShort } from "@/app/lib/utils";
+import CalendarDatePicker from "@/app/ui/calendardatepicker";
+import { CardStats } from '@/app/lib/definitions';
+import { useState } from "react";
 
-export default function StatsCard() {
+interface StatsCardProps {
+    setError: (error: string) => void;
+}
+
+export default function StatsCard({ setError }: StatsCardProps) {
 
     const [selectedDateStart, setSelectedDateStart] = useState<Date | null>(new Date());
     const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(new Date());
-    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+    const [stats, setStats] = useState<CardStats | undefined>();
 
 
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        // Prevent page refresh. Como esta dentro de un form, se previene el comportamiento por defecto del form.
         event.preventDefault();
-        setButtonDisabled(true);
+        setDisabled(true);
 
         if (!selectedDateStart || !selectedDateEnd) {
-            alert('Please enter both start and end dates.');
+            alert('Por favor ingrese ambas fechas');
+            setDisabled(false);
             return;
         }
 
-        setButtonDisabled(false);
+        const response = await fetch(`/api/downloadstats?startDate=${selectedDateStart?.toISOString()}&endDate=${selectedDateEnd?.toISOString()}`);
 
+        if (response.ok) {
+            const fetchedStats = await response.json();
+            setStats(fetchedStats);
+            setDisabled(false);
+        } else {
+            const data = await response.json();
+            setError(data.message);
+            console.error('Failed to download statistics data. Message:', data.message);
+            await new Promise((resolve) => setTimeout(() => {
+                setError('');
+                resolve(null);
+            }, 3000));
+            setDisabled(false);
+        }
     }
 
     return (
@@ -38,8 +61,8 @@ export default function StatsCard() {
                                     </svg>
                                 </button>
                             </div>
-                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-36 border border-gray-300'>
-                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">90%</p>
+                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-44 border border-gray-300'>
+                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.ocupacion_promedio ? formatPercentage(stats.ocupacion_promedio) : "0%"}</p>
                             </div>
                         </div>
                     </div>
@@ -53,8 +76,8 @@ export default function StatsCard() {
                                     </svg>
                                 </button>
                             </div>
-                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-36 border border-gray-300'>
-                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">2 H + 5 min</p>
+                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-44 border border-gray-300'>
+                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.tiempo_medio_duracion ? formatPostgresIntervalShort(stats.tiempo_medio_duracion) : "N/A"}</p>
                             </div>
                         </div>
                     </div>
@@ -68,8 +91,8 @@ export default function StatsCard() {
                                     </svg>
                                 </button>
                             </div>
-                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-36 border border-gray-300'>
-                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">3,4 Veces x Dia</p>
+                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-44 border border-gray-300'>
+                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.rotacion_espacios_prom_dia ? formatRotacionEspacios(stats.rotacion_espacios_prom_dia) : "0 Veces x Dia"}</p>
                             </div>
                         </div>
                     </div>
@@ -83,8 +106,8 @@ export default function StatsCard() {
                                     </svg>
                                 </button>
                             </div>
-                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-36 border border-gray-300'>
-                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">90%</p>
+                            <div className='container p-2 bg-slate-100 rounded-md place-content-center w-44 border border-gray-300'>
+                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.porc_vehiculos_recurrentes ? formatPercentage(stats.porc_vehiculos_recurrentes) : "0%"}</p>
                             </div>
                         </div>
                     </div>
@@ -114,28 +137,11 @@ export default function StatsCard() {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex flex-row items-center justify-between mt-4'>
-                                <label className="md:text-md md:font-medium text-gray-950" htmlFor="TipoVehiculo">Tipo Vehículo</label>
-                                <div className="relative rounded-md">
-                                    <div className="relative">
-                                        <select
-                                            id="TipoVehiculo"
-                                            name="TipoVehiculo"
-                                            className="peer block w-full cursor-pointer border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
-                                            <option value="" disabled>Tipo Vehiculo</option>
-                                            <option>Automóvil</option>
-                                            <option>Camioneta</option>
-                                            <option>Motocicleta</option>
-                                            <option>Bicicleta</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex flex-row-reverse mt-4'>
-                            <button className="btn btn-neutral" onClick={handleSubmit} disabled={buttonDisabled}>{buttonDisabled ? (<>Consultando <span className="loading loading-dots loading-xs"></span></>) : "Consultar" }</button>
                         </div>
                     </form>
+                    <div className='flex flex-row-reverse'>
+                        <button className="btn btn-neutral" onClick={handleSubmit} disabled={disabled}>{disabled ? (<>Consultando <span className="loading loading-dots loading-xs"></span></>) : "Consultar"}</button>
+                    </div>
                 </div>
             </div>
         </div>

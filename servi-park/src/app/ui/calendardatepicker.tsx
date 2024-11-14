@@ -13,7 +13,12 @@ interface CalendarDatePickerProps {
     setSelectedDate: (date: Date | null) => void;
 }
 
-export default function CalendarDatePicker({ setSelectedDate }: CalendarDatePickerProps) {
+export default function CalendarDatePicker(
+    {
+        setSelectedDate,
+        disabled = false
+    }: CalendarDatePickerProps & { disabled?: boolean }
+) {
 
     const [startDate, setStartDate] = useState<Date | null>(new Date());
 
@@ -23,6 +28,6 @@ export default function CalendarDatePicker({ setSelectedDate }: CalendarDatePick
     };
 
     return (
-        <DatePicker locale={"es"} selected={startDate} onChange={(date) => handleDateChange(date)} />
+        <DatePicker disabled={disabled} locale={"es"} selected={startDate} onChange={(date) => handleDateChange(date)} />
     );
 }

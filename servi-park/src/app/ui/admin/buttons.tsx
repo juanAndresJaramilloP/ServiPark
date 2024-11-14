@@ -9,7 +9,7 @@ export function DownloadDataButton() {
                 <Image
                     src="/history.png"
                     className="rounded-xl"
-                    alt="simbolo de historial"
+                    alt="Icono de historial"
                     width={100}
                     height={100}
                 />
@@ -31,7 +31,7 @@ export function FinancialReportsButton() {
                 <Image
                     src="/money.png"
                     className="rounded-xl"
-                    alt="simbolo de historial"
+                    alt="Icono de dinero"
                     width={100}
                     height={100}
                 />
@@ -53,7 +53,7 @@ export function ParkingFeesButton() {
                 <Image
                     src="/updateToll.png"
                     className="rounded-xl"
-                    alt="simbolo de historial"
+                    alt="Icono de actualizar tarifas"
                     width={100}
                     height={100}
                 />

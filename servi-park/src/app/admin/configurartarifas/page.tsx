@@ -19,7 +19,7 @@ export default async function Page(
         <div className="container mx-auto min-w-[1288px]">
             <ConfigurarTarifasForm />
             <div className="divider">Histórico</div>
-            <div className='flex flex-row justify-between mb-2'>
+            <div className='flex flex-row justify-between mb-2 z-0'>
                 <div className='container w-[400px]'>
                     <Search placeholder='Busque por nombre de tarifa...' />
                 </div>

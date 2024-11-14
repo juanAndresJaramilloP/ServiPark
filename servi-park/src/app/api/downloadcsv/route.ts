@@ -40,6 +40,6 @@ export async function GET(request: Request) {
         });
     } catch (error) {
         console.error('Error generating CSV:', error);
-        return NextResponse.json({ message: 'Ocurrió un error generado el archivo csv. Espere un momento e intente nuevamente' }, { status: 500 });
+        return NextResponse.json({ message: 'Ocurrió un error generando el archivo csv. Espere un momento e intente nuevamente' }, { status: 500 });
     }
 }

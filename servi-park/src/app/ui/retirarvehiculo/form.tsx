@@ -5,12 +5,6 @@ import { useState } from 'react';
 
 export default function DigitarPlacaForm() {
 
-    
-
-    const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
-    }
-
     return (
         <div className="card bg-base-100 w-96 shadow-2xl">
             <div className='flex flex-row'>

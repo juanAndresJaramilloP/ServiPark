@@ -1,5 +1,5 @@
 import { db } from '@vercel/postgres';
-import { users, events, incidents, weekDays, parkingFees, blackPlates, incidentPlate, serviPark } from '../lib/placeholder-data';
+import { users, events, incidents, weekDays, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
 import { PaymentCard, Transaction, Incident } from '../lib/definitions';
 import bcrypt from "bcrypt";
 
@@ -398,6 +398,17 @@ async function seedEvents() {
 //   );
 // }
 
+async function seedTableAnalytics() {
+  await Promise.all(
+    stats.map((stat) => {
+      return client.sql`
+        INSERT INTO analytics (aaaa_mm, ocupacion_promedio, tiempo_medio_duracion, rotacion_espacios_prom_dia, porc_vehiculos_recurrentes, ingresos, nomina, imp_predial, servicios_publicos, mantenimiento, iva, otros)
+        VALUES (${stat.aaaa_mm}, ${stat.ocupacion_promedio}, ${stat.tiempo_medio_duracion}, ${stat.rotacion_espacios_prom_dia}, ${stat.porc_vehiculos_recurrentes}, ${stat.ingresos}, ${stat.nomina}, ${stat.imp_predial}, ${stat.servicios_publicos}, ${stat.mantenimiento}, ${stat.iva}, ${stat.otros});
+      `;
+    })
+  );
+}
+
 export async function GET() {
   // return Response.json({
   //   message:
@@ -405,7 +416,7 @@ export async function GET() {
   // });
   try {
     await client.sql`BEGIN`;
-    await seedEvents();
+    await seedTableAnalytics();
     await client.sql`COMMIT`;
 
     return Response.json({ message: 'Success' });
