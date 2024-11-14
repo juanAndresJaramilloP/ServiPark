@@ -20,91 +20,91 @@ const users = [
 const events = [
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '79f1f3e0-bf21-4415-88ec-313f8e7fd63a',
+        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
         placa: 'ABC123',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
         placa: 'DEF456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
         placa: 'GHI789',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
         placa: 'JKL012',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'MNO345',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'PQR678',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'B001',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'VWX234',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'YZA456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'B002',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'EFG012',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'VWX234',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'YZA456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'B003',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'dd14bd15-8dc2-4405-96ad-a163bdbb7b09',
+        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
         placa: 'EFG012',
         tipo_vehiculo: 'MOTOCICLETA'
     }
@@ -118,29 +118,6 @@ const incidents = [
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
         descripcion: 'Se esta filtrando el agua por el techo de la oficina del administrador'
-    }
-]
-
-const weekDays = [
-    {
-        business_id : "1111111",
-        lunes: "1",
-        martes:"1",
-        miercoles:"1",
-        jueves:"1",
-        viernes:"1",
-        sabado:"1",
-        domingo:"1"
-    },
-    {
-        business_id : "0000011",
-        lunes: "0",
-        martes:"0",
-        miercoles:"0",
-        jueves:"0",
-        viernes:"0",
-        sabado:"1",
-        domingo:"1"
     }
 ]
 
@@ -205,9 +182,9 @@ const serviPark = [
     }
 ]
 
-const stats = [
+const analytics = [
     {
-        aaaa_mm: '2023-01-01',
+        timestamp: '2024-01-01T04:05:06',
         ocupacion_promedio: 90, // 90%
         tiempo_medio_duracion: '02:30:00', // 2 horas 30 minutos
         rotacion_espacios_prom_dia: 340, // 3,4 vehiculos x dia (se multiplica por 100)
@@ -221,7 +198,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-02-01',
+        timestamp: '2024-01-02T04:05:06',
         ocupacion_promedio: 88,
         tiempo_medio_duracion: '02:00:00',
         rotacion_espacios_prom_dia: 320,
@@ -235,7 +212,7 @@ const stats = [
         otros: 1200000
     },
     {
-        aaaa_mm: '2023-03-01',
+        timestamp: '2024-01-30T04:05:06',
         ocupacion_promedio: 87,
         tiempo_medio_duracion: '01:45:15',
         rotacion_espacios_prom_dia: 300,
@@ -249,7 +226,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-04-01',
+        timestamp: '2024-02-01T04:05:06',
         ocupacion_promedio: 91,
         tiempo_medio_duracion: '01:45:15',
         rotacion_espacios_prom_dia: 380,
@@ -263,7 +240,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-05-01',
+        timestamp: '2024-02-10T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -277,7 +254,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-06-01',
+        timestamp: '2024-03-12T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -291,7 +268,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-07-01',
+        timestamp: '2024-04-15T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -305,7 +282,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-08-01',
+        timestamp: '2024-04-17T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -319,7 +296,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-09-01',
+        timestamp: '2024-05-01T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -333,7 +310,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-10-01',
+        timestamp: '2024-06-03T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -347,7 +324,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-11-01',
+        timestamp: '2024-07-07T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -361,7 +338,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2023-12-01',
+        timestamp: '2024-08-24T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -375,7 +352,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2024-01-01',
+        timestamp: '2024-09-25T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -389,7 +366,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2024-02-01',
+        timestamp: '2024-10-01T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -403,7 +380,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2024-03-01',
+        timestamp: '2024-11-04T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -417,7 +394,7 @@ const stats = [
         otros: 0
     },
     {
-        aaaa_mm: '2024-04-01',
+        timestamp: '2024-11-07T04:05:06',
         ocupacion_promedio: 92,
         tiempo_medio_duracion: '02:45:15',
         rotacion_espacios_prom_dia: 390,
@@ -429,63 +406,7 @@ const stats = [
         mantenimiento: 200000,
         iva: 4750000,
         otros: 0
-    },
-    {
-        aaaa_mm: '2024-05-01',
-        ocupacion_promedio: 92,
-        tiempo_medio_duracion: '02:45:15',
-        rotacion_espacios_prom_dia: 390,
-        porc_vehiculos_recurrentes: 85,
-        ingresos: 29851000,
-        nomina: 12350000,
-        imp_predial: 0,
-        servicios_publicos: 1200000,
-        mantenimiento: 200000,
-        iva: 4750000,
-        otros: 0
-    },
-    {
-        aaaa_mm: '2024-06-01',
-        ocupacion_promedio: 92,
-        tiempo_medio_duracion: '02:45:15',
-        rotacion_espacios_prom_dia: 390,
-        porc_vehiculos_recurrentes: 85,
-        ingresos: 30851000,
-        nomina: 12350000,
-        imp_predial: 0,
-        servicios_publicos: 1200000,
-        mantenimiento: 200000,
-        iva: 4750000,
-        otros: 0
-    },
-    {
-        aaaa_mm: '2024-07-01',
-        ocupacion_promedio: 92,
-        tiempo_medio_duracion: '02:45:15',
-        rotacion_espacios_prom_dia: 390,
-        porc_vehiculos_recurrentes: 85,
-        ingresos: 31851000,
-        nomina: 12350000,
-        imp_predial: 0,
-        servicios_publicos: 1200000,
-        mantenimiento: 200000,
-        iva: 4750000,
-        otros: 800000
-    },
-    {
-        aaaa_mm: '2024-08-01',
-        ocupacion_promedio: 92,
-        tiempo_medio_duracion: '02:45:15',
-        rotacion_espacios_prom_dia: 390,
-        porc_vehiculos_recurrentes: 85,
-        ingresos: 32851000,
-        nomina: 12350000,
-        imp_predial: 0,
-        servicios_publicos: 1200000,
-        mantenimiento: 200000,
-        iva: 4750000,
-        otros: 0
     }
 ]
 
-export { users, events, incidents, parkingFees, weekDays, incidentPlate, blackPlates, serviPark, stats };
+export { users, events, incidents, parkingFees, incidentPlate, blackPlates, serviPark, analytics as stats };

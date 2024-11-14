@@ -44,7 +44,7 @@ const CarRegistrationSchema = z.object({
 
 
 
-const CreateParkingFee = ParkingFeeSchema.omit({ id: true, user_id: true, week_days_id: true });
+const CreateParkingFee = ParkingFeeSchema.omit({ id: true, user_id: true });
 const RegisterVehicle = CarRegistrationSchema.omit({ user_id: true });
 
 // EMPLOYEE RELATED ACTIONS
@@ -102,23 +102,11 @@ export async function createParkingFee(formData: FormData) {
     const sabado = validatedFields.data.Sabado ? '1' : '0';
     const domingo = validatedFields.data.Domingo ? '1' : '0';
 
-    const business_id = lunes + martes + miercoles + jueves + viernes + sabado + domingo;
+    const week_days_id = lunes + martes + miercoles + jueves + viernes + sabado + domingo;
 
-    console.log("DEBUG: Business ID: ", business_id);
+    console.log("DEBUG: week days ID: ", week_days_id);
 
     try {
-        // check if week_days already exists in database, if not, create it
-        const weekDaysExists = await sql`
-          SELECT business_id FROM week_days WHERE business_id = ${business_id}
-        `;
-
-        if (weekDaysExists.rowCount === null || weekDaysExists.rowCount === 0) {
-            await sql`
-            INSERT INTO week_days (business_id, lunes, martes, miercoles, jueves, viernes, sabado, domingo)
-            VALUES (${business_id}, ${lunes}, ${martes}, ${miercoles}, ${jueves}, ${viernes}, ${sabado}, ${domingo})
-          `;
-        }
-
         // insert the new parking fee:
         // user id: beb58dfd-dce5-41c1-bbcc-39ecdb9e2724 FOR TESTING, DELETE WHEN AUTH IS DONE.
 
@@ -163,7 +151,7 @@ export async function createParkingFee(formData: FormData) {
 
         await sql`
         INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_desde, vigencia_hasta, exclusivo_mensualidad, exclusivo_administracion, tarifa_activa, nuevo_dia)
-        VALUES ('beb58dfd-dce5-41c1-bbcc-39ecdb9e2724', ${business_id}, ${validatedFields.data.NombreTarifa}, ${tipoVehiculo}, ${validatedFields.data.ValorHora}, ${validatedFields.data.IncrementoPrimerHora}, ${validatedFields.data.IncrementoSegundaHora}, ${validatedFields.data.ValorDia}, ${validatedFields.data.FlagPrimeraHora}, ${validatedFields.data.FlagHoraAdicional}, ${validatedFields.data.VigenciaDesde}, ${validatedFields.data.VigenciaHasta}, ${validatedFields.data.ExclusivoMensualidad || false}, ${validatedFields.data.ExclusivoAdministracion || false}, ${validatedFields.data.TarifaActiva || false}, ${nuevoDia})
+        VALUES ('beb58dfd-dce5-41c1-bbcc-39ecdb9e2724', ${week_days_id}, ${validatedFields.data.NombreTarifa}, ${tipoVehiculo}, ${validatedFields.data.ValorHora}, ${validatedFields.data.IncrementoPrimerHora}, ${validatedFields.data.IncrementoSegundaHora}, ${validatedFields.data.ValorDia}, ${validatedFields.data.FlagPrimeraHora}, ${validatedFields.data.FlagHoraAdicional}, ${validatedFields.data.VigenciaDesde}, ${validatedFields.data.VigenciaHasta}, ${validatedFields.data.ExclusivoMensualidad || false}, ${validatedFields.data.ExclusivoAdministracion || false}, ${validatedFields.data.TarifaActiva || false}, ${nuevoDia})
         `;
 
     } catch (error) {

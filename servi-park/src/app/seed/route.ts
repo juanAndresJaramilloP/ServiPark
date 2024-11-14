@@ -1,5 +1,5 @@
 import { db } from '@vercel/postgres';
-import { users, events, incidents, weekDays, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
+import { users, events, incidents, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
 import { PaymentCard, Transaction, Incident } from '../lib/definitions';
 import bcrypt from "bcrypt";
 
@@ -15,9 +15,10 @@ const client = await db.connect();
  * 5. incident_plate
  * 6. black_plates
  * 7. gallery
- * 8. week_days
- * 9. parking_fee
- * 10. events
+ * 8. parking_fee
+ * 9. events
+ * 10. servi_park
+ * 11. analytics
  * 
  * Para poblar la base de datos, ejecute localmente y navegue a: localhost:3000/seed
  */
@@ -38,27 +39,27 @@ const client = await db.connect();
 
 // }
 
-// async function createTableEvents() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS events (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       placa TEXT NOT NULL,
-//       fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       duracion INTERVAL,
-//       valor_base NUMERIC,
-//       iva NUMERIC,
-//       total NUMERIC,
-//       tipo_vehiculo TEXT NOT NULL,
-//       tiquete_perdido BOOLEAN DEFAULT FALSE
-//     );
-//   `;
+async function createTableEvents() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS events (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      placa TEXT NOT NULL,
+      fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      duracion INTERVAL,
+      valor_base NUMERIC,
+      iva NUMERIC,
+      total NUMERIC,
+      tipo_vehiculo TEXT NOT NULL,
+      tiquete_perdido BOOLEAN DEFAULT FALSE
+    );
+  `;
 
-// }
+}
 
 // async function createTableIncidents() {
 //   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -135,49 +136,30 @@ const client = await db.connect();
 //   `;
 // }
 
-// async function createTableParkingFee() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS parking_fee (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       week_days_id TEXT REFERENCES week_days(business_id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       nombre_tarifa TEXT NOT NULL UNIQUE,
-//       tipo_vehiculo TEXT NOT NULL,
-//       valor_hora NUMERIC NOT NULL,
-//       incremento_primer_hora NUMERIC NOT NULL,
-//       incremento_segunda_hora NUMERIC NOT NULL,
-//       valor_dia NUMERIC NOT NULL,
-//       primera_hora_a_partir_minuto NUMERIC NOT NULL,
-//       hora_adicional_a_partir_minuto NUMERIC NOT NULL,
-//       vigencia_desde TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       vigencia_hasta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       exclusivo_mensualidad BOOLEAN DEFAULT FALSE,
-//       exclusivo_administracion BOOLEAN DEFAULT FALSE,
-//       tarifa_activa BOOLEAN DEFAULT TRUE,
-//       nuevo_dia TEXT NOT NULL
-//     );
-//   `;
-// }
-
-// async function createTableWeekDays() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS week_days (
-//       id UUID DEFAULT uuid_generate_v4(),
-//       business_id TEXT PRIMARY KEY,
-//       lunes TEXT NOT NULL,
-//       martes TEXT NOT NULL,
-//       miercoles TEXT NOT NULL,
-//       jueves TEXT NOT NULL,
-//       viernes TEXT NOT NULL,
-//       sabado TEXT NOT NULL,
-//       domingo TEXT NOT NULL
-//     );
-//   `;
-
-// }
-
+async function createTableParkingFee() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS parking_fee (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      week_days_id TEXT NOT NULL,
+      nombre_tarifa TEXT NOT NULL UNIQUE,
+      tipo_vehiculo TEXT NOT NULL,
+      valor_hora NUMERIC NOT NULL,
+      incremento_primer_hora NUMERIC NOT NULL,
+      incremento_segunda_hora NUMERIC NOT NULL,
+      valor_dia NUMERIC NOT NULL,
+      primera_hora_a_partir_minuto NUMERIC NOT NULL,
+      hora_adicional_a_partir_minuto NUMERIC NOT NULL,
+      vigencia_desde TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      vigencia_hasta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      exclusivo_mensualidad BOOLEAN DEFAULT FALSE,
+      exclusivo_administracion BOOLEAN DEFAULT FALSE,
+      tarifa_activa BOOLEAN DEFAULT TRUE,
+      nuevo_dia TEXT NOT NULL
+    );
+  `;
+}
 
 // async function createTableServiPark() {
 //   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -191,25 +173,26 @@ const client = await db.connect();
 //   `;
 // }
 
-// async function createTableAnalytics(){
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS analytics (
-//       aaaa_mm DATE PRIMARY KEY,
-//       ocupacion_promedio SMALLINT DEFAULT 0,
-//       tiempo_medio_duracion INTERVAL,
-//       rotacion_espacios_prom_dia SMALLINT DEFAULT 0,
-//       porc_vehiculos_recurrentes SMALLINT DEFAULT 0,
-//       ingresos NUMERIC DEFAULT 0,
-//       nomina NUMERIC DEFAULT 0,
-//       imp_predial NUMERIC DEFAULT 0,
-//       servicios_publicos NUMERIC DEFAULT 0,
-//       mantenimiento NUMERIC DEFAULT 0,
-//       iva NUMERIC DEFAULT 0,
-//       otros NUMERIC DEFAULT 0
-//     );
-//   `;
-// }
+async function createTableAnalytics(){
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS analytics (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      ocupacion_promedio SMALLINT DEFAULT 0,
+      tiempo_medio_duracion INTERVAL,
+      rotacion_espacios_prom_dia SMALLINT DEFAULT 0,
+      porc_vehiculos_recurrentes SMALLINT DEFAULT 0,
+      ingresos NUMERIC DEFAULT 0,
+      nomina NUMERIC DEFAULT 0,
+      imp_predial NUMERIC DEFAULT 0,
+      servicios_publicos NUMERIC DEFAULT 0,
+      mantenimiento NUMERIC DEFAULT 0,
+      iva NUMERIC DEFAULT 0,
+      otros NUMERIC DEFAULT 0
+    );
+  `;
+}
 
 // --------------------------- SEED TABLES ---------------------------
 
@@ -336,30 +319,17 @@ async function seedEvents() {
 //   return insertedIncidents;
 // }
 
-// async function seedWeekDays() {
-//   const insertedWeekDays = await Promise.all(
-//     weekDays.map((weekdays) => {
-//       return client.sql`
-//         INSERT INTO week_days (business_id, lunes, martes, miercoles, jueves, viernes, sabado, domingo)
-//         VALUES (${weekdays.business_id}, ${weekdays.lunes}, ${weekdays.martes}, ${weekdays.miercoles}, ${weekdays.jueves}, ${weekdays.viernes}, ${weekdays.sabado}, ${weekdays.domingo});
-//       `;
-//     })
-//   );
+async function seedParkingFee() {
+  const insertedParkingFees = await Promise.all(
+    parkingFees.map((fee) => {
+      return client.sql`
+        INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_hasta, nuevo_dia)
+        VALUES (${fee.user_id}, ${fee.week_days_id}, ${fee.nombre_tarifa}, ${fee.tipo_vehiculo}, ${fee.valor_hora}, ${fee.incremento_primer_hora}, ${fee.incremento_segunda_hora}, ${fee.valor_dia}, ${fee.primera_hora_a_partir_minuto}, ${fee.hora_adicional_a_partir_minuto}, ${fee.vigencia_hasta}, ${fee.nuevo_dia});
+      `;
+    })
+  );
 
-//   return insertedWeekDays;
-// }
-
-// async function seedParkingFee() {
-//   const insertedParkingFees = await Promise.all(
-//     parkingFees.map((fee) => {
-//       return client.sql`
-//         INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_hasta, nuevo_dia)
-//         VALUES (${fee.user_id}, ${fee.week_days_id}, ${fee.nombre_tarifa}, ${fee.tipo_vehiculo}, ${fee.valor_hora}, ${fee.incremento_primer_hora}, ${fee.incremento_segunda_hora}, ${fee.valor_dia}, ${fee.primera_hora_a_partir_minuto}, ${fee.hora_adicional_a_partir_minuto}, ${fee.vigencia_hasta}, ${fee.nuevo_dia});
-//       `;
-//     })
-//   );
-
-// }
+}
 
 // async function seedBlackPlates() {
 
@@ -402,8 +372,8 @@ async function seedTableAnalytics() {
   await Promise.all(
     stats.map((stat) => {
       return client.sql`
-        INSERT INTO analytics (aaaa_mm, ocupacion_promedio, tiempo_medio_duracion, rotacion_espacios_prom_dia, porc_vehiculos_recurrentes, ingresos, nomina, imp_predial, servicios_publicos, mantenimiento, iva, otros)
-        VALUES (${stat.aaaa_mm}, ${stat.ocupacion_promedio}, ${stat.tiempo_medio_duracion}, ${stat.rotacion_espacios_prom_dia}, ${stat.porc_vehiculos_recurrentes}, ${stat.ingresos}, ${stat.nomina}, ${stat.imp_predial}, ${stat.servicios_publicos}, ${stat.mantenimiento}, ${stat.iva}, ${stat.otros});
+        INSERT INTO analytics (timestamp, ocupacion_promedio, tiempo_medio_duracion, rotacion_espacios_prom_dia, porc_vehiculos_recurrentes, ingresos, nomina, imp_predial, servicios_publicos, mantenimiento, iva, otros)
+        VALUES (${stat.timestamp}, ${stat.ocupacion_promedio}, ${stat.tiempo_medio_duracion}, ${stat.rotacion_espacios_prom_dia}, ${stat.porc_vehiculos_recurrentes}, ${stat.ingresos}, ${stat.nomina}, ${stat.imp_predial}, ${stat.servicios_publicos}, ${stat.mantenimiento}, ${stat.iva}, ${stat.otros});
       `;
     })
   );
