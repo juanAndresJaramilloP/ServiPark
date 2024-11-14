@@ -44,7 +44,7 @@ const CarRegistrationSchema = z.object({
 
 
 
-const CreateParkingFee = ParkingFeeSchema.omit({ id: true, user_id: true });
+const CreateParkingFee = ParkingFeeSchema.omit({ id: true, user_id: true, week_days_id: true });
 const RegisterVehicle = CarRegistrationSchema.omit({ user_id: true });
 
 // EMPLOYEE RELATED ACTIONS
@@ -55,29 +55,6 @@ const RegisterVehicle = CarRegistrationSchema.omit({ user_id: true });
 // - Para registrar tiquete a perdida
 // - Para registrar placa en lista negra
 // Reportar un incidente
-
-// const FormSchema = z.object({
-//     id: z.string(),
-//     customerId: z.string({
-//         invalid_type_error: 'Please select a customer.',
-//     }),
-//     amount: z.coerce.number().gt(0, { message: 'Please enter an amount greater than $0.' }),
-//     status: z.enum(['pending', 'paid'], {
-//         invalid_type_error: 'Please select an invoice status.',
-//     }),
-//     date: z.string(),
-//     desde: z.date(),
-//     hasta: z.date(),
-// });
-
-// export type State = {
-//     errors?: {
-//         customerId?: string[];
-//         amount?: string[];
-//         status?: string[];
-//     };
-//     message?: string | null;
-// };
 
 export async function createParkingFee(formData: FormData) {
 
@@ -170,6 +147,7 @@ export async function createParkingFee(formData: FormData) {
 
     // Revalidate the cache for the parking fee page and redirect the user.
     revalidatePath('/admin/configurartarifas');
+    revalidatePath('/employees/registrarvehiculo');
     redirect('/admin/configurartarifas');
 }
 
@@ -188,7 +166,49 @@ export async function registerVehicle(formData: FormData) {
         };
     }
 
-    // ID tarifa: dd14bd15-8dc2-4405-96ad-a163bdbb7b09 FOR TESTING
-    // ID user: beb58dfd-dce5-41c1-bbcc-39ecdb9e2724 FOR TESTING
+    // Prepare for data insertion
 
+    // check if the vehicle is already registered
+    try {
+        const isVehicleInSystem = await sql`
+        SELECT *
+        FROM events
+        WHERE placa = ${validatedFields.data.Placa} AND fecha_hora_salida IS NULL
+        `;
+
+        if (isVehicleInSystem.rows.length > 0) {
+            console.log('DEBUG: Vehicle already in system.');
+            return {
+                message: `El vehiculo del placa: ${validatedFields.data.Placa.toUpperCase()} ya se encuentra registrado en el sistema.`,
+            };
+        }
+
+    } catch (error) {
+        console.error('DEBUG: Error registering vehicle:\n', error);
+        return {
+            message: 'Ocurrio un error al intentar registrar la entrada del vehiculo. Por favor intentelo nuevamente.',
+        };
+    }
+
+    // insert event:
+    // ID user: beb58dfd-dce5-41c1-bbcc-39ecdb9e2724 FOR TESTING
+    try {
+
+        await sql`
+        INSERT INTO events (user_id, tarifa_id, placa, tipo_vehiculo)
+        VALUES ('beb58dfd-dce5-41c1-bbcc-39ecdb9e2724', ${validatedFields.data.Tarifa}, ${validatedFields.data.Placa.toUpperCase()}, ${validatedFields.data.TipoVehiculo})
+        `;
+
+    } catch (error) {
+        console.error('DEBUG: Error registering vehicle:\n', error);
+        return {
+            message: 'Ocurrio un error al intentar registrar la entrada del vehiculo. Por favor intentelo nuevamente.',
+        };
+    }
+
+    // Revalidate cache and redirect user.
+    console.log('DEBUG: Vehicle registered successfully.');
+    revalidatePath('/employees/registrarvehiculo');
+    redirect('/employees');
+    
 }

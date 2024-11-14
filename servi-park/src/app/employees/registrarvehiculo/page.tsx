@@ -6,6 +6,7 @@ export default async function Page() {
 
     const fees = await fetchActiveParkingFeesList()
 
+    
     return (
         <div className="flex flex-col xl:flex-row gap-4 justify-center items-center">
             <div className="card bg-base-100 w-[580px] shadow-2xl">

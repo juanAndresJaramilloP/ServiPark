@@ -80,6 +80,19 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
             total: event.total ?? undefined,
         }));
 
+
+
+        const borrar = await sql<ParkingFeeField>`
+        SELECT
+        id
+        FROM parking_fee
+        WHERE vigencia_desde <= NOW() AND vigencia_hasta >= NOW()
+        ORDER BY vigencia_hasta DESC
+        `;
+
+        console.log("DEBUG: Active parking fees fetched successfully:", borrar.rows);
+
+
         return formattedData;
     } catch (error) {
         console.error('Database Error:', error);
@@ -212,6 +225,8 @@ export async function fetchActiveParkingFeesList() {
         WHERE vigencia_desde <= NOW() AND vigencia_hasta >= NOW()
         ORDER BY vigencia_hasta DESC
         `;
+
+        console.log("DEBUG: Active parking fees fetched successfully:", data.rows);
 
         return data.rows;
     } catch (error) {

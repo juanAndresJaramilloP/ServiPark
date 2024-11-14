@@ -1,3 +1,5 @@
+'use client';
+
 import { registerVehicle } from '@/app/lib/actions';
 import { ParkingFeeField } from '@/app/lib/definitions';
 

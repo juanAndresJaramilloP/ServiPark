@@ -24,6 +24,8 @@ const client = await db.connect();
  */
 
 
+// MARK: - CREATE TABLES
+
 // async function createTableUsers() {
 //   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 //   await client.sql`
@@ -143,7 +145,7 @@ async function createTableParkingFee() {
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
       week_days_id TEXT NOT NULL,
-      nombre_tarifa TEXT NOT NULL UNIQUE,
+      nombre_tarifa TEXT NOT NULL,
       tipo_vehiculo TEXT NOT NULL,
       valor_hora NUMERIC NOT NULL,
       incremento_primer_hora NUMERIC NOT NULL,
@@ -194,7 +196,7 @@ async function createTableAnalytics(){
   `;
 }
 
-// --------------------------- SEED TABLES ---------------------------
+// MARK: - SEED TABLES
 
 // // async function seedUsers() {
 // //   const insertedUsers = await Promise.all(
@@ -210,7 +212,7 @@ async function createTableAnalytics(){
 // //   return insertedUsers;
 // // }
 
-async function seedEvents() {
+async function seedTableEvents() {
   const insertedEvents = await Promise.all(
     events.map((event) => {
       return client.sql`
@@ -223,37 +225,37 @@ async function seedEvents() {
   return insertedEvents;
 }
 
-// async function simulateCarExitCashPayment() {
-//   const eventId = '30f32f54-dd9b-4f2f-abb6-ed92948cfda4'; //actualizar por un id valido (si se borra la tabla).
+async function simulateCarExitCashPayment() {
+  const eventId = '30f32f54-dd9b-4f2f-abb6-ed92948cfda4'; //actualizar por un id valido (si se borra la tabla).
 
-//   const valor_base = 5800;
-//   const iva = valor_base * 0.19;
-//   const total = valor_base + iva;
+  const valor_base = 5800;
+  const iva = valor_base * 0.19;
+  const total = valor_base + iva;
 
 
-//   // registra la transaccion en la tabla de transacciones
-//   const response = await client.sql<Transaction>`
-//       INSERT INTO transactions (metodo_pago, valor)
-//       VALUES ('CONTADO', ${total})
-//       RETURNING id;
-//     `;
+  // registra la transaccion en la tabla de transacciones
+  const response = await client.sql<Transaction>`
+      INSERT INTO transactions (metodo_pago, valor)
+      VALUES ('CONTADO', ${total})
+      RETURNING id;
+    `;
 
-//   const transaction_id = response.rows[0].id;
+  const transaction_id = response.rows[0].id;
 
-//   //registra la salida del vehiculo en la tabla de eventos
-//   await client.sql`
-//       UPDATE events
-//       SET (transaction_id, fecha_hora_salida, valor_base, iva, total) = (${transaction_id}, DEFAULT, ${valor_base}, ${iva},${total})
-//       WHERE id = ${eventId};
-//     `;
+  //registra la salida del vehiculo en la tabla de eventos
+  await client.sql`
+      UPDATE events
+      SET (transaction_id, fecha_hora_salida, valor_base, iva, total) = (${transaction_id}, DEFAULT, ${valor_base}, ${iva},${total})
+      WHERE id = ${eventId};
+    `;
 
-//   await client.sql`
-//     UPDATE events
-//     SET duracion = (fecha_hora_salida - fecha_hora_ingreso)
-//     WHERE id = ${eventId}
-//   `;
+  await client.sql`
+    UPDATE events
+    SET duracion = (fecha_hora_salida - fecha_hora_ingreso)
+    WHERE id = ${eventId}
+  `;
 
-// }
+}
 
 // async function simulateCarExitCardPayment() {
 //   const eventId = '10671de7-bee6-4887-9d04-5b723594c32d'; //actualizar por un id valido (si se borra la tabla).
@@ -386,7 +388,7 @@ export async function GET() {
   // });
   try {
     await client.sql`BEGIN`;
-    await seedTableAnalytics();
+    await seedTableEvents();
     await client.sql`COMMIT`;
 
     return Response.json({ message: 'Success' });

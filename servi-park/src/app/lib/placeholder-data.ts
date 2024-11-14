@@ -20,91 +20,91 @@ const users = [
 const events = [
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
+        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
         placa: 'ABC123',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
+        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
         placa: 'DEF456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
+        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
         placa: 'GHI789',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '2bf2c7ae-524d-49bd-aa4e-73f79577d814',
+        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
         placa: 'JKL012',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'MNO345',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'PQR678',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'B001',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'VWX234',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'YZA456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'B002',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'EFG012',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'VWX234',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'YZA456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'B003',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '5211beb0-6c30-4b45-977d-c998eb4509a8',
+        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
         placa: 'EFG012',
         tipo_vehiculo: 'MOTOCICLETA'
     }
