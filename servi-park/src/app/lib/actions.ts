@@ -223,13 +223,27 @@ export async function registerVehicle(formData: FormData) {
 
 export async function registerPayment(billingData: BillingData | any): Promise<BillingState> {
 
-    const { fechaHoraIngreso, fechaHoraSalida, formattedCurrency, nombreTarifa, placa } = billingData;
+    const { formattedCurrency, placa } = billingData;
     const metodoDePago = billingData.metodoDePago ?? 'CONTADO';
     const numberCurrency = formatCurrencyToNumber(formattedCurrency);
 
-    console.log("DEBUG: Number Currency: ", numberCurrency);
-
     try {
+        // Verifica que el vehiculo efectivamente tenga una entrada activa (sin cancelar) en el parqueadero.
+        const event = await sql<InvoiceEvent>`
+        SELECT
+        id,
+        tarifa_id,
+        fecha_hora_ingreso
+        FROM events
+        WHERE placa ILIKE ${placa} AND fecha_hora_salida IS NULL
+        `;
+
+        if (event.rows.length === 0) {
+            return {
+                error: `El vehiculo con placa ${placa.toUpperCase()} no tiene una entrada activa (sin cancelar) en el sistema.`,
+            };
+        }
+
         let response;
         if (metodoDePago === 'Tarjeta') {
             //registra la tarjeta de pago en la tabla de tarjetas de pago
@@ -244,7 +258,7 @@ export async function registerPayment(billingData: BillingData | any): Promise<B
             // registra la transaccion en la tabla de transacciones
             response = await sql<Transaction>`
             INSERT INTO transactions (payment_card_id, metodo_pago, valor)
-            VALUES (${payment_card_id}, 'CONTADO', ${numberCurrency})
+            VALUES (${payment_card_id}, ${metodoDePago.toUpperCase()}, ${numberCurrency})
             RETURNING id;
             `;
         } else {
@@ -258,14 +272,7 @@ export async function registerPayment(billingData: BillingData | any): Promise<B
         const transaction_id = response.rows[0].id;
 
         //registra la salida del vehiculo en la tabla de eventos
-        const event = await sql<InvoiceEvent>`
-        SELECT
-        id,
-        tarifa_id,
-        fecha_hora_ingreso
-        FROM events
-        WHERE placa ILIKE ${placa} AND fecha_hora_salida IS NULL
-        `;
+
 
         const eventId = event.rows[0].id;
         const iva = numberCurrency * 0.19;
