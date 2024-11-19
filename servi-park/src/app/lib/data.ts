@@ -1,43 +1,20 @@
+'use server';
+
 import { sql } from '@vercel/postgres';
-import { Event, Incident, User, ParkingFee, ParkingFeeField, CardStats } from './definitions';
+import { Event, Incident, User, ParkingFee, ParkingFeeField, CardStats, InvoiceEvent, InvoiceDataState, InvoiceData } from './definitions';
 import { formatPostgresInterval } from '@/app/lib/utils';
-import { Parser } from 'json2csv';
+import { formatCurrency, formatTimestampToLocale, getCurrentLocalTimestampDate, calculateValueToPay } from '@/app/lib/utils';
+import { z } from 'zod';
+
+
+// MARK: - SCHEMAS
+
+const carExitSchema = z.object({
+    Placa: z.string({ required_error: "Debe ingresar una placa." }).max(6, { message: "La placa no debe tener más de 6 caracteres" }).min(4, { message: "La placa no debe tener menos de 4 caracteres" }),
+});
+
 
 // QUERIES RELACIONADAS AL ADMINISTRADOR:
-
-export async function downloadEventsCSV(startDate: string, endDate: string) {
-
-    try {
-        const events = await sql<Event>`
-        SELECT
-            id,
-            placa,
-            fecha_hora_ingreso,
-            fecha_hora_salida,
-            duracion,
-            valor_base,
-            iva,
-            total,
-            tipo_vehiculo,
-            tiquete_perdido
-        FROM events 
-        WHERE fecha_hora_ingreso BETWEEN ${startDate} AND ${endDate}
-        ORDER BY fecha_hora_ingreso DESC
-        `;
-
-        // Generate CSV using json2csv
-        const json2csvParser = new Parser();
-        const csv = json2csvParser.parse(events.rows);
-
-        // Create a filename using the date range, e.g., historico_2023-01-01_to_2023-12-31.csv
-        const filename = `historico_${startDate}_${endDate}.csv`;
-
-    } catch (error) {
-        console.error('Error generating CSV:', error);
-        throw new Error('Error generating CSV');
-    }
-
-}
 
 const ITEMS_PER_PAGE_EVENTS = 10;
 export async function testFetchFilteredEvents(query: string, currentPage: number) {
@@ -79,19 +56,6 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
             iva: event.iva ?? undefined,
             total: event.total ?? undefined,
         }));
-
-
-
-        const borrar = await sql<ParkingFeeField>`
-        SELECT
-        id
-        FROM parking_fee
-        WHERE vigencia_desde <= NOW() AND vigencia_hasta >= NOW()
-        ORDER BY vigencia_hasta DESC
-        `;
-
-        console.log("DEBUG: Active parking fees fetched successfully:", borrar.rows);
-
 
         return formattedData;
     } catch (error) {
@@ -226,8 +190,6 @@ export async function fetchActiveParkingFeesList() {
         ORDER BY vigencia_hasta DESC
         `;
 
-        console.log("DEBUG: Active parking fees fetched successfully:", data.rows);
-
         return data.rows;
     } catch (error) {
         console.error('Database Error:', error);
@@ -256,6 +218,107 @@ export async function fetchStatsCard(startDate: string, endDate: string) {
         throw new Error('Failed to fetch statistics data.');
     }
 }
+
+export async function generateInvoiceForVehicle(formData: FormData): Promise<InvoiceDataState> {
+
+    const rawFormData = Object.fromEntries(formData.entries())
+    console.log('DEBUG: generateInvoiceForVehicle Form Data: ', rawFormData);
+
+    // validate using zod
+    const validatedFields = carExitSchema.safeParse(rawFormData);
+    if (!validatedFields.success) {
+        console.log("DEBUG validated Fields Errors: ", validatedFields.error.flatten().fieldErrors)
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+        };
+    }
+
+    try {
+
+        // validate license plate exists in system and is active.
+        const event = await sql<InvoiceEvent>`
+        SELECT
+        id,
+        tarifa_id,
+        fecha_hora_ingreso
+        FROM events
+        WHERE placa ILIKE ${validatedFields.data.Placa} AND fecha_hora_salida IS NULL
+        `;
+
+        if (event.rows.length === 0) {
+            console.log('DEBUG: Vehicle not found in system.');
+            return {
+                errors: { Placa: [`El vehiculo con placa ${validatedFields.data.Placa.toUpperCase()} no se encuentra registrado en el sistema.`] },
+            };
+        } else if (event.rows.length > 1) {
+            return {
+                errors: { Placa: [`El vehiculo con placa ${validatedFields.data.Placa.toUpperCase()} tiene mas de una entrada activa. Por favor contacte al administrador.`] },
+            };
+        }
+
+        // generate billing information.
+        const event_id = event.rows[0].id;
+        const tarifa_id = event.rows[0].tarifa_id;
+        const fecha_hora_ingreso = event.rows[0].fecha_hora_ingreso;
+
+        const fee = await sql<ParkingFee>`
+        SELECT *
+        FROM parking_fee
+        WHERE id = ${tarifa_id}
+        `;
+
+        if (fee.rows.length === 0) {
+            return {
+                errors: { Placa: [`La tarifa del vehiculo con placa ${validatedFields.data.Placa.toUpperCase()} no se encuentra registrada en el sistema. Contacte al administrador.`] },
+            };
+        }
+
+        const valorHora = Number(fee.rows[0].valor_hora);
+        const incrementoPrimerHora = Number(fee.rows[0].incremento_primer_hora);
+        const incrementoSegundaHora = Number(fee.rows[0].incremento_segunda_hora);
+        const valorDia = Number(fee.rows[0].valor_dia);
+        const primeraHora = Number(fee.rows[0].primera_hora_a_partir_minuto);
+        const horaAdicional = Number(fee.rows[0].hora_adicional_a_partir_minuto);
+        const cobrarDiaAPartirMin = Number(fee.rows[0].cobrar_valor_dia_a_partir_minuto);
+        
+        const nuevoDia = fee.rows[0].nuevo_dia;
+        const nombreTarifa = fee.rows[0].nombre_tarifa;
+
+        // calcular tiempo total de estadia en minutos
+        const fechaHoraSalida = getCurrentLocalTimestampDate();
+        const fechaHoraIngreso = formatTimestampToLocale(fecha_hora_ingreso);
+        const tiempoEstadia = fechaHoraSalida.getTime() - fechaHoraIngreso.getTime();
+        const minutosEstadia = Math.ceil(tiempoEstadia / 60000);
+
+        // calcular valor a pagar
+        // NUEVO_DIA_CALENDARIO" | "24_HORAS" | "12_HORAS"
+        const valorTotal = calculateValueToPay(minutosEstadia, valorHora, incrementoPrimerHora, incrementoSegundaHora, valorDia, primeraHora, horaAdicional, cobrarDiaAPartirMin, nuevoDia);
+        const formattedCurrency = formatCurrency(valorTotal);
+        const placa = validatedFields.data.Placa;
+
+        const invoiceData: InvoiceData = {
+            fechaHoraIngreso: fechaHoraIngreso,
+            fechaHoraSalida: fechaHoraSalida,
+            formattedCurrency: formattedCurrency,
+            nombreTarifa: nombreTarifa,
+            placa: placa,
+        }
+
+        return {
+            message: invoiceData,
+        };
+
+    } catch (error) {
+        console.error('DEBUG: Error exiting vehicle:\n', error);
+        return {
+            errors: { Placa: ['Ocurrio un error al intentar registrar la salida del vehiculo. Por favor intentelo nuevamente.'] },
+        };
+    }
+
+}
+
+
+
 
 // EMPLOYEE RELATED QUERIES
 

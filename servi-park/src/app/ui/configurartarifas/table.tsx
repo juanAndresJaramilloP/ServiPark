@@ -1,4 +1,4 @@
-import { formatDateToLocal, formatCurrency, formatActiveDays, formatBoolean } from "@/app/lib/utils";
+import { formatDateToLocale, formatCurrency, formatActiveDays, formatBoolean } from "@/app/lib/utils";
 import { fetchParkingFees } from "@/app/lib/data";
 
 export default async function ConfigurarTarifasTable(
@@ -24,6 +24,7 @@ export default async function ConfigurarTarifasTable(
                         <th>Incremento 1er Hora</th>
                         <th>Incremento 2da Hora</th>
                         <th>Valor Día</th>
+                        <th>Cobrar Día a Partir Min</th>
                         <th>Gracia 1er Hora</th>
                         <th>Gracia Hora Adicional</th>
                         <th>Vigencia Desde</th>
@@ -44,10 +45,11 @@ export default async function ConfigurarTarifasTable(
                             <td>{formatCurrency(fee.incremento_primer_hora)}</td>
                             <td>{formatCurrency(fee.incremento_segunda_hora)}</td>
                             <td>{formatCurrency(fee.valor_dia)}</td>
+                            <td>{fee.cobrar_valor_dia_a_partir_minuto}</td>
                             <td>{fee.primera_hora_a_partir_minuto}</td>
                             <td>{fee.hora_adicional_a_partir_minuto}</td>
-                            <td>{formatDateToLocal(fee.vigencia_desde)}</td>
-                            <td>{formatDateToLocal(fee.vigencia_hasta)}</td>
+                            <td>{formatDateToLocale(fee.vigencia_desde)}</td>
+                            <td>{formatDateToLocale(fee.vigencia_hasta)}</td>
                             <td>{formatActiveDays(fee.week_days_id)}</td>
                             <td>{formatBoolean(fee.exclusivo_mensualidad)}</td>
                             <td>{formatBoolean(fee.exclusivo_administracion)}</td>

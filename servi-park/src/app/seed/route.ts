@@ -151,6 +151,7 @@ async function createTableParkingFee() {
       incremento_primer_hora NUMERIC NOT NULL,
       incremento_segunda_hora NUMERIC NOT NULL,
       valor_dia NUMERIC NOT NULL,
+      cobrar_valor_dia_a_partir_minuto NUMERIC NOT NULL,
       primera_hora_a_partir_minuto NUMERIC NOT NULL,
       hora_adicional_a_partir_minuto NUMERIC NOT NULL,
       vigencia_desde TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -257,76 +258,76 @@ async function simulateCarExitCashPayment() {
 
 }
 
-// async function simulateCarExitCardPayment() {
-//   const eventId = '10671de7-bee6-4887-9d04-5b723594c32d'; //actualizar por un id valido (si se borra la tabla).
+async function simulateCarExitCardPayment() {
+  const eventId = '10671de7-bee6-4887-9d04-5b723594c32d'; //actualizar por un id valido (si se borra la tabla).
 
-//   const valor_base = 5800;
-//   const iva = valor_base * 0.19;
-//   const total = valor_base + iva;
+  const valor_base = 5800;
+  const iva = valor_base * 0.19;
+  const total = valor_base + iva;
 
-//   //registra la tarjeta de pago en la tabla de tarjetas de pago
-//   const result = await client.sql<PaymentCard>`
-//     INSERT INTO payment_cards (tipo, proveedor, ultimos_cuatro_digitos, cod_autorizacion_emisor, estado)
-//     VALUES ('DEBITO', 'VISA', '1234', '1234', 'APROBADO')
-//     RETURNING id;
-//   `;
+  //registra la tarjeta de pago en la tabla de tarjetas de pago
+  const result = await client.sql<PaymentCard>`
+    INSERT INTO payment_cards (tipo, proveedor, ultimos_cuatro_digitos, cod_autorizacion_emisor, estado)
+    VALUES ('DEBITO', 'VISA', '1234', '1234', 'APROBADO')
+    RETURNING id;
+  `;
 
-//   const payment_card_id = result.rows[0].id;
+  const payment_card_id = result.rows[0].id;
 
-//   // registra la transaccion en la tabla de transacciones
-//   const response = await client.sql<Transaction>`
-//     INSERT INTO transactions (payment_card_id, metodo_pago, valor)
-//     VALUES (${payment_card_id}, 'CONTADO', ${total})
-//     RETURNING id;
-//   `;
+  // registra la transaccion en la tabla de transacciones
+  const response = await client.sql<Transaction>`
+    INSERT INTO transactions (payment_card_id, metodo_pago, valor)
+    VALUES (${payment_card_id}, 'CONTADO', ${total})
+    RETURNING id;
+  `;
 
-//   const transaction_id = response.rows[0].id;
+  const transaction_id = response.rows[0].id;
 
-//   // registra la salida del vehiculo en la tabla de eventos
-//   await client.sql`
-//     UPDATE events
-//     SET (transaction_id, fecha_hora_salida, valor_base, iva, total) = (${transaction_id}, DEFAULT, ${valor_base}, ${iva},${total})
-//     WHERE id = ${eventId};
-//   `;
+  // registra la salida del vehiculo en la tabla de eventos
+  await client.sql`
+    UPDATE events
+    SET (transaction_id, fecha_hora_salida, valor_base, iva, total) = (${transaction_id}, DEFAULT, ${valor_base}, ${iva},${total})
+    WHERE id = ${eventId};
+  `;
 
-//   await client.sql`
-//   UPDATE events
-//   SET duracion = (fecha_hora_salida - fecha_hora_ingreso)
-//   WHERE id = ${eventId};
-// `;
-// }
+  await client.sql`
+  UPDATE events
+  SET duracion = (fecha_hora_salida - fecha_hora_ingreso)
+  WHERE id = ${eventId};
+`;
+}
 
-// async function seedIncidentsAndGallery() {
-//   const insertedIncidents = await Promise.all(
-//     incidents.map((incident) => {
-//       return client.sql<Incident>`
-//         INSERT INTO incidents (user_id, descripcion)
-//         VALUES (${incident.user_id}, ${incident.descripcion})
-//         RETURNING id;
-//       `;
-//     }),
-//   );
+async function seedIncidentsAndGallery() {
+  const insertedIncidents = await Promise.all(
+    incidents.map((incident) => {
+      return client.sql<Incident>`
+        INSERT INTO incidents (user_id, descripcion)
+        VALUES (${incident.user_id}, ${incident.descripcion})
+        RETURNING id;
+      `;
+    }),
+  );
 
-//   const imageIncidentUrl = 'https://utfs.io/f/tZv4L8MOVx8yIhFDIgpIzPhdOm4J7HlSw6UYog2TvCfL5Xe3';
+  const imageIncidentUrl = 'https://utfs.io/f/tZv4L8MOVx8yIhFDIgpIzPhdOm4J7HlSw6UYog2TvCfL5Xe3';
 
-//   await Promise.all(
-//     insertedIncidents.map((incident) => {
-//       return client.sql`
-//         INSERT INTO gallery (incident_id, url)
-//         VALUES (${incident.rows[0].id}, ${imageIncidentUrl});
-//       `;
-//     }),
-//   );
+  await Promise.all(
+    insertedIncidents.map((incident) => {
+      return client.sql`
+        INSERT INTO gallery (incident_id, url)
+        VALUES (${incident.rows[0].id}, ${imageIncidentUrl});
+      `;
+    }),
+  );
 
-//   return insertedIncidents;
-// }
+  return insertedIncidents;
+}
 
-async function seedParkingFee() {
+async function seedTableParkingFee() {
   const insertedParkingFees = await Promise.all(
     parkingFees.map((fee) => {
       return client.sql`
-        INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_hasta, nuevo_dia)
-        VALUES (${fee.user_id}, ${fee.week_days_id}, ${fee.nombre_tarifa}, ${fee.tipo_vehiculo}, ${fee.valor_hora}, ${fee.incremento_primer_hora}, ${fee.incremento_segunda_hora}, ${fee.valor_dia}, ${fee.primera_hora_a_partir_minuto}, ${fee.hora_adicional_a_partir_minuto}, ${fee.vigencia_hasta}, ${fee.nuevo_dia});
+        INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, cobrar_valor_dia_a_partir_minuto, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_hasta, nuevo_dia)
+        VALUES (${fee.user_id}, ${fee.week_days_id}, ${fee.nombre_tarifa}, ${fee.tipo_vehiculo}, ${fee.valor_hora}, ${fee.incremento_primer_hora}, ${fee.incremento_segunda_hora}, ${fee.valor_dia},${fee.cobrar_valor_dia_a_partir_minuto}, ${fee.primera_hora_a_partir_minuto}, ${fee.hora_adicional_a_partir_minuto}, ${fee.vigencia_hasta}, ${fee.nuevo_dia});
       `;
     })
   );

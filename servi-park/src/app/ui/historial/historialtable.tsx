@@ -1,5 +1,5 @@
 import { testFetchFilteredEvents } from "@/app/lib/data";
-import { formatCurrency, formatDateToLocal} from "@/app/lib/utils";
+import { formatCurrency, formatDateToLocale} from "@/app/lib/utils";
 
 export default async function HistorialTable(
     {
@@ -31,8 +31,8 @@ export default async function HistorialTable(
                     {events.map(e => (
                     <tr key={e.id}>
                         <td>{e.placa}</td>
-                        <td>{formatDateToLocal(e.fecha_hora_ingreso)}</td>
-                        <td>{formatDateToLocal(e.fecha_hora_salida)}</td>
+                        <td>{formatDateToLocale(e.fecha_hora_ingreso)}</td>
+                        <td>{formatDateToLocale(e.fecha_hora_salida)}</td>
                         <td>{e.duracion}</td>
                         <td>{e.tipo_vehiculo}</td>
                         <td>{formatCurrency(e.valor_base)}</td>

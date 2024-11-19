@@ -1,10 +1,10 @@
 'use client';
 
 import CalendarDatePicker from '@/app/ui/calendardatepicker';
-import { formatDateToLocal } from '@/app/lib/utils';
+import { formatDateToLocale } from '@/app/lib/utils';
 import { ErrorAlert, SuccessAlert } from '@/app/ui/feedback';
 import { useState } from "react";
-import { lusitana } from "./fonts";
+import { lusitana } from "@/app/ui/fonts";
 
 export default function DownloadDataModal() {
 
@@ -28,8 +28,8 @@ export default function DownloadDataModal() {
         // Send request to the API with date range parameters
         const response = await fetch(`/api/downloadcsv?startDate=${selectedDateStart?.toISOString()}&endDate=${selectedDateEnd?.toISOString()}`);
 
-        const formattedStartDate = formatDateToLocal(selectedDateStart?.toISOString());
-        const formattedEndDate = formatDateToLocal(selectedDateEnd?.toISOString());
+        const formattedStartDate = formatDateToLocale(selectedDateStart?.toISOString());
+        const formattedEndDate = formatDateToLocale(selectedDateEnd?.toISOString());
         
         const fileName = `Historico_${formattedStartDate}-${formattedEndDate}.csv`;
 
@@ -90,8 +90,7 @@ export default function DownloadDataModal() {
                                 </div>
                             </div>
                         </div>
-                        <div className=' absolute bottom-5 
-                        right-5'>
+                        <div className='absolute bottom-5 right-5'>
                             <button className="btn btn-neutral" onClick={handleSubmit} disabled={disabled}>{disabled ? (<>Descargando <span className="loading loading-dots loading-xs"></span></>) : "Descargar CSV"}</button>
                         </div>
                     </form>

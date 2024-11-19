@@ -20,91 +20,91 @@ const users = [
 const events = [
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
+        tarifa_id: '0a107661-1b9b-4e11-9f11-3353bd939b04',
         placa: 'ABC123',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
+        tarifa_id: '0a107661-1b9b-4e11-9f11-3353bd939b04',
         placa: 'DEF456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
+        tarifa_id: '0a107661-1b9b-4e11-9f11-3353bd939b04',
         placa: 'GHI789',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: '53415543-cb4e-4bdb-ba09-fd5395a587ac',
+        tarifa_id: '0a107661-1b9b-4e11-9f11-3353bd939b04',
         placa: 'JKL012',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'MNO345',
         tipo_vehiculo: 'AUTOMOVIL'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'PQR678',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'B001',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'VWX234',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'YZA456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'B002',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'EFG012',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'VWX234',
         tipo_vehiculo: 'MOTOCICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'YZA456',
         tipo_vehiculo: 'CAMIONETA'
     },
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'B003',
         tipo_vehiculo: 'BICICLETA'
     },
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
-        tarifa_id: 'e5069c9d-ebe7-42ac-9260-b1ffd3ade37e',
+        tarifa_id: '74ba50b5-63d4-4eb1-8fec-2e7da7a7c3ca',
         placa: 'EFG012',
         tipo_vehiculo: 'MOTOCICLETA'
     }
@@ -131,6 +131,7 @@ const parkingFees = [
         incremento_primer_hora: 3000,
         incremento_segunda_hora: 3000,
         valor_dia: 12000,
+        cobrar_valor_dia_a_partir_minuto: 120,
         primera_hora_a_partir_minuto: 15,
         hora_adicional_a_partir_minuto: 15,
         vigencia_hasta: '2025-01-08T04:05:06',
@@ -145,6 +146,7 @@ const parkingFees = [
         incremento_primer_hora: 2000,
         incremento_segunda_hora: 2000,
         valor_dia: 10000,
+        cobrar_valor_dia_a_partir_minuto: 180,
         primera_hora_a_partir_minuto: 15,
         hora_adicional_a_partir_minuto: 15,
         vigencia_hasta: '2025-01-08T04:05:06',

@@ -308,6 +308,21 @@ export default function ConfigurarTarifasForm() {
                                     Tarifa activa
                                 </label>
                             </div>
+                            <div className="container flex flex-row items-center" >
+                                <label className="md:text-md md:font-medium text-gray-950 w-fit text-nowrap" htmlFor="CobrarDiaAPartirMin" >Cobrar Día a Partir del Minuto</label>
+                                <div className="relative rounded-md">
+                                    <div className="relative">
+                                        <input
+                                            type="number"
+                                            step={1}
+                                            id="CobrarDiaAPartirMin"
+                                            name="CobrarDiaAPartirMin"
+                                            className="peer w-14 border rounded-md py-2 px-2 mx-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
+                                            placeholder="Min"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <button className="btn btn-neutral">Agregar Tarifa</button>

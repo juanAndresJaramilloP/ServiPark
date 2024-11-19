@@ -25,6 +25,41 @@ export type Event = {
     tiquete_perdido: boolean;
 };
 
+export type InvoiceEvent = {
+    id: string;
+    tarifa_id: string;
+    fecha_hora_ingreso: string;
+};
+
+export type InvoiceData = {
+    fechaHoraIngreso: Date | undefined;
+    fechaHoraSalida: Date | undefined;
+    formattedCurrency: string;
+    nombreTarifa: string;
+    placa: string;
+};
+
+export type InvoiceDataState = {
+    errors?: {
+        Placa?: string[];
+    };
+    message?: InvoiceData;
+};
+
+export type BillingData = {
+    metodoDePago: string;
+    fechaHoraIngreso: Date;
+    fechaHoraSalida: Date;
+    formattedCurrency: string;
+    nombreTarifa: string;
+    placa: string;
+};
+
+export type BillingState = {
+    error?: string;
+    message?: string;
+};
+
 export type Incident = {
     id: string;
     user_id: string;
@@ -77,6 +112,7 @@ export type ParkingFee = {
     incremento_primer_hora: number;
     incremento_segunda_hora: number;
     valor_dia: number;
+    cobrar_valor_dia_a_partir_minuto: number;
     primera_hora_a_partir_minuto: number;
     hora_adicional_a_partir_minuto: number;
     vigencia_desde: string;

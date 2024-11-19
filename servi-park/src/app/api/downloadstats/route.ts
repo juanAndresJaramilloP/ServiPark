@@ -23,7 +23,7 @@ export async function GET(request: Request) {
         AVG(rotacion_espacios_prom_dia) as rotacion_espacios_prom_dia,
         AVG(porc_vehiculos_recurrentes) as porc_vehiculos_recurrentes
         FROM analytics
-        WHERE aaaa_mm BETWEEN ${startDate} AND ${endDate}
+        WHERE timestamp BETWEEN ${startDate} AND ${endDate}
         `;
 
         if (!data || data.rows.length === 0 || data.rows[0]?.ocupacion_promedio === null || data.rows[0]?.tiempo_medio_duracion === null || data.rows[0]?.rotacion_espacios_prom_dia === null || data.rows[0]?.porc_vehiculos_recurrentes === null) {

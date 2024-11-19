@@ -1,12 +1,33 @@
-'use client'
+'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState } from "react";
+import { generateInvoiceForVehicle } from '@/app/lib/data';
+import { inter } from '../fonts';
+import {InvoiceDataState} from '@/app/lib/definitions';
 
-export default function DigitarPlacaForm() {
+interface DigitarPlacaInvoiceData {
+    setInvoiceData: (data: InvoiceDataState) => void;
+}
+
+export default function DigitarPlacaForm({setInvoiceData}:DigitarPlacaInvoiceData) {
+
+    const [disabled, setDisabled] = useState(false);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setDisabled(true);
+
+        const form = new FormData(event.currentTarget);
+        const state = await generateInvoiceForVehicle(form);
+        setInvoiceData(state);
+        console.log("DigitarPlacaForm state: ", state);
+        
+        setDisabled(false);
+    };
 
     return (
-        <div className="card bg-base-100 w-96 shadow-2xl">
+        <div className="card bg-base-100 w-[450px] shadow-2xl">
             <div className='flex flex-row'>
                 <figure>
                     <Image
@@ -22,13 +43,13 @@ export default function DigitarPlacaForm() {
                 </div>
             </div>
             <div className="card-body">
-                <form action="" className="space-y-3 ">
+                <form  onSubmit={handleSubmit} className="space-y-3 ">
                     <div className='flex flex-col items-center gap-4'>
-                        <label className="text-lg md:text-2xl font-medium text-gray-950" htmlFor="placa">Digita la Placa</label>
+                        <label className="text-lg md:text-2xl font-medium text-gray-950" htmlFor="Placa">Digita la Placa</label>
                         <div className='join'>
-                            <input className="peer block rounded-md border border-gray-300 py-[9px] text-lg text-center outline-2 placeholder:text-gray-500 join-item" type="text" id="placa" name="placa" placeholder='AAA123' />
+                            <input className="peer block rounded-md border border-gray-300 py-[9px] text-lg text-center outline-2 placeholder:text-gray-500 join-item" type="text" id="Placa" name="Placa" placeholder='AAA123' />
                             <div className="card-actions">
-                                <button className="btn btn-primary join-item">Ingresar</button>
+                                <button className="btn btn-primary join-item" disabled={disabled}>{disabled ? (<>Buscando Vehículo <span className="loading loading-dots loading-xs"></span></>) : "Buscar"}</button>
                             </div>
                         </div>
                     </div>
