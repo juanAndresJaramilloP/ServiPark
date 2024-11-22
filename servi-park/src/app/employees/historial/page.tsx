@@ -1,11 +1,34 @@
 import Image from 'next/image';
+import HistorialTable from '@/app/ui/historial/historialtable';
+import { Suspense } from 'react';
+import { HistorialTableSkeleton } from '@/app/ui/skeletons';
+import Pagination from '@/app/ui/pagination';
+import { fetchEventsPages } from '@/app/lib/data';
+import Search from '@/app/ui/search';
 
-export default function Page() {
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
+
+export default async function Page(
+    { searchParams }: { searchParams?: { query?: string; page?: string; } }
+) {
+
+    const session = await getServerSession(options);
+    if (!session) {
+        redirect('/api/auth/signin');
+    }
+
+    const userID = session.user.id;
+    const query = searchParams?.query || '';
+    const currentPage = Number(searchParams?.page) || 1;
+
+    const totalPages = await fetchEventsPages(query, userID);
 
     return (
         <div className='flex justify-center'>
-            <div className="flex flex-col items-center gap-16 max-h-screen overflow-auto place-content-center place-items-center">
-                <div className='container bg-orange-500 rounded-lg max-w-3xl'>
+            <div className="flex flex-col items-center max-h-screen overflow-auto place-content-center place-items-center">
+                <div className='container bg-orange-500 rounded-lg max-w-3xl mb-8'>
                     <div className='flex flex-row items-center'>
                         <figure className=' p-2'>
                             <Image
@@ -21,205 +44,12 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <div className="overflow-auto h-[500px]">
-                    <table className="table table-zebra text-lg table-pin-rows">
-                        {/* head */}
-                        <thead className='text-lg'>
-                            <tr>
-                                <th>Placa</th>
-                                <th>Entrada</th>
-                                <th>Salida</th>
-                                <th>Tiempo</th>
-                                <th>Forma Pago</th>
-                                <th>Valor Base</th>
-                                <th>IVA</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* row 1 */}
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                            <tr>
-                                <th>USD123</th>
-                                <td>14-08-2024</td>
-                                <td>14-08-2024</td>
-                                <td>2H + 5 min</td>
-                                <td>Contado</td>
-                                <td>$7,290</td>
-                                <td>$1,710</td>
-                                <td>$9,000</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <Search placeholder='Busque por placa...' />
+                <Suspense key={query + currentPage} fallback={<HistorialTableSkeleton />}>
+                    <HistorialTable query={query} currentPage={currentPage} />
+                </Suspense>
+                <div className="flex w-full justify-center">
+                    <Pagination totalPages={totalPages} />
                 </div>
             </div>
         </div>

@@ -1,0 +1,155 @@
+@startuml
+class User {
+
+- nombreUsuario: String
+- nombreCargo: JobTitle
+- contrasena: String
+- celular: String
+- numIdentificacion: String
+
+}
+
+class Event {
+
+- placa: String
+- fechaHoraIngreso: String
+- fechaHoraSalida: String
+- duracion: String
+- valorBase: Number
+- iva: Number
+- total: Number
+- tipoVehiculo: VehicleType
+- tiquetePerdido: boolean
+
+}
+
+class Incident {
+
+- descripcion: String
+- fechaHoraSuceso: String
+}
+
+class IncidentPlate {
+
+- placa: String
+
+}
+
+class BlackPlate {
+
+- placa: String
+
+}
+
+class Gallery {
+
+- url: String
+
+}
+
+class Transaction{
+
+- fechaHoraTransaccion: String
+- metodoPago: PaymentMethod
+- valor: Number
+
+}
+
+class PaymentCard {
+
+- tipo: CardType
+- proveedor: CardProvider
+- ultimosCuatroDigitos: String
+- codAutorizacionEmisor: String
+- estado: TransactionStatus
+
+}
+
+class ParkingFee {
+- nombreTarifa: String
+- tipoVehiculo: VehicleType
+- valorHora: Number
+- incrementoPrimerHora: Number
+- incrementoSegundaHora: Number
+- valorDia: Number
+- primeraHoraAPartirMinuto: Number
+- horaAdicionalAPartirMinuto: Number
+- vigenciaDesde: String
+- vigenciaHasta: String
+- exclusivoMensualidad: boolean
+- exclusivoAdministracion: boolean
+- tarifaActiva: boolean
+- nuevoDia: NewDay
+}
+
+class WeekDays {
+- lunes
+- martes
+- miercoles
+- jueves
+- viernes
+- sabado
+- domingo
+}
+
+enum NewDay {
+NUEVO_DIA_CALENDARIO
+24_HORAS
+12_HORAS
+8_HORAS
+}
+
+
+enum CardType {
+DEBITO
+CREDITO
+}
+
+enum CardProvider {
+
+VISA
+MASTERCARD
+
+}
+
+enum TransactionStatus {
+
+PENDIENTE
+APROBADO
+RECHAZADO
+
+}
+
+enum JobTitle {
+
+ADMIN
+EMPLEADO
+
+}
+
+enum VehicleType {
+AUTOMOVIL
+CAMIONETA
+MOTOCICLETA
+BICICLETA
+}
+
+enum PaymentMethod {
+
+CONTADO
+TARJETA
+
+}
+
+
+User "1: user" --- "0..*: events" Event
+Event "1: event" -- "1: transaction" Transaction
+Event "0..*" --- "1: appliedFee" ParkingFee
+Transaction "1: transaction" -- "0..1: paymentCard" PaymentCard
+Incident "1: incident" -- "0..*: gallery" Gallery
+Incident "1: incident" -- "0..*: licensePlates" IncidentPlate
+User "1: user" --- "0..*: incidents" Incident
+User "1: user" -- "0..*" BlackPlate
+User "1: user" ---- "0..*: tarifas" ParkingFee
+ParkingFee "1..*" -- "1: diasAplicable" WeekDays
+@enduml

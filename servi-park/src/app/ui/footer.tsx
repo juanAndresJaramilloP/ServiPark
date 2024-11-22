@@ -1,14 +1,15 @@
 import Image from "next/image";
 import ServiParkLogo from '@/app/ui/servipark-logo';
+import Clock from "@/app/ui/clock";
 
 export default function Footer() {
     return (
-        <footer className="footer bg-base-100 items-center p-4 shadow-inner grid-flow-col">
+        <footer className="footer bg-base-100 items-center p-2 shadow-inner grid-flow-col">
             <aside className="grid-flow-col items-center">
                 <div className="w-20 md:w-28 h-auto ml-4">
                     <ServiParkLogo />
                 </div>
-                <p className="hidden md:block text-sm md:text-xl font-medium text-gray-900 ml-4 md:ml-16" >{new Date().toLocaleString()}</p>
+                <Clock initialTime={new Date().toLocaleString()}/>
             </aside>
             <nav className="grid-flow-col md:place-self-center md:justify-self-end items-center">
                 <Image

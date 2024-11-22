@@ -1,6 +1,5 @@
 // 'use client';
 
-
 // import { lusitana } from '@/app/ui/fonts';
 // import {
 //   AtSymbolIcon,
@@ -9,11 +8,11 @@
 // } from '@heroicons/react/24/outline';
 // import { ArrowRightIcon } from '@heroicons/react/20/solid';
 // import { Button } from './button';
-// import { useActionState } from 'react';
 // import { authenticate } from '@/app/lib/actions';
+// import { useFormState } from 'react-dom';
 
 // export default function LoginForm() {
-//   const [errorMessage, formAction, isPending] = useActionState(
+//   const [errorMessage, formAction, isPending] = useFormState(
 //     authenticate,
 //     undefined,
 //   );
