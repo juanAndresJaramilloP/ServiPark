@@ -252,18 +252,14 @@ export function StatsCardSkeleton() {
                                 <label className="md:text-md font-medium text-gray-950" htmlFor='desde'>Desde</label>
                                 <div className='flex flex-row items-center gap-2'>
                                     <p className='text-gray-500'>(mm/dd/aaaa)</p>
-                                    <div className='container border border-gray-200 rounded-md p-2 w-[200px]'>
-                                        <CalendarDatePicker setSelectedDate={(date: Date | null) => (date = new Date())} disabled={true} />
-                                    </div>
+                                    <CalendarDatePicker setSelectedDate={(date: Date | null) => (date = new Date())} disabled={true} />
                                 </div>
                             </div>
                             <div className='flex flex-row items-center justify-between mt-4'>
                                 <label className="md:text-md font-medium text-gray-950" htmlFor='hasta'>Hasta</label>
                                 <div className='flex flex-row items-center gap-2'>
                                     <p className='text-gray-500'>(mm/dd/aaaa)</p>
-                                    <div className='container border border-gray-200 rounded-md p-2 w-[200px]'>
-                                        <CalendarDatePicker setSelectedDate={(date: Date | null) => (date = new Date())} disabled={true}/>
-                                    </div>
+                                    <CalendarDatePicker setSelectedDate={(date: Date | null) => (date = new Date())} disabled={true} />
                                 </div>
                             </div>
                             {/* <div className='flex flex-row items-center justify-between mt-4'>
@@ -285,11 +281,67 @@ export function StatsCardSkeleton() {
                             </div> */}
                         </div>
                         <div className='flex flex-row-reverse mt-4'>
-                            <button className="btn btn-neutral"disabled={true}> "Consultar"</button>
+                            <button className="btn btn-neutral" disabled={true}> "Consultar"</button>
                         </div>
                     </form>
                 </div>
             </div>
+        </div>
+    );
+}
+
+export function EmployeesTableRowSkeleton() {
+
+    return (
+        <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+            {/* nombre_usuario */}
+            <td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
+                <div className="skeleton h-6 w-32 rounded bg-gray-100"></div>
+            </td>
+            {/* nombre_cargo */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* celular */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* cedula */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-6 w-16 rounded bg-gray-100"></div>
+            </td>
+            {/* Editar */}
+            <td className="whitespace-nowrap px-3 py-3">
+                <div className="skeleton h-10 w-20 rounded bg-gray-100"></div>
+            </td>
+        </tr>
+    );
+}
+
+export function EmployeesTableSkeleton() {
+
+    return (
+        <div className="overflow-auto h-[450px] w-[774px] border border-gray-300 rounded-md mt-3">
+            <table className="table table-zebra text-lg table-pin-rows">
+                <thead className='text-lg'>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cargo</th>
+                        <th>Celular</th>
+                        <th>Cedula</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <EmployeesTableRowSkeleton />
+                    <EmployeesTableRowSkeleton />
+                    <EmployeesTableRowSkeleton />
+                    <EmployeesTableRowSkeleton />
+                    <EmployeesTableRowSkeleton />
+                    <EmployeesTableRowSkeleton />
+                    <EmployeesTableRowSkeleton />
+                </tbody>
+            </table>
         </div>
     );
 }

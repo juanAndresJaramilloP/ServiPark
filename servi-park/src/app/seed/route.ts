@@ -164,17 +164,20 @@ async function createTableParkingFee() {
   `;
 }
 
-// async function createTableServiPark() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS servi_park (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       nombre TEXT NOT NULL,
-//       celdas SMALLINT NOT NULL,
-//       direccion TEXT NOT NULL
-//     );
-//   `;
-// }
+async function createTableServiPark() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS servi_park (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      nombre TEXT NOT NULL,
+      celdas SMALLINT NOT NULL,
+      celdas_vehiculo SMALLINT NOT NULL,
+      celdas_motocicleta SMALLINT NOT NULL,
+      celdas_bicicleta SMALLINT NOT NULL,
+      direccion TEXT NOT NULL
+    );
+  `;
+}
 
 async function createTableAnalytics(){
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -199,19 +202,19 @@ async function createTableAnalytics(){
 
 // MARK: - SEED TABLES
 
-// // async function seedUsers() {
-// //   const insertedUsers = await Promise.all(
-// //     users.map(async (user) => {
-// //       const hashedPassword = await bcrypt.hash(user.contrasena, 10);
-// //       return client.sql`
-// //         INSERT INTO users (nombre_usuario, nombre_cargo, celular, cedula, contrasena)
-// //         VALUES (${user.nombre_usuario}, ${user.nombre_cargo}, ${user.celular}, ${user.cedula}, ${hashedPassword});
-// //       `;
-// //     }),
-// //   );
+async function seedUsers() {
+  const insertedUsers = await Promise.all(
+    users.map(async (user) => {
+      const hashedPassword = await bcrypt.hash(user.contrasena, 10);
+      return client.sql`
+        INSERT INTO users (nombre_usuario, nombre_cargo, celular, cedula, contrasena)
+        VALUES (${user.nombre_usuario}, ${user.nombre_cargo}, ${user.celular}, ${user.cedula}, ${hashedPassword});
+      `;
+    }),
+  );
 
-// //   return insertedUsers;
-// // }
+  return insertedUsers;
+}
 
 async function seedTableEvents() {
   const insertedEvents = await Promise.all(
@@ -360,16 +363,16 @@ async function seedTableParkingFee() {
 // }
 
 
-// async function seedServiPark() {
-//   const insertedServiPark = await Promise.all(
-//     serviPark.map((sp) => {
-//       return client.sql`
-//         INSERT INTO servi_park (nombre, celdas, direccion)
-//         VALUES (${sp.nombre}, ${sp.celdas}, ${sp.direccion});
-//       `;
-//     })
-//   );
-// }
+async function seedServiPark() {
+  const insertedServiPark = await Promise.all(
+    serviPark.map((sp) => {
+      return client.sql`
+        INSERT INTO servi_park (nombre, celdas, celdas_vehiculo, celdas_motocicleta, celdas_bicicleta, direccion)
+        VALUES (${sp.nombre}, ${sp.celdas},${sp.celdas_vehiculo},${sp.celdas_motocicleta},${sp.celdas_bicicleta}, ${sp.direccion});
+      `;
+    })
+  );
+}
 
 async function seedTableAnalytics() {
   await Promise.all(
@@ -389,7 +392,7 @@ export async function GET() {
   // });
   try {
     await client.sql`BEGIN`;
-    await seedTableEvents();
+    await seedServiPark();
     await client.sql`COMMIT`;
 
     return Response.json({ message: 'Success' });

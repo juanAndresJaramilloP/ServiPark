@@ -42,7 +42,7 @@ export default function StatsCard({ setError }: StatsCardProps) {
             await new Promise((resolve) => setTimeout(() => {
                 setError('');
                 resolve(null);
-            }, 3000));
+            }, 2000));
             setDisabled(false);
         }
     }
@@ -123,18 +123,14 @@ export default function StatsCard({ setError }: StatsCardProps) {
                                 <label className="md:text-md font-medium text-gray-950" htmlFor='desde'>Desde</label>
                                 <div className='flex flex-row items-center gap-2'>
                                     <p className='text-gray-500'>(mm/dd/aaaa)</p>
-                                    <div className='container border border-gray-200 rounded-md p-2 w-[200px]'>
-                                        <CalendarDatePicker setSelectedDate={setSelectedDateStart} />
-                                    </div>
+                                    <CalendarDatePicker setSelectedDate={setSelectedDateStart} />
                                 </div>
                             </div>
                             <div className='flex flex-row items-center justify-between mt-4'>
                                 <label className="md:text-md font-medium text-gray-950" htmlFor='hasta'>Hasta</label>
                                 <div className='flex flex-row items-center gap-2'>
                                     <p className='text-gray-500'>(mm/dd/aaaa)</p>
-                                    <div className='container border border-gray-200 rounded-md p-2 w-[200px]'>
-                                        <CalendarDatePicker setSelectedDate={setSelectedDateEnd} />
-                                    </div>
+                                    <CalendarDatePicker setSelectedDate={setSelectedDateEnd} />
                                 </div>
                             </div>
                         </div>

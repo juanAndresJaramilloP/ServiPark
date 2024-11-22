@@ -5,17 +5,28 @@ import CalendarDatePicker from '@/app/ui/calendardatepicker';
 import { useState } from 'react';
 import { createParkingFee } from '@/app/lib/actions';
 
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
+
 export default function ConfigurarTarifasForm() {
 
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/api/auth/signin')
+        }
+    })
+    const userID = session?.user.id || '';
     const [selectedDateStart, setSelectedDateStart] = useState<Date | null>(new Date());
     const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(new Date());
 
     return (
         <form action={createParkingFee}>
+            <input hidden id='userID' name="userID" value={userID} readOnly />
             <div className="rounded-md bg-gray-100 p-4">
                 <div className="flex flex-col">
-                    <div className="flex flex-row justify-between gap-2">
-                        <div className="flex flex-col w-64">
+                    <div className="flex flex-row gap-[73px]">
+                        <div className="flex flex-col w-96">
                             <label className="md:text-md md:font-medium text-gray-950" htmlFor="NombreTarifa">Nombre Tarifa</label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
@@ -45,8 +56,8 @@ export default function ConfigurarTarifasForm() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col">
-                            <label className="md:text-md md:font-medium text-gray-950" htmlFor="ValorHora">Valor Hora</label>
+                        <div className="flex flex-col w-28">
+                            <label className="md:text-md md:font-medium text-gray-950 text-nowrap" htmlFor="ValorHora">Valor Hora</label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
                                     <input
@@ -61,7 +72,7 @@ export default function ConfigurarTarifasForm() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col w-44">
                             <label className="md:text-md md:font-medium text-gray-950" htmlFor="IncrementoPrimerHora">Incremento 1er Hora</label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
@@ -77,7 +88,7 @@ export default function ConfigurarTarifasForm() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col w-44">
                             <label className="md:text-md md:font-medium text-gray-950" htmlFor="IncrementoSegundaHora">Incremento 2da Hora</label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
@@ -93,8 +104,8 @@ export default function ConfigurarTarifasForm() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col">
-                            <label className="md:text-md md:font-medium text-gray-950" htmlFor="ValorDia">Valor Día</label>
+                        <div className="flex flex-col w-28">
+                            <label className="md:text-md md:font-medium text-gray-950 text-nowrap" htmlFor="ValorDia">Valor Día</label>
                             <div className="relative mt-2 rounded-md">
                                 <div className="relative">
                                     <input
@@ -110,9 +121,9 @@ export default function ConfigurarTarifasForm() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row gap-4 mt-4">
+                    <div className="flex flex-row justify-between mt-7">
                         <div className="container flex flex-row items-center" >
-                            <label className="md:text-md md:font-medium text-gray-950 text-wrap w-44" htmlFor="FlagPrimeraHora" >Cobrar Primera Hora a Partir del Minuto</label>
+                            <label className="md:text-md md:font-medium text-gray-950 text-wrap w-44 mr-2" htmlFor="FlagPrimeraHora" >Cobrar Primera Hora a Partir del Minuto</label>
                             <div className="relative rounded-md">
                                 <div className="relative">
                                     <input
@@ -120,14 +131,14 @@ export default function ConfigurarTarifasForm() {
                                         step={1}
                                         id="FlagPrimeraHora"
                                         name="FlagPrimeraHora"
-                                        className="peer w-12 border rounded-md py-2 px-2 mx-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
+                                        className="peer w-12 border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="Min"
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="container flex flex-row items-center" >
-                            <label className="md:text-md md:font-medium text-gray-950 text-wrap w-48" htmlFor="FlagHoraAdicional" >Cobrar Hora Adicional a Partir del Minuto</label>
+                            <label className="md:text-md md:font-medium text-gray-950 text-wrap w-48 mr-2" htmlFor="FlagHoraAdicional" >Cobrar Hora Adicional a Partir del Minuto</label>
                             <div className="relative rounded-md">
                                 <div className="relative">
                                     <input
@@ -135,40 +146,47 @@ export default function ConfigurarTarifasForm() {
                                         step={1}
                                         id="FlagHoraAdicional"
                                         name="FlagHoraAdicional"
-                                        className="peer w-12 border rounded-md py-2 px-2 mx-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
+                                        className="peer w-12 border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="Min"
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="container flex flex-row items-center" >
-                            <label className="md:text-md md:font-medium text-gray-950 text-wrap" htmlFor="VigenciaDesde">Vigencia Desde</label>
+                            <label className="md:text-md md:font-medium text-gray-950 w-44 text-wrap mr-2" htmlFor="CobrarDiaAPartirMin" >Cobrar Día a Partir del Minuto</label>
                             <div className="relative rounded-md">
                                 <div className="relative">
-                                    <div className="container border border-gray-200 rounded-md p-2 w-[200px] mx-2">
-                                        <div className='!w-40 z-50' style={{ width: 160 }}>
-                                            <CalendarDatePicker setSelectedDate={setSelectedDateStart} />
-                                        </div>
-                                        <input hidden id="VigenciaDesde" name="VigenciaDesde" value={selectedDateStart?.toISOString() || ''} readOnly></input>
-                                    </div>
+                                    <input
+                                        type="number"
+                                        step={1}
+                                        id="CobrarDiaAPartirMin"
+                                        name="CobrarDiaAPartirMin"
+                                        className="peer w-14 border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
+                                        placeholder="Min"
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div className="container flex flex-row items-center" >
-                            <label className="md:text-md md:font-medium text-gray-950 text-wrap" htmlFor="VigenciaHasta">Vigencia Hasta</label>
+                            <label className="md:text-md md:font-medium text-gray-950 text-nowrap mr-2" htmlFor="VigenciaDesde">Vigencia Desde</label>
                             <div className="relative rounded-md">
                                 <div className="relative">
-                                    <div className="container border border-gray-200 rounded-md p-2 w-[200px] mx-2">
-                                        <div className='!w-40 z-50' style={{ width: '160px' }}>
-                                            <CalendarDatePicker setSelectedDate={setSelectedDateEnd} />
-                                        </div>
-                                        <input hidden id="VigenciaHasta" name="VigenciaHasta" value={selectedDateEnd?.toISOString() || ''} readOnly></input>
-                                    </div>
+                                    <CalendarDatePicker setSelectedDate={setSelectedDateStart} />
+                                    <input readOnly hidden id="VigenciaDesde" name="VigenciaDesde" value={selectedDateStart?.toISOString() || ''}></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="container flex flex-row items-center" >
+                            <label className="md:text-md md:font-medium text-gray-950 text-nowrap mr-2" htmlFor="VigenciaHasta">Vigencia Hasta</label>
+                            <div className="relative rounded-md">
+                                <div className="relative">
+                                    <CalendarDatePicker setSelectedDate={setSelectedDateEnd} />
+                                    <input readOnly hidden id="VigenciaHasta" name="VigenciaHasta" value={selectedDateEnd?.toISOString() || ''}></input>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row mt-4 gap-4">
+                    <div className="flex flex-row mt-7 gap-16">
                         <fieldset className='min-w-fit'>
                             <div className='flex flex-row items-center gap-2 min-w-fit'>
                                 <legend className="md:text-md md:font-medium text-gray-950 min-w-fit">
@@ -262,7 +280,7 @@ export default function ConfigurarTarifasForm() {
                                     <select
                                         id="CobrarNuevoDiaCada"
                                         name="CobrarNuevoDiaCada"
-                                        className="peer block w-full cursor-pointer border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
+                                        className="peer block w-fit min-w-52 cursor-pointer border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
                                         <option value="" disabled>Seleccione una opcion</option>
                                         <option>Nuevo día calendario</option>
                                         <option>24 horas</option>
@@ -307,21 +325,6 @@ export default function ConfigurarTarifasForm() {
                                 <label htmlFor='TarifaActiva' className='mx-2 cursor-pointer'>
                                     Tarifa activa
                                 </label>
-                            </div>
-                            <div className="container flex flex-row items-center" >
-                                <label className="md:text-md md:font-medium text-gray-950 w-fit text-nowrap" htmlFor="CobrarDiaAPartirMin" >Cobrar Día a Partir del Minuto</label>
-                                <div className="relative rounded-md">
-                                    <div className="relative">
-                                        <input
-                                            type="number"
-                                            step={1}
-                                            id="CobrarDiaAPartirMin"
-                                            name="CobrarDiaAPartirMin"
-                                            className="peer w-14 border rounded-md py-2 px-2 mx-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
-                                            placeholder="Min"
-                                        />
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div>

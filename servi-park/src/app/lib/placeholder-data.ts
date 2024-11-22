@@ -1,19 +1,26 @@
 //placeholder data for trying the app functionalities
 
+// {
+//     nombre_usuario: 'Juan Andres Jaramillo',
+//     nombre_cargo: 'ADMIN',
+//     celular: '1234567890',
+//     cedula: '1234567890',
+//     contrasena: 'admin'
+// },
+// {
+//     nombre_usuario: 'Paola Rodriguez',
+//     nombre_cargo: 'EMPLEADO',
+//     celular: '0987654321',
+//     cedula: '0987654321',
+//     contrasena: 'empleado'
+// }
 const users = [
     {
-        nombre_usuario: 'Juan Andres Jaramillo',
-        nombre_cargo: 'ADMIN',
-        celular: '1234567890',
-        cedula: '1234567890',
-        contrasena: 'admin'
-    },
-    {
-        nombre_usuario: 'Paola Rodriguez',
-        nombre_cargo: 'EMPLEADO',
+        nombre_usuario: 'Camilo Escobar Velasquez',
+        nombre_cargo: 'GERENTE',
         celular: '0987654321',
-        cedula: '0987654321',
-        contrasena: 'empleado'
+        cedula: '1111111111',
+        contrasena: 'gerente'
     }
 ]
 
@@ -125,7 +132,7 @@ const parkingFees = [
     {
         user_id: 'beb58dfd-dce5-41c1-bbcc-39ecdb9e2724',
         week_days_id: '1111111',
-        nombre_tarifa: 'Estandar automóvil 2024', 
+        nombre_tarifa: 'Estandar automóvil 2024',
         tipo_vehiculo: 'AUTOMOVIL',
         valor_hora: 4700,
         incremento_primer_hora: 3000,
@@ -140,7 +147,7 @@ const parkingFees = [
     {
         user_id: '95723cc3-8cf5-41da-9d32-c3e83ee7b4f8',
         week_days_id: '0000011',
-        nombre_tarifa: 'Estándar fin de semana automóviles 2024', 
+        nombre_tarifa: 'Estándar fin de semana automóviles 2024',
         tipo_vehiculo: 'AUTOMOVIL',
         valor_hora: 3700,
         incremento_primer_hora: 2000,
@@ -180,6 +187,9 @@ const serviPark = [
     {
         nombre: "ServiPark",
         celdas: 100,
+        celdas_vehiculo: 80,
+        celdas_motocicleta: 10,
+        celdas_bicicleta: 10,
         direccion: "Calle 123 # 45-67",
     }
 ]

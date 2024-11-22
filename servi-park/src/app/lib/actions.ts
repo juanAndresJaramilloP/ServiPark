@@ -6,12 +6,13 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { getCurrentLocalTimestampString, formatCurrencyToNumber } from '@/app/lib/utils';
 import { BillingData, BillingState, Transaction, InvoiceEvent, PaymentCard } from '@/app/lib/definitions';
+import bcrypt from "bcrypt";
 
 // MARK: - SCHEMAS
 
 const ParkingFeeSchema = z.object({
     id: z.string(),
-    user_id: z.string(),
+    userID: z.string(),
     week_days_id: z.string(),
     NombreTarifa: z.string({ required_error: "Debe ingresar un nombre valido para la tarifa." }).max(100, { message: "Maximo 100 caracteres" }),
     TipoVehiculo: z.enum(['Automóvil', 'Camioneta', 'Motocicleta', 'Bicicleta']),
@@ -38,15 +39,25 @@ const ParkingFeeSchema = z.object({
 });
 
 const CarRegistrationSchema = z.object({
-    user_id: z.string(),
+    userID: z.string(),
     Tarifa: z.string(),
     Placa: z.string({ required_error: "Debe ingresar una placa." }).max(6, { message: "Maximo 6 caracteres" }).min(4, { message: "Minimo 4 caracteres" }),
     TipoVehiculo: z.enum(['Automóvil', 'Camioneta', 'Motocicleta', 'Bicicleta']),
 });
 
+const EmployeeSchema = z.object({
+    id: z.string(),
+    nombre: z.string({ required_error: "Debe ingresar un nombre." }).max(100, { message: "Maximo 100 caracteres" }),
+    cargo: z.enum(['EMPLEADO', 'ADMINISTRADOR', 'GERENTE']),
+    cedula: z.string({ required_error: "Debe ingresar una cedula." }).max(10, { message: "Maximo 10 caracteres" }).min(7, { message: "Minimo 7 caracteres" }),
+    celular: z.string({ required_error: "Debe ingresar un celular." }).max(10, { message: "Maximo 10 caracteres" }).min(10, { message: "Minimo 10 caracteres" }),
+    contrasena: z.string({ required_error: "Debe ingresar una contraseña." }).min(5, { message: "Minimo 6 caracteres" }).max(300, { message: "Maximo 300 caracteres" }),
+});
 
-const CreateParkingFee = ParkingFeeSchema.omit({ id: true, user_id: true, week_days_id: true });
-const RegisterVehicle = CarRegistrationSchema.omit({ user_id: true });
+
+const CreateParkingFee = ParkingFeeSchema.omit({ id: true, week_days_id: true });
+const CreateEmployee = EmployeeSchema.omit({ id: true });
+const EditEmployee = EmployeeSchema.omit({ contrasena: true, id: true });
 
 // EMPLOYEE RELATED ACTIONS
 
@@ -87,8 +98,6 @@ export async function createParkingFee(formData: FormData) {
 
     try {
         // insert the new parking fee:
-        // user id: beb58dfd-dce5-41c1-bbcc-39ecdb9e2724 FOR TESTING, DELETE WHEN AUTH IS DONE.
-
         // prepare the insert statement
         if (new Date(validatedFields.data.VigenciaDesde) > new Date(validatedFields.data.VigenciaHasta)) {
             return {
@@ -130,7 +139,7 @@ export async function createParkingFee(formData: FormData) {
 
         await sql`
         INSERT INTO parking_fee (user_id, week_days_id, nombre_tarifa, tipo_vehiculo, valor_hora, incremento_primer_hora, incremento_segunda_hora, valor_dia, cobrar_valor_dia_a_partir_minuto, primera_hora_a_partir_minuto, hora_adicional_a_partir_minuto, vigencia_desde, vigencia_hasta, exclusivo_mensualidad, exclusivo_administracion, tarifa_activa, nuevo_dia)
-        VALUES ('beb58dfd-dce5-41c1-bbcc-39ecdb9e2724', ${week_days_id}, ${validatedFields.data.NombreTarifa}, ${tipoVehiculo}, ${validatedFields.data.ValorHora}, ${validatedFields.data.IncrementoPrimerHora}, ${validatedFields.data.IncrementoSegundaHora}, ${validatedFields.data.ValorDia}, ${validatedFields.data.CobrarDiaAPartirMin}, ${validatedFields.data.FlagPrimeraHora}, ${validatedFields.data.FlagHoraAdicional}, ${validatedFields.data.VigenciaDesde}, ${validatedFields.data.VigenciaHasta}, ${validatedFields.data.ExclusivoMensualidad || false}, ${validatedFields.data.ExclusivoAdministracion || false}, ${validatedFields.data.TarifaActiva || false}, ${nuevoDia})
+        VALUES (${validatedFields.data.userID}, ${week_days_id}, ${validatedFields.data.NombreTarifa}, ${tipoVehiculo}, ${validatedFields.data.ValorHora}, ${validatedFields.data.IncrementoPrimerHora}, ${validatedFields.data.IncrementoSegundaHora}, ${validatedFields.data.ValorDia}, ${validatedFields.data.CobrarDiaAPartirMin}, ${validatedFields.data.FlagPrimeraHora}, ${validatedFields.data.FlagHoraAdicional}, ${validatedFields.data.VigenciaDesde}, ${validatedFields.data.VigenciaHasta}, ${validatedFields.data.ExclusivoMensualidad || false}, ${validatedFields.data.ExclusivoAdministracion || false}, ${validatedFields.data.TarifaActiva || false}, ${nuevoDia})
         `;
 
     } catch (error) {
@@ -158,7 +167,7 @@ export async function registerVehicle(formData: FormData) {
     const rawFormData = Object.fromEntries(formData.entries())
 
     // validate using zod
-    const validatedFields = RegisterVehicle.safeParse(rawFormData);
+    const validatedFields = CarRegistrationSchema.safeParse(rawFormData);
     if (!validatedFields.success) {
         console.log("DEBUG validated Fields Errors: ", validatedFields.error.flatten().fieldErrors)
         return {
@@ -191,7 +200,6 @@ export async function registerVehicle(formData: FormData) {
     }
 
     // insert event:
-    // ID user: beb58dfd-dce5-41c1-bbcc-39ecdb9e2724 FOR TESTING
     const fechaHoraIngreso = getCurrentLocalTimestampString();
 
     console.log("DEBUG: Fecha Hora Ingreso: ", fechaHoraIngreso);
@@ -199,7 +207,7 @@ export async function registerVehicle(formData: FormData) {
     try {
         await sql`
         INSERT INTO events (user_id, tarifa_id, placa, fecha_hora_ingreso, fecha_hora_salida, tipo_vehiculo)
-        VALUES ('beb58dfd-dce5-41c1-bbcc-39ecdb9e2724', ${validatedFields.data.Tarifa}, ${validatedFields.data.Placa.toUpperCase()}, ${fechaHoraIngreso}, ${null}, ${validatedFields.data.TipoVehiculo})
+        VALUES (${validatedFields.data.userID}, ${validatedFields.data.Tarifa}, ${validatedFields.data.Placa.toUpperCase()}, ${fechaHoraIngreso}, ${null}, ${validatedFields.data.TipoVehiculo})
         `;
 
     } catch (error) {
@@ -272,8 +280,6 @@ export async function registerPayment(billingData: BillingData | any): Promise<B
         const transaction_id = response.rows[0].id;
 
         //registra la salida del vehiculo en la tabla de eventos
-
-
         const eventId = event.rows[0].id;
         const iva = numberCurrency * 0.19;
         const valor_base = numberCurrency - iva;
@@ -303,3 +309,103 @@ export async function registerPayment(billingData: BillingData | any): Promise<B
     }
 
 }
+
+export async function deleteEmployee(id: string) {
+    try {
+        await sql`
+        DELETE FROM users
+        WHERE id = ${id}
+        `;
+    } catch (error) {
+        console.error('DEBUG: Error deleting employee:\n', error);
+        return {
+            error: 'Ocurrio un error al intentar eliminar el empleado. Por favor intentelo nuevamente.',
+        };
+    }
+
+
+    revalidatePath('/management/employees');
+}
+
+export async function addEmployee(formData: FormData) {
+
+    const rawFormData = Object.fromEntries(formData.entries())
+    // validate using zod
+    const validatedFields = CreateEmployee.safeParse(rawFormData);
+    if (!validatedFields.success) {
+        console.log("DEBUG validated Fields Errors: ", validatedFields.error.flatten().fieldErrors)
+        return {
+            error: JSON.stringify(validatedFields.error.flatten().fieldErrors),
+            message: 'Error de validación. No se pudo agregar el empleado.',
+        };
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(validatedFields.data.contrasena, 10);
+        await sql`
+          INSERT INTO users (nombre_usuario, nombre_cargo, celular, cedula, contrasena)
+          VALUES (${validatedFields.data.nombre}, ${validatedFields.data.cargo}, ${validatedFields.data.celular}, ${validatedFields.data.cedula}, ${hashedPassword});
+        `;
+    } catch (error) {
+        console.error('DEBUG: Error adding employee:\n', error);
+        return {
+            error: 'Ocurrio un error al intentar agregar el empleado. Por favor intentelo nuevamente.',
+        };
+    }
+
+    revalidatePath('/management/employees');
+    return {
+        message: '¡Empleado agregado exitosamente!',
+    };
+}
+
+export async function updateEmployee(formData: FormData, id: string) {
+
+    const rawFormData = Object.fromEntries(formData.entries())
+    // validate using zod
+    const validatedFields = EditEmployee.safeParse(rawFormData);
+    if (!validatedFields.success) {
+        console.log("DEBUG validated Fields Errors: ", validatedFields.error.flatten().fieldErrors)
+        return {
+            error: JSON.stringify(validatedFields.error.flatten().fieldErrors),
+            message: 'Error de validación. No se pudo editar el empleado.',
+        };
+    }
+
+    try{
+        await sql`
+        UPDATE users
+        SET nombre_usuario = ${validatedFields.data.nombre}, nombre_cargo = ${validatedFields.data.cargo}, cedula = ${validatedFields.data.cedula}, celular = ${validatedFields.data.celular}
+        WHERE id = ${id};
+        `;
+    }catch(error){
+        console.error('DEBUG: Error updating employee:\n', error);
+        return {
+            error: 'Ocurrio un error al intentar editar el empleado. Por favor intentelo nuevamente.',
+        };
+    }
+
+    revalidatePath('/management/employees');
+    return {
+        message: '¡Empleado editado exitosamente!',
+    };
+};
+
+// export async function authenticate(
+//     prevState: string | undefined,
+//     formData: FormData,
+// ) {
+//     try {
+//         await signIn('credentials', formData);
+//     } catch (error) {
+//         if (error instanceof AuthError) {
+//             switch (error.type) {
+//                 case 'CredentialsSignin':
+//                     return 'Invalid credentials.';
+//                 default:
+//                     return 'Something went wrong.';
+//             }
+//         }
+//         throw error;
+//     }
+// }

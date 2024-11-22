@@ -14,9 +14,9 @@ export default async function ConfigurarTarifasTable(
     const fees = await fetchParkingFees(query, currentPage);
 
     return (
-        <div className="overflow-auto h-[250px] z-0">
-            <table className="table table-zebra table-pin-rows">
-                <thead className='md:text-lg z-0'>
+        <div className="overflow-auto h-[250px]">
+            <table className="table table-zebra table-pin-rows !-z-10">
+                <thead className='md:text-lg'>
                     <tr>
                         <th>Nombre Tarifa</th>
                         <th>Tipo Vehículo</th>

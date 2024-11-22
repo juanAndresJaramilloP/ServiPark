@@ -16,10 +16,10 @@ const carExitSchema = z.object({
 
 // QUERIES RELACIONADAS AL ADMINISTRADOR:
 
-const ITEMS_PER_PAGE_EVENTS = 10;
-export async function testFetchFilteredEvents(query: string, currentPage: number) {
+const ITEMS_PER_PAGE = 10;
+export async function fetchFilteredEvents(query: string, currentPage: number, userID: string) {
 
-    const offset = (currentPage - 1) * ITEMS_PER_PAGE_EVENTS;
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
     try {
         // borrar promesa al final.. es solo para simular la carga de los datos
@@ -31,16 +31,17 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
             data = await sql<Event>`
             SELECT *
             FROM events
+            WHERE user_id = ${userID}
             ORDER BY fecha_hora_ingreso DESC
-            LIMIT ${ITEMS_PER_PAGE_EVENTS} OFFSET ${offset}
+            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
             `;
         } else {
             data = await sql<Event>`
             SELECT *
             FROM events
-            WHERE placa ILIKE ${`%${query}%`}
+            WHERE placa ILIKE ${`%${query}%`} AND user_id = ${userID}
             ORDER BY fecha_hora_ingreso DESC
-            LIMIT ${ITEMS_PER_PAGE_EVENTS} OFFSET ${offset}
+            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
             `;
         }
 
@@ -64,23 +65,24 @@ export async function testFetchFilteredEvents(query: string, currentPage: number
     }
 }
 
-export async function fetchEventsPages(query: string) {
+export async function fetchEventsPages(query: string, userID: string) {
     try {
         let count;
         if (query === '') {
             count = await sql`SELECT COUNT(*)
             FROM events
+            WHERE user_id = ${userID}
             `;
         } else {
             count = await sql`SELECT COUNT(*)
             FROM events
             WHERE
-            placa ILIKE ${`%${query}%`}
+            placa ILIKE ${`%${query}%`} AND user_id = ${userID}
             `;
         }
 
         console.log('DEBUG: Total events:', count.rows[0].count);
-        const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE_EVENTS);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
         return totalPages;
     } catch (error) {
         console.error('Database Error:', error);
@@ -280,7 +282,7 @@ export async function generateInvoiceForVehicle(formData: FormData): Promise<Inv
         const primeraHora = Number(fee.rows[0].primera_hora_a_partir_minuto);
         const horaAdicional = Number(fee.rows[0].hora_adicional_a_partir_minuto);
         const cobrarDiaAPartirMin = Number(fee.rows[0].cobrar_valor_dia_a_partir_minuto);
-        
+
         const nuevoDia = fee.rows[0].nuevo_dia;
         const nombreTarifa = fee.rows[0].nombre_tarifa;
 
@@ -315,6 +317,81 @@ export async function generateInvoiceForVehicle(formData: FormData): Promise<Inv
         };
     }
 
+}
+
+export async function fetchFilteredEmployees(query: string, currentPage: number) {
+
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+    try {
+
+        console.log('DEBUG: Fetching Users data...');
+
+        let data;
+        if (query === '') {
+            data = await sql<User>`
+            SELECT *
+            FROM users
+            ORDER BY nombre_usuario DESC
+            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+            `;
+        } else {
+            data = await sql<User>`
+            SELECT *
+            FROM users
+            WHERE nombre_usuario ILIKE ${`%${query}%`}
+            ORDER BY nombre_usuario DESC
+            LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+            `;
+        }
+
+        console.log("DEBUG: Users data fetched successfully.", data.rows.length);
+
+        return data.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch employees data.');
+    }
+}
+
+export async function fetchEmployeePages(query: string) {
+    try {
+        let count;
+        if (query === '') {
+            count = await sql`SELECT COUNT(*)
+            FROM users
+            `;
+        } else {
+            count = await sql`SELECT COUNT(*)
+            FROM users
+            WHERE
+            nombre_usuario ILIKE ${`%${query}%`}
+            `;
+        }
+
+        console.log('DEBUG: Total users fetched:', count.rows[0].count);
+        const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+        return totalPages;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch total number of users.');
+    }
+}
+
+export async function fetchEmployeeById(id: string) {
+
+    try {
+        const data = await sql<User>`
+            SELECT *
+            FROM users
+            WHERE id = ${id}
+            `;
+
+        return data.rows[0];
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch employee data.');
+    }
 }
 
 

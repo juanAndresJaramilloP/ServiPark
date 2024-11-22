@@ -28,6 +28,6 @@ export default function CalendarDatePicker(
     };
 
     return (
-        <DatePicker disabled={disabled} locale={"es"} selected={startDate} onChange={(date) => handleDateChange(date)} />
+        <DatePicker className="w-36 border border-gray-300 rounded-md !z-50" disabled={disabled} locale={"es"} selected={startDate} onChange={(date) => handleDateChange(date)} />
     );
 }

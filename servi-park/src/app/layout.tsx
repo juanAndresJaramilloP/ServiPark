@@ -1,5 +1,6 @@
 import '@/app/ui/global.css';
-import {inter} from '@/app/ui/fonts';
+import { inter } from '@/app/ui/fonts';
+import AuthProvider from '@/app/context/AuthProvider';
 
 export default function RootLayout({
   children,
@@ -7,8 +8,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="lofi">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+    <html lang="es" data-theme="lofi">
+      <body className={`${inter.className} antialiased`}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

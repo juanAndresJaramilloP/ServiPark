@@ -2,8 +2,18 @@ import Image from 'next/image';
 import RegisterVehicleForm from '@/app/ui/registrarvehiculo/form';
 import { fetchActiveParkingFeesList } from '@/app/lib/data';
 
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
+
 export default async function Page() {
 
+    const session = await getServerSession(options);
+    if (!session) {
+        redirect('/api/auth/signin');
+    }
+
+    const userID = session.user.id;
     const fees = await fetchActiveParkingFeesList()
 
     
@@ -25,7 +35,7 @@ export default async function Page() {
                     </div>
                 </div>
                 <div className="card-body">
-                    <RegisterVehicleForm parkingFees={fees} />
+                    <RegisterVehicleForm parkingFees={fees} userID={userID} />
                 </div>
             </div>
         </div>

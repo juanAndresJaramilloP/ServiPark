@@ -1,5 +1,5 @@
 import ServiParkLogo from '@/app/ui/servipark-logo';
-// import LoginForm from '@/app/ui/login-form';
+import LoginForm from '@/app/ui/login-form';
 
 export default function LoginPage() {
     return (
@@ -8,7 +8,7 @@ export default function LoginPage() {
                 <div className=" md:h-1/4">
                     <ServiParkLogo />
                 </div>
-                {/* <LoginForm /> */}
+                <LoginForm />
             </div>
         </main>
     );

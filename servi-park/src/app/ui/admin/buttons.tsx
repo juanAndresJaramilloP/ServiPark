@@ -1,6 +1,7 @@
 import DownloadDataModal from '@/app/ui/download-data-modal';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { User } from 'next-auth';
 
 export function DownloadDataButton() {
     return (
@@ -45,7 +46,7 @@ export function FinancialReportsButton() {
     );
 }
 
-export function ParkingFeesButton() {
+export function ParkingFeesButton({ user }: { user: User | undefined }) {
 
     return (
         <div className="card lg:card-side bg-base-200 shadow-2xl max-w-[450px]">

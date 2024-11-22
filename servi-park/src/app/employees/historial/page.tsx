@@ -6,14 +6,24 @@ import Pagination from '@/app/ui/pagination';
 import { fetchEventsPages } from '@/app/lib/data';
 import Search from '@/app/ui/search';
 
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
+
 export default async function Page(
     { searchParams }: { searchParams?: { query?: string; page?: string; } }
 ) {
 
+    const session = await getServerSession(options);
+    if (!session) {
+        redirect('/api/auth/signin');
+    }
+
+    const userID = session.user.id;
     const query = searchParams?.query || '';
     const currentPage = Number(searchParams?.page) || 1;
 
-    const totalPages = await fetchEventsPages(query);
+    const totalPages = await fetchEventsPages(query, userID);
 
     return (
         <div className='flex justify-center'>

@@ -6,9 +6,19 @@ import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
 import { fetchParkingFeePages } from '@/app/lib/data';
 
+import { getServerSession } from 'next-auth/next';
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { redirect } from 'next/navigation';
+
 export default async function Page(
     { searchParams }: { searchParams?: { query?: string; page?: string; } }
 ) {
+
+    const session = await getServerSession(options);
+
+    if(!session){
+        redirect('/api/auth/signin');
+    }
 
     const query = searchParams?.query || '';
     const currentPage = Number(searchParams?.page) || 1;

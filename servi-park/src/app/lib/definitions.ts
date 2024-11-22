@@ -3,10 +3,18 @@
 export type User = {
     id: string;
     nombre_usuario: string;
-    nombre_cargo: 'ADMIN' | 'EMPLEADO';
+    nombre_cargo: 'ADMINISTRADOR' | 'EMPLEADO' | 'GERENTE';
     celular: string;
     cedula: string;
     contrasena: string;
+};
+
+export type AuthUser = {
+    id: string;
+    nombre_usuario: string;
+    nombre_cargo: 'ADMIN' | 'EMPLEADO' | 'GERENTE';
+    contrasena: string;
+
 };
 
 export type Event = {

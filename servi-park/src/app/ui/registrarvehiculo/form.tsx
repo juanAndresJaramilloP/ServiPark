@@ -3,10 +3,11 @@
 import { registerVehicle } from '@/app/lib/actions';
 import { ParkingFeeField } from '@/app/lib/definitions';
 
-export default function RegisterVehicleForm({parkingFees}:{parkingFees: ParkingFeeField[]}) {
+export default function RegisterVehicleForm({ parkingFees, userID }: { parkingFees: ParkingFeeField[], userID: string }) {
 
     return (
         <form action={registerVehicle} className="space-y-3 h-[250px]">
+            <input hidden id='userID' name="userID" value={userID} />
             <div className='flex flex-row justify-between items-center'>
                 <label className="text-xl font-medium text-gray-950" htmlFor="Placa">Placa</label>
                 <input className="peer block w-40 rounded-md border border-gray-300 py-[9px] text-base text-center outline-2 placeholder:text-gray-500" type="text" id="Placa" name="Placa" placeholder='AAA123' />

@@ -1,5 +1,9 @@
-import { testFetchFilteredEvents } from "@/app/lib/data";
+import { fetchFilteredEvents } from "@/app/lib/data";
 import { formatCurrency, formatDateToLocale} from "@/app/lib/utils";
+
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 
 export default async function HistorialTable(
     {
@@ -10,7 +14,14 @@ export default async function HistorialTable(
         currentPage: number;
      }
 ) {
-    const events = await testFetchFilteredEvents(query, currentPage);
+
+    const session = await getServerSession(options);
+    if (!session) {
+        redirect('/api/auth/signin');
+    }
+
+    const userID = session.user.id;
+    const events = await fetchFilteredEvents(query, currentPage, userID);
 
     return (
         <div className="overflow-auto h-[450px] border border-gray-300 rounded-md mt-3">
