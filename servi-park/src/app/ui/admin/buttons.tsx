@@ -1,7 +1,6 @@
 import DownloadDataModal from '@/app/ui/download-data-modal';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { User } from 'next-auth';
 
 export function DownloadDataButton() {
     return (
