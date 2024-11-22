@@ -1,3 +1,4 @@
+import { PostgresInterval } from "@/app/lib/definitions";
 
 export const formatCurrency = (amount: number | undefined | string): string => {
     if (amount === undefined) {
@@ -21,7 +22,10 @@ export const formatCurrency = (amount: number | undefined | string): string => {
     return formattedAmount;
 };
 
-export const formatCurrencyToNumber = (amount: string): number => {
+export const formatCurrencyToNumber = (amount: string | undefined): number => {
+    if (amount === undefined) {
+        return 0;
+    }
     return parseInt(amount.replace(/[^0-9]/g, ''));
 }
 
@@ -91,14 +95,14 @@ export const formatTimestampToLocaleString = (timestamp: Date | undefined): stri
     return formattedStringDate;
 };
 
-export const formatPostgresInterval = (interval: any) => {
+export const formatPostgresInterval = (interval: PostgresInterval) => {
     if (!interval || interval.constructor.name !== 'PostgresInterval') {
         return 'N/A';
     }
 
     // Extract values from the PostgresInterval object, defaulting to 0 if they’re undefined
     const days = interval.days || 0;
-    const hours = interval.hours || 0;
+    const hours = interval.hours ? interval.hours - 5 : 0; // Subtract 5 hours to adjust to local timezone
     const minutes = interval.minutes || 0;
     const seconds = interval.seconds || 0;
 
@@ -107,7 +111,7 @@ export const formatPostgresInterval = (interval: any) => {
     return formattedDuration;
 };
 
-export const formatPostgresIntervalShort = (interval: any): string => {
+export const formatPostgresIntervalShort = (interval: PostgresInterval): string => {
 
     console.log("Interval: ",interval.constructor.name);
 
@@ -119,7 +123,6 @@ export const formatPostgresIntervalShort = (interval: any): string => {
     const days = interval.days || 0;
     const hours = interval.hours || 0;
     const minutes = interval.minutes || 0;
-    const seconds = interval.seconds || 0;
 
     // Format the interval values into a string
     const formattedDuration = `${days}D, ${hours}H, ${minutes}M`;

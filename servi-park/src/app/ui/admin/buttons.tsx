@@ -46,7 +46,7 @@ export function FinancialReportsButton() {
     );
 }
 
-export function ParkingFeesButton({ user }: { user: User | undefined }) {
+export function ParkingFeesButton() {
 
     return (
         <div className="card lg:card-side bg-base-200 shadow-2xl max-w-[450px]">

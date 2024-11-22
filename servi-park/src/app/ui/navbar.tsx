@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ServiParkLogo from '@/app/ui/servipark-logo';
 import Link from "next/link";
 
@@ -13,7 +12,7 @@ export default async function NavBar() {
         redirect('/api/auth/signin');
     }
 
-    const homeLink = session.user.role === 'ADMIN' || session.user.role === "GERENTE" ? '/admin' : '/employees';
+    const homeLink = session.user.role === 'ADMINISTRADOR' || session.user.role === "GERENTE" ? '/admin' : '/employees';
     const userName = 'name' in session.user && typeof session.user.name === "string" ? session.user.name : 'Avatar';
     const userRole = session.user.role;
 

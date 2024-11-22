@@ -12,9 +12,19 @@ export type User = {
 export type AuthUser = {
     id: string;
     nombre_usuario: string;
-    nombre_cargo: 'ADMIN' | 'EMPLEADO' | 'GERENTE';
+    nombre_cargo: 'ADMINISTRADOR' | 'EMPLEADO' | 'GERENTE';
     contrasena: string;
 
+};
+
+export type PostgresInterval = {
+    years?: number;
+    months?: number;
+    days?: number;
+    hours?: number;
+    minutes?: number;
+    seconds?: number;
+    milliseconds?: number;
 };
 
 export type Event = {
@@ -25,7 +35,7 @@ export type Event = {
     placa: string;
     fecha_hora_ingreso: string;
     fecha_hora_salida: string;
-    duracion: any; // PostresInterval object.
+    duracion: PostgresInterval; // PostresInterval object.
     valor_base: number | null;
     iva: number | null;
     total: number | null;
@@ -55,12 +65,12 @@ export type InvoiceDataState = {
 };
 
 export type BillingData = {
-    metodoDePago: string;
-    fechaHoraIngreso: Date;
-    fechaHoraSalida: Date;
-    formattedCurrency: string;
-    nombreTarifa: string;
-    placa: string;
+    metodoDePago?: string;
+    fechaHoraIngreso?: Date;
+    fechaHoraSalida?: Date;
+    formattedCurrency?: string;
+    nombreTarifa?: string;
+    placa?: string;
 };
 
 export type BillingState = {
@@ -153,7 +163,7 @@ export type Stats = {
     id: string;
     aaaa_mm: string;
     ocupacion_promedio: number;
-    tiempo_medio_duracion: any; // PostresInterval object.
+    tiempo_medio_duracion: PostgresInterval; // PostresInterval object.
     rotacion_espacios_prom_dia: number;
     porc_vehiculos_recurrentes: number;
     ingresos: number;
@@ -167,7 +177,7 @@ export type Stats = {
 
 export type CardStats = {
     ocupacion_promedio: number;
-    tiempo_medio_duracion: any; // PostresInterval object.
+    tiempo_medio_duracion: PostgresInterval; // PostresInterval object.
     rotacion_espacios_prom_dia: number;
     porc_vehiculos_recurrentes: number;
 }

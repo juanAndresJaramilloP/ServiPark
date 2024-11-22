@@ -35,7 +35,9 @@ export default function ConfigurarTarifasForm() {
                                         id="NombreTarifa"
                                         name="NombreTarifa"
                                         className="peer block w-full border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
-                                        placeholder="Nombre Tarifa" />
+                                        placeholder="Nombre Tarifa" 
+                                        required={true}
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -46,7 +48,9 @@ export default function ConfigurarTarifasForm() {
                                     <select
                                         id="TipoVehiculo"
                                         name="TipoVehiculo"
-                                        className="peer block w-full cursor-pointer border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
+                                        className="peer block w-full cursor-pointer border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
+                                        required={true}
+                                        >
                                         <option value="" disabled>Tipo Vehiculo</option>
                                         <option>Automóvil</option>
                                         <option>Camioneta</option>
@@ -67,6 +71,7 @@ export default function ConfigurarTarifasForm() {
                                         name="ValorHora"
                                         className="peer block w-full border rounded-md py-2 pr-5 pl-10 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="COP"
+                                        required={true}
                                     />
                                     <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                                 </div>
@@ -83,6 +88,7 @@ export default function ConfigurarTarifasForm() {
                                         name="IncrementoPrimerHora"
                                         className="peer block w-full border rounded-md py-2 pr-5 pl-10 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="COP"
+                                        required={true}
                                     />
                                     <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                                 </div>
@@ -99,6 +105,7 @@ export default function ConfigurarTarifasForm() {
                                         name="IncrementoSegundaHora"
                                         className="peer block w-full border rounded-md py-2 pr-5 pl-10 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="COP"
+                                        required={true}
                                     />
                                     <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                                 </div>
@@ -115,6 +122,7 @@ export default function ConfigurarTarifasForm() {
                                         name="ValorDia"
                                         className="peer block w-full border rounded-md py-2 pr-5 pl-10 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="COP"
+                                        required={true}
                                     />
                                     <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                                 </div>
@@ -133,6 +141,7 @@ export default function ConfigurarTarifasForm() {
                                         name="FlagPrimeraHora"
                                         className="peer w-12 border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="Min"
+                                        required={true}
                                     />
                                 </div>
                             </div>
@@ -148,6 +157,7 @@ export default function ConfigurarTarifasForm() {
                                         name="FlagHoraAdicional"
                                         className="peer w-12 border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="Min"
+                                        required={true}
                                     />
                                 </div>
                             </div>
@@ -163,6 +173,7 @@ export default function ConfigurarTarifasForm() {
                                         name="CobrarDiaAPartirMin"
                                         className="peer w-14 border rounded-md py-2 px-2 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         placeholder="Min"
+                                        required={true}
                                     />
                                 </div>
                             </div>

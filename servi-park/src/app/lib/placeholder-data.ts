@@ -2,7 +2,7 @@
 
 // {
 //     nombre_usuario: 'Juan Andres Jaramillo',
-//     nombre_cargo: 'ADMIN',
+//     nombre_cargo: 'ADMINISTRADOR',
 //     celular: '1234567890',
 //     cedula: '1234567890',
 //     contrasena: 'admin'

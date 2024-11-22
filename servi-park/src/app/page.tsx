@@ -13,7 +13,7 @@ export default async function Home() {
       redirect('/api/auth/signin');
   }
 
-  const homeLink = session.user.role === 'ADMIN' || session.user.role === "GERENTE" ? '/admin' : '/employees';
+  const homeLink = session.user.role === 'ADMINISTRADOR' || session.user.role === "GERENTE" ? '/admin' : '/employees';
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen">

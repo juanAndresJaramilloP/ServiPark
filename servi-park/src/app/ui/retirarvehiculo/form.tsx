@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useState } from "react";
 import { generateInvoiceForVehicle } from '@/app/lib/data';
-import { inter } from '../fonts';
 import {InvoiceDataState} from '@/app/lib/definitions';
 
 interface DigitarPlacaInvoiceData {

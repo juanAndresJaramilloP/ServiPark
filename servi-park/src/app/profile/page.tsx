@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getServerSession } from 'next-auth/next';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import { redirect } from 'next/navigation';
@@ -19,13 +18,6 @@ export default async function Profile() {
                 <div className="w-1/3 bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500 flex items-center justify-center relative rounded-xl">
                     <div className="avatar absolute -top-12">
                         <div className="ring ring-primary ring-offset-base-100 w-24 rounded-full bg-white">
-                            {/* <Image
-                                src="/cool-avatar.jpg"
-                                className="rounded-xl"
-                                alt={`Consultar Historial del Turno`}
-                                width={320}
-                                height={320}
-                            /> */}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-24">
                                 <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clipRule="evenodd" />
                             </svg>

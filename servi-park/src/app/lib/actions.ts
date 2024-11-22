@@ -229,11 +229,17 @@ export async function registerVehicle(formData: FormData) {
 }
 
 
-export async function registerPayment(billingData: BillingData | any): Promise<BillingState> {
+export async function registerPayment(billingData: BillingData): Promise<BillingState> {
 
     const { formattedCurrency, placa } = billingData;
-    const metodoDePago = billingData.metodoDePago ?? 'CONTADO';
+    const metodoDePago = billingData.metodoDePago;
     const numberCurrency = formatCurrencyToNumber(formattedCurrency);
+
+    if(!placa || !formattedCurrency || !metodoDePago){
+        return {
+            error: 'Debe seleccionar un metodo de pago.',
+        };
+    }
 
     try {
         // Verifica que el vehiculo efectivamente tenga una entrada activa (sin cancelar) en el parqueadero.

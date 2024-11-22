@@ -1,5 +1,6 @@
 // Utilities for Tremor Charts
 // Tremor Raw chartColors [v0.1.0]
+/* eslint-disable */
 
 export type ColorUtility = "bg" | "stroke" | "fill" | "text"
 

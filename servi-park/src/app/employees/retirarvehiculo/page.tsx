@@ -4,7 +4,7 @@ import DigitarPlacaForm from "@/app/ui/retirarvehiculo/form";
 import Invoice from "@/app/ui/retirarvehiculo/invoice";
 import { useState } from "react";
 import { InvoiceDataState } from '@/app/lib/definitions';
-import { ErrorAlert, SuccessAlert } from "@/app/ui/feedback";
+import { ErrorAlert } from "@/app/ui/feedback";
 
 export default function Page() {
 
@@ -21,7 +21,7 @@ export default function Page() {
     return (
         <div className="flex flex-col items-center">
             <div className="fixed top-32 container max-w-2xl">
-                { invoiceData.errors?.Placa?.[0] && <ErrorAlert message={invoiceData.errors.Placa[0]} />}
+                {invoiceData.errors?.Placa?.[0] && <ErrorAlert message={invoiceData.errors.Placa[0]} />}
             </div>
             <div className="flex flex-col xl:flex-row gap-14 xl:gap-44 justify-center items-center">
                 <DigitarPlacaForm setInvoiceData={setInvoiceData} />

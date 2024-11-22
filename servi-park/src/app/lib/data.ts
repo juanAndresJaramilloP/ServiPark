@@ -259,7 +259,6 @@ export async function generateInvoiceForVehicle(formData: FormData): Promise<Inv
         }
 
         // generate billing information.
-        const event_id = event.rows[0].id;
         const tarifa_id = event.rows[0].tarifa_id;
         const fecha_hora_ingreso = event.rows[0].fecha_hora_ingreso;
 

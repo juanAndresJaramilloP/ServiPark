@@ -1,5 +1,4 @@
 import { sql } from '@vercel/postgres';
-import { Parser } from 'json2csv';
 import { NextResponse } from 'next/server';
 import { CardStats } from '@/app/lib/definitions';
 

@@ -4,7 +4,7 @@ import { ErrorAlert, SuccessAlert } from '@/app/ui/feedback';
 import { useState } from "react";
 import { lusitana } from "@/app/ui/fonts";
 import { registerPayment } from '@/app/lib/actions';
-import { InvoiceDataState, BillingState } from '@/app/lib/definitions';
+import { InvoiceDataState, BillingState, BillingData } from '@/app/lib/definitions';
 
 export default function BillingModal({ invoiceData }: { invoiceData: InvoiceDataState }) {
 
@@ -17,7 +17,7 @@ export default function BillingModal({ invoiceData }: { invoiceData: InvoiceData
         const form = new FormData(event.currentTarget);
         const rawForm = Object.fromEntries(form.entries());
         // Merge form data with invoiceData
-        const combinedData = {
+        const combinedData: BillingData = {
             ...rawForm,
             ...(invoiceData.message ? invoiceData.message : {})
         };
@@ -45,7 +45,9 @@ export default function BillingModal({ invoiceData }: { invoiceData: InvoiceData
                             <select
                                 id="metodoDePago"
                                 name="metodoDePago"
-                                className="peer block w-40 cursor-pointer border rounded-md py-2 px-2 text-lg text-wrap border-gray-300 outline-2 placeholder:text-gray-500">
+                                className="peer block w-40 cursor-pointer border rounded-md py-2 px-2 text-lg text-wrap border-gray-300 outline-2 placeholder:text-gray-500"
+                                required
+                                >
                                 <option value="" disabled>Metodo de Pago</option>
                                 <option>Contado</option>
                                 <option>Tarjeta</option>

@@ -1,4 +1,3 @@
-import CalendarDatePicker from "@/app/ui/calendardatepicker";
 import { lusitana } from "@/app/ui/fonts";
 
 export function FeeTableRowSkeleton() {
@@ -252,14 +251,14 @@ export function StatsCardSkeleton() {
                                 <label className="md:text-md font-medium text-gray-950" htmlFor='desde'>Desde</label>
                                 <div className='flex flex-row items-center gap-2'>
                                     <p className='text-gray-500'>(mm/dd/aaaa)</p>
-                                    <CalendarDatePicker setSelectedDate={(date: Date | null) => (date = new Date())} disabled={true} />
+                                    <div className="skeleton h-10 w-36 border border-gray-300 rounded-md bg-gray-100"></div>
                                 </div>
                             </div>
                             <div className='flex flex-row items-center justify-between mt-4'>
                                 <label className="md:text-md font-medium text-gray-950" htmlFor='hasta'>Hasta</label>
                                 <div className='flex flex-row items-center gap-2'>
                                     <p className='text-gray-500'>(mm/dd/aaaa)</p>
-                                    <CalendarDatePicker setSelectedDate={(date: Date | null) => (date = new Date())} disabled={true} />
+                                    <div className="skeleton h-10 w-36 border border-gray-300 rounded-md bg-gray-100"></div>
                                 </div>
                             </div>
                             {/* <div className='flex flex-row items-center justify-between mt-4'>
@@ -281,7 +280,7 @@ export function StatsCardSkeleton() {
                             </div> */}
                         </div>
                         <div className='flex flex-row-reverse mt-4'>
-                            <button className="btn btn-neutral" disabled={true}> "Consultar"</button>
+                            <button className="btn btn-neutral" disabled={true}>Consultar</button>
                         </div>
                     </form>
                 </div>
