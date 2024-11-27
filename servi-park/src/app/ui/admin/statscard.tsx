@@ -92,7 +92,7 @@ export default function StatsCard({ setError }: StatsCardProps) {
                                 </button>
                             </div>
                             <div className='container p-2 bg-slate-100 rounded-md place-content-center w-44 border border-gray-300'>
-                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.rotacion_espacios_prom_dia ? formatRotacionEspacios(stats.rotacion_espacios_prom_dia) : "0 Veces x Dia"}</p>
+                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.rotacion_espacios ? formatRotacionEspacios(stats.rotacion_espacios) : "0 Veces x Dia"}</p>
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@ export default function StatsCard({ setError }: StatsCardProps) {
                                 </button>
                             </div>
                             <div className='container p-2 bg-slate-100 rounded-md place-content-center w-44 border border-gray-300'>
-                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.porc_vehiculos_recurrentes ? formatPercentage(stats.porc_vehiculos_recurrentes) : "0%"}</p>
+                                <p className="text-sm md:text-base font-medium text-gray-950 text-center">{stats?.porcentaje_vehiculos_recurrentes ? formatPercentage(stats.porcentaje_vehiculos_recurrentes) : "0%"}</p>
                             </div>
                         </div>
                     </div>

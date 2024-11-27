@@ -47,6 +47,7 @@ export type InvoiceEvent = {
     id: string;
     tarifa_id: string;
     fecha_hora_ingreso: string;
+    tipo_vehiculo: 'AUTOMOVIL' | 'CAMIONETA' | 'MOTOCICLETA' | 'BICICLETA';
 };
 
 export type InvoiceData = {
@@ -62,6 +63,16 @@ export type InvoiceDataState = {
         Placa?: string[];
     };
     message?: InvoiceData;
+};
+
+export type RegisterVehicleState = {
+    error?: {
+        Placa?: string[];
+        userID?: string[];
+        TipoVehiculo?: string[];
+        Tarifa?: string[];
+    } | string;
+    message?: string;
 };
 
 export type BillingData = {
@@ -161,11 +172,13 @@ export type WeekDays = {
 export type Stats = {
 
     id: string;
-    aaaa_mm: string;
+    timestamp: string;
+    celdas_ocupadas_vehiculo: number;
+    celdas_ocupadas_motocicleta: number;
+    celdas_ocupadas_bicicleta: number;
     ocupacion_promedio: number;
     tiempo_medio_duracion: PostgresInterval; // PostresInterval object.
-    rotacion_espacios_prom_dia: number;
-    porc_vehiculos_recurrentes: number;
+    rotacion_espacios: number;
     ingresos: number;
     nomina: number;
     imp_predial: number;
@@ -175,9 +188,25 @@ export type Stats = {
     otros: number;
 };
 
+export type AppContext = {
+    celdas_ocupadas_vehiculo: number;
+    celdas_ocupadas_motocicleta: number;
+    celdas_ocupadas_bicicleta: number;
+};
+
 export type CardStats = {
     ocupacion_promedio: number;
     tiempo_medio_duracion: PostgresInterval; // PostresInterval object.
-    rotacion_espacios_prom_dia: number;
-    porc_vehiculos_recurrentes: number;
-}
+    rotacion_espacios: number;
+    porcentaje_vehiculos_recurrentes: number | undefined;
+};
+
+export type ServiPark = {
+    id: string;
+    nombre: string;
+    celdas: number;
+    celdas_vehiculo: number;
+    celdas_motocicleta: number;
+    celdas_bicicleta: number;
+    direccion: string;
+};

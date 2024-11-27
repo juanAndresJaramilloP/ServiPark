@@ -1,67 +1,67 @@
-"use client"
+"use client";
 
 import { BarChart } from "@/components/barchart"
 
 const chartdata = [
     {
-        date: "Jan 23",
-        SolarPanels: 2890,
-        Inverters: 2338,
+        date: "Enero 23",
+        Ingresos: 2890000,
+        Gastos: 2338000,
     },
     {
         date: "Feb 23",
-        SolarPanels: 2756,
-        Inverters: 2103,
+        Ingresos: 2756000,
+        Gastos: 2103000,
     },
     {
         date: "Mar 23",
-        SolarPanels: 3322,
-        Inverters: 2194,
+        Ingresos: 3322000,
+        Gastos: 2194000,
     },
     {
-        date: "Apr 23",
-        SolarPanels: 3470,
-        Inverters: 2108,
+        date: "Abr 23",
+        Ingresos: 3470000,
+        Gastos: 2108000,
     },
     {
         date: "May 23",
-        SolarPanels: 3475,
-        Inverters: 1812,
+        Ingresos: 3475000,
+        Gastos: 1812000,
     },
     {
         date: "Jun 23",
-        SolarPanels: 3129,
-        Inverters: 1726,
+        Ingresos: 3129000,
+        Gastos: 1726000,
     },
     {
         date: "Jul 23",
-        SolarPanels: 3490,
-        Inverters: 1982,
+        Ingresos: 3490000,
+        Gastos: 1982000,
     },
     {
-        date: "Aug 23",
-        SolarPanels: 2903,
-        Inverters: 2012,
+        date: "Ago 23",
+        Ingresos: 2903000,
+        Gastos: 2012000,
     },
     {
         date: "Sep 23",
-        SolarPanels: 2643,
-        Inverters: 2342,
+        Ingresos: 2643000,
+        Gastos: 2342000,
     },
     {
         date: "Oct 23",
-        SolarPanels: 2837,
-        Inverters: 2473,
+        Ingresos: 2837000,
+        Gastos: 2473000,
     },
     {
         date: "Nov 23",
-        SolarPanels: 2954,
-        Inverters: 3848,
+        Ingresos: 2954000,
+        Gastos: 3848000,
     },
     {
-        date: "Dec 23",
-        SolarPanels: 3239,
-        Inverters: 3736,
+        date: "Dic 23",
+        Ingresos: 3239000,
+        Gastos: 3736000,
     },
 ]
 
@@ -69,16 +69,17 @@ export default function BarChartAxisLabels() {
 
     return (
         <BarChart
-            className="h-80"
+            className="h-80 w-11/12"
             data={chartdata}
             index="date"
-            categories={["SolarPanels", "Inverters"]}
+            categories={["Ingresos", "Gastos"]}
             valueFormatter={(number: number) =>
                 `$${Intl.NumberFormat("us").format(number).toString()}`
             }
             onValueChange={(v) => console.log(v)}
-            xAxisLabel="Month"
-            yAxisLabel="Spend Category"
+            yAxisLabel="$ COP"
+            showYAxis={false}
+            colors={["emerald", "amber"]}
         />
     );
 }

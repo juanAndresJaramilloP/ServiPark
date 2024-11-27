@@ -4,6 +4,7 @@ import { CurrencyDollarIcon } from '@heroicons/react/20/solid';
 import CalendarDatePicker from '@/app/ui/calendardatepicker';
 import { useState } from 'react';
 import { createParkingFee } from '@/app/lib/actions';
+import { useRef } from 'react';
 
 import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
@@ -19,9 +20,34 @@ export default function ConfigurarTarifasForm() {
     const userID = session?.user.id || '';
     const [selectedDateStart, setSelectedDateStart] = useState<Date | null>(new Date());
     const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(new Date());
+    const [disabled, setDisabled] = useState(false);
+    const [error, setError] = useState<string | undefined>();
+    const [success, setSuccess] = useState<string | undefined>();
+    const ref = useRef<HTMLFormElement>(null)
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setDisabled(true);
+
+        const form = new FormData(event.currentTarget);
+
+        const { error, message } = await createParkingFee(form);
+        setError(error);
+        setSuccess(message);
+
+        ref.current?.reset()
+        setDisabled(false);
+
+        await new Promise((resolve) => setTimeout(() => {
+            setSuccess('');
+            setError('');
+            resolve(null);
+        }, 4500));
+    }
 
     return (
-        <form action={createParkingFee}>
+        <form ref={ref} onSubmit={handleSubmit}>
+            {error && <div className="text-red-500 text-lg">{error}</div>}
             <input hidden id='userID' name="userID" value={userID} readOnly />
             <div className="rounded-md bg-gray-100 p-4">
                 <div className="flex flex-col">
@@ -35,9 +61,9 @@ export default function ConfigurarTarifasForm() {
                                         id="NombreTarifa"
                                         name="NombreTarifa"
                                         className="peer block w-full border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
-                                        placeholder="Nombre Tarifa" 
+                                        placeholder="Nombre Tarifa"
                                         required={true}
-                                        />
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -50,7 +76,7 @@ export default function ConfigurarTarifasForm() {
                                         name="TipoVehiculo"
                                         className="peer block w-full cursor-pointer border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500"
                                         required={true}
-                                        >
+                                    >
                                         <option value="" disabled>Tipo Vehiculo</option>
                                         <option>Automóvil</option>
                                         <option>Camioneta</option>
@@ -302,7 +328,7 @@ export default function ConfigurarTarifasForm() {
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-row mt-4 justify-between'>
+                    <div className='flex flex-row mt-4 justify-between items-center'>
                         <div className='flex flex-row gap-3 items-center'>
                             <div className='container min-w-fit'>
                                 <input
@@ -332,14 +358,16 @@ export default function ConfigurarTarifasForm() {
                                     name='TarifaActiva'
                                     type='checkbox'
                                     className="w-3 h-3 cursor-pointer border-gray-300 bg-gray-100 text-gray-950 focus:ring-2"
+                                    defaultChecked
                                 />
                                 <label htmlFor='TarifaActiva' className='mx-2 cursor-pointer'>
                                     Tarifa activa
                                 </label>
                             </div>
                         </div>
-                        <div>
-                            <button className="btn btn-neutral">Agregar Tarifa</button>
+                        <div className='flex flex-row gap-4 items-center'>
+                            {success && <div className="text-green-500 text-lg text-wrap">{success}</div>}
+                            <button className="btn btn-neutral" disabled={disabled}>{disabled ? (<>Agregando <span className="loading loading-dots loading-xs"></span></>) : "Agregar Tarifa"}</button>
                         </div>
                     </div>
                 </div>

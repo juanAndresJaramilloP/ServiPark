@@ -4,10 +4,14 @@ import { ErrorAlert, SuccessAlert } from '@/app/ui/feedback';
 import { useState } from "react";
 import { lusitana } from "@/app/ui/fonts";
 import { registerPayment } from '@/app/lib/actions';
+import { fetchOcupationalContext } from '@/app/lib/data';
 import { InvoiceDataState, BillingState, BillingData } from '@/app/lib/definitions';
+import { useVariables } from '@/app/context/ParkingState';
+
 
 export default function BillingModal({ invoiceData }: { invoiceData: InvoiceDataState }) {
 
+    const { setCeldas_ocupadas_vehiculo, setCeldas_ocupadas_motocicleta, setCeldas_ocupadas_bicicleta } = useVariables();
     const [disabled, setDisabled] = useState(false);
     const [billingState, setBillingState] = useState<BillingState>();
 
@@ -22,12 +26,14 @@ export default function BillingModal({ invoiceData }: { invoiceData: InvoiceData
             ...(invoiceData.message ? invoiceData.message : {})
         };
 
-        console.log("Combined Data: ", combinedData);
-
         const state = await registerPayment(combinedData);
         setBillingState(state);
         setDisabled(false);
 
+        const context = await fetchOcupationalContext();
+        setCeldas_ocupadas_vehiculo(context.celdas_ocupadas_vehiculo);
+        setCeldas_ocupadas_motocicleta(context.celdas_ocupadas_motocicleta);
+        setCeldas_ocupadas_bicicleta(context.celdas_ocupadas_bicicleta);
     };
 
 

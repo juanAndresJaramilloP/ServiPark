@@ -1,7 +1,7 @@
 'use server';
 
 import { sql } from '@vercel/postgres';
-import { Event, Incident, User, ParkingFee, ParkingFeeField, CardStats, InvoiceEvent, InvoiceDataState, InvoiceData } from './definitions';
+import { Event, Incident, User, ParkingFee, ParkingFeeField, CardStats, InvoiceEvent, InvoiceDataState, InvoiceData, AppContext } from './definitions';
 import { formatPostgresInterval } from '@/app/lib/utils';
 import { formatCurrency, formatTimestampToLocale, getCurrentLocalTimestampDate, calculateValueToPay } from '@/app/lib/utils';
 import { z } from 'zod';
@@ -200,26 +200,25 @@ export async function fetchActiveParkingFeesList() {
 
 }
 
-export async function fetchStatsCard(startDate: string, endDate: string) {
-    try {
+// export async function fetchStatsCard(startDate: string, endDate: string) {
+//     try {
 
-        console.log("DEBUG: startDate:", startDate, "endDate:", endDate);
+//         console.log("DEBUG: startDate:", startDate, "endDate:", endDate);
 
-        const data = await sql<CardStats>`
-        SELECT 
-        AVG(ocupacion_promedio) as ocupacion_promedio,
-        AVG(tiempo_medio_duracion) as tiempo_medio_duracion,
-        AVG(rotacion_espacios_prom_dia) as rotacion_espacios_prom_dia,
-        AVG(porc_vehiculos_recurrentes) as porc_vehiculos_recurrentes
-        FROM analytics
-        WHERE aaaa_mm BETWEEN ${startDate} AND ${endDate}
-        `;
-        return data.rows[0];
-    } catch (error) {
-        console.error('The following error occured:', error);
-        throw new Error('Failed to fetch statistics data.');
-    }
-}
+//         const data = await sql<CardStats>`
+//         SELECT 
+//         AVG(ocupacion_promedio) as ocupacion_promedio,
+//         AVG(tiempo_medio_duracion) as tiempo_medio_duracion,
+//         SUM(rotacion_espacios) as rotacion_espacios,
+//         FROM analytics
+//         WHERE timestamp BETWEEN ${startDate} AND ${endDate}
+//         `;
+//         return data.rows[0];
+//     } catch (error) {
+//         console.error('The following error occured:', error);
+//         throw new Error('Failed to fetch statistics data.');
+//     }
+// }
 
 export async function generateInvoiceForVehicle(formData: FormData): Promise<InvoiceDataState> {
 
@@ -242,7 +241,8 @@ export async function generateInvoiceForVehicle(formData: FormData): Promise<Inv
         SELECT
         id,
         tarifa_id,
-        fecha_hora_ingreso
+        fecha_hora_ingreso,
+        tipo_vehiculo
         FROM events
         WHERE placa ILIKE ${validatedFields.data.Placa} AND fecha_hora_salida IS NULL
         `;
@@ -390,6 +390,23 @@ export async function fetchEmployeeById(id: string) {
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch employee data.');
+    }
+}
+
+export async function fetchOcupationalContext() {
+    try {
+
+        const context = await sql<AppContext>`
+        SELECT celdas_ocupadas_vehiculo, celdas_ocupadas_motocicleta, celdas_ocupadas_bicicleta
+        FROM analytics
+        ORDER BY timestamp DESC
+        LIMIT 1
+        `;
+
+        return context.rows[0];
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch occupational context data.');
     }
 }
 

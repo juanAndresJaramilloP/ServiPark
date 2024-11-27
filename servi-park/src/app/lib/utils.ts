@@ -113,21 +113,35 @@ export const formatPostgresInterval = (interval: PostgresInterval) => {
 
 export const formatPostgresIntervalShort = (interval: PostgresInterval): string => {
 
-    console.log("Interval: ",interval.constructor.name);
-
     if (!interval) {
         return 'N/A';
     }
 
     // Extract values from the PostgresInterval object, defaulting to 0 if they’re undefined
     const days = interval.days || 0;
-    const hours = interval.hours || 0;
+    const hours = interval.hours ? (interval.hours - 5 >= 0 ? interval.hours - 5 : 0) : 0;
     const minutes = interval.minutes || 0;
 
     // Format the interval values into a string
     const formattedDuration = `${days}D, ${hours}H, ${minutes}M`;
     return formattedDuration;
 }
+
+export const formatPostgresIntervalForInput = (interval: PostgresInterval): string => {
+
+    if (!interval || interval.constructor.name !== 'PostgresInterval') {
+        return 'N/A';
+    }
+
+    const days = interval.days || 0;
+    const hours = interval.hours ? interval.hours - 5 : 0;
+    const minutes = interval.minutes || 0;
+    const seconds = interval.seconds || 0;
+
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    return `${days} ${formattedTime}`;
+};
 
 export const formatActiveDays = (daysString: string): string => {
     const daysOfWeek = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];

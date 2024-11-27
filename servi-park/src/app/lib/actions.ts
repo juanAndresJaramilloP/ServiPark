@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { getCurrentLocalTimestampString, formatCurrencyToNumber } from '@/app/lib/utils';
-import { BillingData, BillingState, Transaction, InvoiceEvent, PaymentCard } from '@/app/lib/definitions';
+import { getCurrentLocalTimestampString, formatCurrencyToNumber, formatPostgresIntervalForInput } from '@/app/lib/utils';
+import { BillingData, BillingState, Transaction, InvoiceEvent, PaymentCard, Stats, ServiPark, RegisterVehicleState, Event } from '@/app/lib/definitions';
 import bcrypt from "bcrypt";
 
 // MARK: - SCHEMAS
@@ -76,9 +76,16 @@ export async function createParkingFee(formData: FormData) {
     const validatedFields = CreateParkingFee.safeParse(rawFormData);
     if (!validatedFields.success) {
         console.log("DEBUG validated Fields Errors: ", validatedFields.error.flatten().fieldErrors)
+        
+        let error_message: string = '';
+        if (validatedFields.error.flatten().fieldErrors) {
+            error_message = JSON.stringify(validatedFields.error.flatten().fieldErrors);
+        } else {
+            error_message = 'Error de validación. No se pudo crear la tarifa.';
+        }
+        
         return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Faltan campos. No se pudo crear la tarifa.',
+            error: error_message,
         };
     }
 
@@ -101,7 +108,7 @@ export async function createParkingFee(formData: FormData) {
         // prepare the insert statement
         if (new Date(validatedFields.data.VigenciaDesde) > new Date(validatedFields.data.VigenciaHasta)) {
             return {
-                message: 'La fecha de inicio de vigencia no puede ser mayor a la fecha del fin de la vigencia.',
+                error: 'La fecha de inicio de vigencia no puede ser mayor a la fecha del fin de la vigencia.',
             };
         }
 
@@ -147,22 +154,25 @@ export async function createParkingFee(formData: FormData) {
 
         if (error instanceof Error && error.message.includes('duplicate key value violates unique constraint')) {
             return {
-                message: 'El nombre de la tarifa ya existe. Por favor, elija un nombre diferente.',
+                error: 'El nombre de la tarifa ya existe. Por favor, elija un nombre diferente.',
             };
         }
 
         return {
-            message: 'Ocurrio un error al intentar crear la tarifa. Por favor intentelo nuevamente.',
+            error: 'Ocurrio un error al intentar crear la tarifa. Por favor intentelo nuevamente.',
         };
     }
 
     // Revalidate the cache for the parking fee page and redirect the user.
     revalidatePath('/admin/configurartarifas');
     revalidatePath('/employees/registrarvehiculo');
-    redirect('/admin/configurartarifas');
+
+    return {
+        message: '¡Tarifa creada exitosamente!',
+    };
 }
 
-export async function registerVehicle(formData: FormData) {
+export async function registerVehicle(formData: FormData): Promise<RegisterVehicleState> {
 
     const rawFormData = Object.fromEntries(formData.entries())
 
@@ -171,8 +181,7 @@ export async function registerVehicle(formData: FormData) {
     if (!validatedFields.success) {
         console.log("DEBUG validated Fields Errors: ", validatedFields.error.flatten().fieldErrors)
         return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Faltan campos. No se pudo registrar la entrada del vehiculo.',
+            error: validatedFields.error.flatten().fieldErrors,
         };
     }
 
@@ -188,14 +197,14 @@ export async function registerVehicle(formData: FormData) {
         if (isVehicleInSystem.rows.length > 0) {
             console.log('DEBUG: Vehicle already in system.');
             return {
-                message: `El vehiculo del placa: ${validatedFields.data.Placa.toUpperCase()} ya se encuentra registrado en el sistema.`,
+                error: `El vehiculo del placa: ${validatedFields.data.Placa.toUpperCase()} ya se encuentra registrado en el sistema.`,
             };
         }
 
     } catch (error) {
         console.error('DEBUG: Error registering vehicle:\n', error);
         return {
-            message: 'Ocurrio un error al intentar registrar la entrada del vehiculo. Por favor intentelo nuevamente.',
+            error: 'Ocurrio un error al intentar registrar la entrada del vehiculo. Por favor intentelo nuevamente.',
         };
     }
 
@@ -204,27 +213,89 @@ export async function registerVehicle(formData: FormData) {
 
     console.log("DEBUG: Fecha Hora Ingreso: ", fechaHoraIngreso);
 
+    let tipoVehiculo = '';
+    switch (validatedFields.data.TipoVehiculo) {
+        case 'Automóvil':
+            tipoVehiculo = 'AUTOMOVIL';
+            break;
+        case 'Camioneta':
+            tipoVehiculo = 'CAMIONETA';
+            break;
+        case 'Motocicleta':
+            tipoVehiculo = 'MOTOCICLETA';
+            break;
+        case 'Bicicleta':
+            tipoVehiculo = 'BICICLETA';
+            break;
+    }
+
     try {
+        await sql`BEGIN;`;
+        console.log("DEBUG: Transaction started")
+
         await sql`
         INSERT INTO events (user_id, tarifa_id, placa, fecha_hora_ingreso, fecha_hora_salida, tipo_vehiculo)
-        VALUES (${validatedFields.data.userID}, ${validatedFields.data.Tarifa}, ${validatedFields.data.Placa.toUpperCase()}, ${fechaHoraIngreso}, ${null}, ${validatedFields.data.TipoVehiculo})
+        VALUES (${validatedFields.data.userID}, ${validatedFields.data.Tarifa}, ${validatedFields.data.Placa.toUpperCase()}, ${fechaHoraIngreso}, ${null}, ${tipoVehiculo});
         `;
 
+        // Actualiza la tabla de analytics
+        // Se creó un indice en el campo timestamp de la tabla analytics para mejorar la velocidad de las consultas. CREATE INDEX idx_timestamp ON analytics(timestamp DESC);
+        const lastStats = await sql<Stats>`
+        SELECT *
+        FROM analytics
+        ORDER BY timestamp DESC
+        LIMIT 1
+        `;
+
+        const celdas_ocupadas_vehiculo: number = (lastStats.rows[0]?.celdas_ocupadas_vehiculo ?? 0) + (validatedFields.data.TipoVehiculo === 'Automóvil' || validatedFields.data.TipoVehiculo === 'Camioneta' ? 1 : 0);
+        const celdas_ocupadas_motocicleta: number = (lastStats.rows[0]?.celdas_ocupadas_motocicleta ?? 0) + (validatedFields.data.TipoVehiculo === 'Motocicleta' ? 1 : 0);
+        const celdas_ocupadas_bicicleta: number = (lastStats.rows[0]?.celdas_ocupadas_bicicleta ?? 0) + (validatedFields.data.TipoVehiculo === 'Bicicleta' ? 1 : 0);
+        let rotacion_espacios: number = lastStats.rows[0]?.rotacion_espacios ?? 0;
+
+        // calculo de estadisticas:
+
+        // Ocupacion promedio:
+        const serviPark = await sql<ServiPark>`
+        SELECT *
+        FROM servi_park
+        `;
+
+        const totalCeldas: number = serviPark.rows[0].celdas;
+        const ocupacion_promedio: number = ((celdas_ocupadas_vehiculo + celdas_ocupadas_motocicleta + celdas_ocupadas_bicicleta) / totalCeldas) * 100;
+
+        // Rotacion de espacios en un dia:
+        rotacion_espacios = Number(rotacion_espacios) + (1 / totalCeldas);
+
+        // inserta el nuevo registro a la tabla de analytics
+        await sql`
+        INSERT INTO analytics (celdas_ocupadas_vehiculo, celdas_ocupadas_motocicleta, celdas_ocupadas_bicicleta, ocupacion_promedio, rotacion_espacios)
+        VALUES (${celdas_ocupadas_vehiculo},${celdas_ocupadas_motocicleta},${celdas_ocupadas_bicicleta},${ocupacion_promedio},${rotacion_espacios})
+        `;
+
+        await sql`COMMIT;`;
+        console.log("DEBUG: Transaction committed");
     } catch (error) {
-        console.error('DEBUG: Error registering vehicle:\n', error);
+        console.error('DEBUG: Error during transaction:\n', error);
+        try {
+            await sql`ROLLBACK;`;
+            console.log("DEBUG: Transaction rolled back");
+        } catch (rollbackError) {
+            console.error('DEBUG: Error during rollback:\n', rollbackError);
+        }
         return {
-            message: 'Ocurrio un error al intentar registrar la entrada del vehiculo. Por favor intentelo nuevamente.',
+            error: 'Ocurrio un error al intentar registrar la entrada del vehiculo. Por favor intentelo nuevamente.',
         };
     }
 
     // Revalidate cache and redirect user.
     console.log('DEBUG: Vehicle registered successfully.');
-
-    revalidatePath('/employees/registrarvehiculo');
     revalidatePath('/employees/retirarvehiculo');
     revalidatePath('/employees/historial');
     revalidatePath('/admin/consultarreportes');
-    redirect('/employees');
+
+    return {
+        message: '¡Vehiculo registrado exitosamente!',
+    };
 
 }
 
@@ -235,7 +306,7 @@ export async function registerPayment(billingData: BillingData): Promise<Billing
     const metodoDePago = billingData.metodoDePago;
     const numberCurrency = formatCurrencyToNumber(formattedCurrency);
 
-    if(!placa || !formattedCurrency || !metodoDePago){
+    if (!placa || !formattedCurrency || !metodoDePago) {
         return {
             error: 'Debe seleccionar un metodo de pago.',
         };
@@ -247,7 +318,8 @@ export async function registerPayment(billingData: BillingData): Promise<Billing
         SELECT
         id,
         tarifa_id,
-        fecha_hora_ingreso
+        fecha_hora_ingreso,
+        tipo_vehiculo
         FROM events
         WHERE placa ILIKE ${placa} AND fecha_hora_salida IS NULL
         `;
@@ -301,6 +373,64 @@ export async function registerPayment(billingData: BillingData): Promise<Billing
         UPDATE events
         SET duracion = (fecha_hora_salida - fecha_hora_ingreso)
         WHERE id = ${eventId}
+        `;
+
+        // Actualiza la tabla de analytics
+        // Se creó un indice en el campo timestamp de la tabla analytics para mejorar la velocidad de las consultas. CREATE INDEX idx_timestamp ON analytics(timestamp DESC);
+        
+        // Parte del ultimo registro ingresado a la tabla de analitica
+        const lastStats = await sql<Stats>`
+        SELECT *
+        FROM analytics
+        ORDER BY timestamp DESC
+        LIMIT 1
+        `;
+
+        // celdas_ocupadas_vehiculo & celdas_ocupadas_motocicleta & celdas_ocupadas_bicicleta
+        let celdas_ocupadas_vehiculo: number = 0;
+        let celdas_ocupadas_motocicleta: number = 0;
+        let celdas_ocupadas_bicicleta: number = 0;
+        if(event.rows[0].tipo_vehiculo === 'AUTOMOVIL' || event.rows[0].tipo_vehiculo === 'CAMIONETA'){
+            celdas_ocupadas_vehiculo = (lastStats.rows[0]?.celdas_ocupadas_vehiculo ?? 0) - 1;
+        }else if(event.rows[0].tipo_vehiculo === 'MOTOCICLETA'){
+            celdas_ocupadas_motocicleta = (lastStats.rows[0]?.celdas_ocupadas_motocicleta ?? 0) - 1;
+        }else if(event.rows[0].tipo_vehiculo === 'BICICLETA'){
+            celdas_ocupadas_bicicleta = (lastStats.rows[0]?.celdas_ocupadas_bicicleta ?? 0) - 1;
+        }
+        let rotacion_espacios: number = lastStats.rows[0]?.rotacion_espacios ?? 0;
+
+        // calculo de estadisticas:
+
+        // Ocupacion promedio:
+        const serviPark = await sql<ServiPark>`
+        SELECT *
+        FROM servi_park
+        `;
+        const totalCeldas: number = serviPark.rows[0].celdas;
+        const ocupacion_promedio: number = ((celdas_ocupadas_vehiculo + celdas_ocupadas_motocicleta + celdas_ocupadas_bicicleta) / totalCeldas) * 100;
+
+        // Rotacion de espacios:
+        rotacion_espacios = Number(rotacion_espacios) - (1 / totalCeldas);
+
+        // tiempo_medio_duracion:
+        const analytics_event = await sql<Event>`
+        SELECT *
+        FROM events
+        WHERE id = ${eventId}
+        `;
+
+        const tiempo_medio_duracion = formatPostgresIntervalForInput(analytics_event.rows[0].duracion ?? undefined);
+
+        console.log("DEBUG: tiempo_medio_duracion: ", tiempo_medio_duracion);
+
+        // Ingresos & IVA
+        const analytics_income = Number(lastStats.rows[0].ingresos) + total;
+        const analytics_iva = Number(lastStats.rows[0].iva) + iva;
+
+        // inserta el nuevo registro a la tabla de analytics
+        await sql`
+        INSERT INTO analytics (celdas_ocupadas_vehiculo, celdas_ocupadas_motocicleta, celdas_ocupadas_bicicleta, ocupacion_promedio, tiempo_medio_duracion, rotacion_espacios, ingresos, iva)
+        VALUES (${celdas_ocupadas_vehiculo},${celdas_ocupadas_motocicleta},${celdas_ocupadas_bicicleta},${ocupacion_promedio},${tiempo_medio_duracion},${rotacion_espacios}, ${analytics_income}, ${analytics_iva})
         `;
 
         return {
@@ -378,13 +508,13 @@ export async function updateEmployee(formData: FormData, id: string) {
         };
     }
 
-    try{
+    try {
         await sql`
         UPDATE users
         SET nombre_usuario = ${validatedFields.data.nombre}, nombre_cargo = ${validatedFields.data.cargo}, cedula = ${validatedFields.data.cedula}, celular = ${validatedFields.data.celular}
         WHERE id = ${id};
         `;
-    }catch(error){
+    } catch (error) {
         console.error('DEBUG: Error updating employee:\n', error);
         return {
             error: 'Ocurrio un error al intentar editar el empleado. Por favor intentelo nuevamente.',

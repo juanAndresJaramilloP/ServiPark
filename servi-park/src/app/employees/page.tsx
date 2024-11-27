@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Page() {
   return (
-    <div className="flex flex-col xl:flex-row gap-4 justify-center items-center">
+    <div className="flex flex-row gap-4 justify-center items-center">
       <div className="card bg-base-100 w-72 shadow-2xl max-w-[350px]">
         <figure className="px-10 pt-10">
           <Image

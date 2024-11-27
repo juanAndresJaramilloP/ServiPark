@@ -1,9 +1,9 @@
-// import { db } from '@vercel/postgres';
-// import { users, events, incidents, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
-// import { PaymentCard, Transaction, Incident } from '../lib/definitions';
-// import bcrypt from "bcrypt";
+import { db } from '@vercel/postgres';
+import { users, events, incidents, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
+import { PaymentCard, Transaction, Incident } from '../lib/definitions';
+import bcrypt from "bcrypt";
 
-// const client = await db.connect();
+const client = await db.connect();
 
 /**
  * Hay un orden para crear las tablas (revisar esquema de la base de datos en la carpeta docs)
@@ -41,27 +41,27 @@
 
 // }
 
-// async function createTableEvents() {
-//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-//   await client.sql`
-//     CREATE TABLE IF NOT EXISTS events (
-//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
-//       placa TEXT NOT NULL,
-//       fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       duracion INTERVAL,
-//       valor_base NUMERIC,
-//       iva NUMERIC,
-//       total NUMERIC,
-//       tipo_vehiculo TEXT NOT NULL,
-//       tiquete_perdido BOOLEAN DEFAULT FALSE
-//     );
-//   `;
+async function createTableEvents() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS events (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
+      placa TEXT NOT NULL,
+      fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      duracion INTERVAL,
+      valor_base NUMERIC,
+      iva NUMERIC,
+      total NUMERIC,
+      tipo_vehiculo TEXT NOT NULL,
+      tiquete_perdido BOOLEAN DEFAULT FALSE
+    );
+  `;
 
-// }
+}
 
 // async function createTableIncidents() {
 //   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -185,10 +185,12 @@
 //     CREATE TABLE IF NOT EXISTS analytics (
 //       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
 //       timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//       ocupacion_promedio SMALLINT DEFAULT 0,
+//       celdas_ocupadas_vehiculo SMALLINT DEFAULT 0,
+//       celdas_ocupadas_motocicleta SMALLINT DEFAULT 0,
+//       celdas_ocupadas_bicicleta SMALLINT DEFAULT 0,
+//       ocupacion_promedio NUMERIC DEFAULT 0,
 //       tiempo_medio_duracion INTERVAL,
-//       rotacion_espacios_prom_dia SMALLINT DEFAULT 0,
-//       porc_vehiculos_recurrentes SMALLINT DEFAULT 0,
+//       rotacion_espacios NUMERIC DEFAULT 0,
 //       ingresos NUMERIC DEFAULT 0,
 //       nomina NUMERIC DEFAULT 0,
 //       imp_predial NUMERIC DEFAULT 0,
@@ -386,18 +388,18 @@
 // }
 
 export async function GET() {
-  return Response.json({
-    message:
-      'Uncomment this file and remove this line to seed the db.',
-  });
-  // try {
-  //   await client.sql`BEGIN`;
-  //   await seedServiPark();
-  //   await client.sql`COMMIT`;
+  // return Response.json({
+  //   message:
+  //     'Uncomment this file and remove this line to seed the db.',
+  // });
+  try {
+    await client.sql`BEGIN`;
+    await createTableEvents();
+    await client.sql`COMMIT`;
 
-  //   return Response.json({ message: 'Success' });
-  // } catch (error) {
-  //   await client.sql`ROLLBACK`;
-  //   return Response.json({ error }, { status: 500 });
-  // }
+    return Response.json({ message: 'Success' });
+  } catch (error) {
+    await client.sql`ROLLBACK`;
+    return Response.json({ error }, { status: 500 });
+  }
 }

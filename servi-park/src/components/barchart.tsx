@@ -120,7 +120,7 @@ const LegendItem = ({
     >
       <span
         className={cx(
-          "size-2 shrink-0 rounded-sm",
+          "size-3 shrink-0 rounded-sm",
           getColorClassName(color, "bg"),
           activeLegend && activeLegend !== name ? "opacity-40" : "opacity-100",
         )}
@@ -129,9 +129,9 @@ const LegendItem = ({
       <p
         className={cx(
           // base
-          "truncate whitespace-nowrap text-xs",
-          // text color
-          "text-gray-700 dark:text-gray-300",
+          "truncate whitespace-nowrap text-base",
+          // text color...Lo modifique, estaba en dark:text-gray-300"
+          "text-gray-700 dark:text-gray-900",
           hasOnValueChange &&
             "group-hover:text-gray-900 dark:group-hover:text-gray-50",
           activeLegend && activeLegend !== name ? "opacity-40" : "opacity-100",
@@ -692,9 +692,9 @@ const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
               stroke=""
               className={cx(
                 // base
-                "text-xs",
+                "text-base",
                 // text fill
-                "fill-gray-500 dark:fill-gray-500",
+                "fill-gray-500 dark:fill-gray-900",
                 { "mt-4": layout !== "vertical" },
               )}
               tickLine={false}

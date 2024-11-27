@@ -105,7 +105,7 @@ export function FeeTableSkeleton() {
 export function HistorialTableSkeleton() {
 
     return (
-        <div className="overflow-auto h-[500px]">
+        <div className="overflow-auto h-[450px] w-[1000px] border border-gray-300 rounded-md mt-3">
             <table className="table table-zebra text-lg table-pin-rows">
                 <thead className='text-lg'>
                     <tr>
@@ -261,23 +261,6 @@ export function StatsCardSkeleton() {
                                     <div className="skeleton h-10 w-36 border border-gray-300 rounded-md bg-gray-100"></div>
                                 </div>
                             </div>
-                            {/* <div className='flex flex-row items-center justify-between mt-4'>
-                                <label className="md:text-md md:font-medium text-gray-950" htmlFor="TipoVehiculo">Tipo Vehículo</label>
-                                <div className="relative rounded-md">
-                                    <div className="relative">
-                                        <select
-                                            id="TipoVehiculo"
-                                            name="TipoVehiculo"
-                                            className="peer block w-full cursor-pointer border rounded-md py-2 px-5 text-sm md:text-base border-gray-300 outline-2 placeholder:text-gray-500">
-                                            <option value="" disabled>Tipo Vehiculo</option>
-                                            <option>Automóvil</option>
-                                            <option>Camioneta</option>
-                                            <option>Motocicleta</option>
-                                            <option>Bicicleta</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                         <div className='flex flex-row-reverse mt-4'>
                             <button className="btn btn-neutral" disabled={true}>Consultar</button>

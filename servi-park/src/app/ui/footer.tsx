@@ -1,8 +1,9 @@
-import Image from "next/image";
 import ServiParkLogo from '@/app/ui/servipark-logo';
 import Clock from "@/app/ui/clock";
+import FooterStats from '@/app/ui/footerStats';
 
 export default function Footer() {
+
     return (
         <footer className="footer bg-base-100 items-center p-2 shadow-inner grid-flow-col">
             <aside className="grid-flow-col items-center">
@@ -12,22 +13,7 @@ export default function Footer() {
                 <Clock initialTime={new Date().toLocaleString()}/>
             </aside>
             <nav className="grid-flow-col md:place-self-center md:justify-self-end items-center">
-                <Image
-                    src="/car.png"
-                    className=" min-w-8"
-                    alt={`car`}
-                    width={52}
-                    height={36}
-                />
-                <p className="text-sm md:text-xl font-medium text-gray-900 mr-8">38</p>
-                <Image
-                    src="/motorcycle.png"
-                    className=" min-w-8"
-                    alt={`motorcycle`}
-                    width={36}
-                    height={36}
-                />
-                <p className="text-sm md:text-xl font-medium text-gray-900 mr-4 md:mr-16">15</p>
+                <FooterStats />
             </nav>
         </footer>
     );

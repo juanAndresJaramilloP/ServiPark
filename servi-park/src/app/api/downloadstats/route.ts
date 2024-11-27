@@ -19,20 +19,44 @@ export async function GET(request: Request) {
         SELECT 
         AVG(ocupacion_promedio) as ocupacion_promedio,
         AVG(tiempo_medio_duracion) as tiempo_medio_duracion,
-        AVG(rotacion_espacios_prom_dia) as rotacion_espacios_prom_dia,
-        AVG(porc_vehiculos_recurrentes) as porc_vehiculos_recurrentes
+        SUM(rotacion_espacios) as rotacion_espacios
         FROM analytics
         WHERE timestamp BETWEEN ${startDate} AND ${endDate}
         `;
 
-        if (!data || data.rows.length === 0 || data.rows[0]?.ocupacion_promedio === null || data.rows[0]?.tiempo_medio_duracion === null || data.rows[0]?.rotacion_espacios_prom_dia === null || data.rows[0]?.porc_vehiculos_recurrentes === null) {
+        if (!data || data.rows.length === 0 || data.rows[0]?.ocupacion_promedio === null || data.rows[0]?.tiempo_medio_duracion === null || data.rows[0]?.rotacion_espacios === null) {
             return NextResponse.json({ message: 'No se encontraron registros para el rango de fechas proporcionado.' }, { status: 404 });
         }
 
+        // Compute: porcentaje de vehiculos recurrentes:
+        const distinct_placas = await sql`
+        SELECT COUNT(*)
+        FROM (
+            SELECT placa
+            FROM events
+            WHERE fecha_hora_ingreso BETWEEN ${startDate} AND ${endDate}
+            GROUP BY placa
+            HAVING COUNT(*) = 1
+        ) AS distinct_placas;
+        `;
+
+        const total_events_in_range = await sql`
+        SELECT COUNT(*)
+        FROM events
+        WHERE fecha_hora_ingreso BETWEEN ${startDate} AND ${endDate}
+        `;
+
+        const porc_vehiculos_recurrentes: number = Number(distinct_placas.rows[0]?.count) / Number(total_events_in_range.rows[0]?.count) * 100;
+
+        const responseData: CardStats = {
+            ocupacion_promedio: data.rows[0].ocupacion_promedio,
+            tiempo_medio_duracion: data.rows[0].tiempo_medio_duracion,
+            rotacion_espacios: data.rows[0].rotacion_espacios,
+            porcentaje_vehiculos_recurrentes: porc_vehiculos_recurrentes ?? 0
+        };
 
         // Return the data from the query
-        console.log('Statistics data:', data.rows[0]);
-        return NextResponse.json(data.rows[0], { status: 200 });
+        return NextResponse.json(responseData, { status: 200 });
     } catch (error) {
         console.error('Error fetching statistics:', error);
         return NextResponse.json({ message: 'Ocurrió un error recuperando la información. Por favor inténtelo nuevamente' }, { status: 500 });

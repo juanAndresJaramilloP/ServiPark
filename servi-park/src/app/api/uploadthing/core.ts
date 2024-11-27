@@ -1,6 +1,10 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 // import { UploadThingError } from "uploadthing/server";
 
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
+
 const f = createUploadthing();
 
 // const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
@@ -18,12 +22,18 @@ export const ourFileRouter = {
     //   if (!user) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: "fakeId" }; //user.id
+
+      const session = await getServerSession(options);
+      if (!session) {
+          redirect('/api/auth/signin');
+      }
+
+      return { userId: session.user.id }; //user.id
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
-
+      
       console.log("file url", file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback

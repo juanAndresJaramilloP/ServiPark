@@ -1,22 +1,11 @@
 'use client'
 
 import Image from 'next/image';
-// import { useState } from 'react';
 import { UploadDropzone } from '@/utils/uploadthing';
 import "@uploadthing/react/styles.css";
 
 export default function Page() {
-    // const [files, setFiles] = useState<FileList | null>(null);
-
-    // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const files = e.target.files;
-    //     setFiles(files);
-    // }
-
-    // const isImageFile = (file: File) => {
-    //     return file && file['type'].split('/')[0] === 'image';
-    // }
-
+    
     return (
         <div className='flex justify-center'>
             <div className="flex flex-col items-center gap-16 max-h-screen overflow-auto place-content-center place-items-center">
@@ -47,35 +36,6 @@ export default function Page() {
                         <button className="btn btn-primary mt-10 rounded-lg">Registrar Incidente</button>
                     </div>
                     <div className='flex flex-col mt-2'>
-                        {/* <label className="form-control">
-                            <div className="label">
-                                <span className="label-text text-lg">Adjunta las imagenes del incidente</span>
-                            </div>
-                            <input type="file" className="file-input file-input-bordered w-full" onChange={handleFileChange} multiple />
-                        </label> */}
-                        {/* <div className="grid grid-cols-4 gap-4 overflow-y-auto">
-                            {
-                                files && Array.from(files).map((file, index) => {
-                                    return (
-                                        <div key={index}>
-                                            {
-                                                isImageFile(file) && (
-                                                    <figure>
-                                                        <Image
-                                                            src={URL.createObjectURL(file)}
-                                                            className="rounded-md"
-                                                            alt="Imagen del incidente"
-                                                            width={150}
-                                                            height={100}
-                                                        />
-                                                    </figure>
-                                                )
-                                            }
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div> */}
                         <p className='text-lg font-medium'> Adjunta evidencia fotográfica del incidente</p>
                         <UploadDropzone
                             endpoint="imageUploader"
