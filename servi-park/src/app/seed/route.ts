@@ -1,9 +1,9 @@
-import { db } from '@vercel/postgres';
-import { users, events, incidents, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
-import { PaymentCard, Transaction, Incident } from '../lib/definitions';
-import bcrypt from "bcrypt";
+// import { db } from '@vercel/postgres';
+// import { users, events, incidents, parkingFees, blackPlates, incidentPlate, serviPark, stats } from '../lib/placeholder-data';
+// import { PaymentCard, Transaction, Incident } from '../lib/definitions';
+// import bcrypt from "bcrypt";
 
-const client = await db.connect();
+// const client = await db.connect();
 
 /**
  * Hay un orden para crear las tablas (revisar esquema de la base de datos en la carpeta docs)
@@ -41,27 +41,27 @@ const client = await db.connect();
 
 // }
 
-async function createTableEvents() {
-  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-  await client.sql`
-    CREATE TABLE IF NOT EXISTS events (
-      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-      user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
-      transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
-      tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
-      placa TEXT NOT NULL,
-      fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      duracion INTERVAL,
-      valor_base NUMERIC,
-      iva NUMERIC,
-      total NUMERIC,
-      tipo_vehiculo TEXT NOT NULL,
-      tiquete_perdido BOOLEAN DEFAULT FALSE
-    );
-  `;
+// async function createTableEvents() {
+//   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+//   await client.sql`
+//     CREATE TABLE IF NOT EXISTS events (
+//       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+//       user_id UUID REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       tarifa_id UUID REFERENCES parking_fee(id) ON DELETE SET NULL ON UPDATE CASCADE,
+//       placa TEXT NOT NULL,
+//       fecha_hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//       fecha_hora_salida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//       duracion INTERVAL,
+//       valor_base NUMERIC,
+//       iva NUMERIC,
+//       total NUMERIC,
+//       tipo_vehiculo TEXT NOT NULL,
+//       tiquete_perdido BOOLEAN DEFAULT FALSE
+//     );
+//   `;
 
-}
+// }
 
 // async function createTableIncidents() {
 //   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -388,18 +388,18 @@ async function createTableEvents() {
 // }
 
 export async function GET() {
-  // return Response.json({
-  //   message:
-  //     'Uncomment this file and remove this line to seed the db.',
-  // });
-  try {
-    await client.sql`BEGIN`;
-    await createTableEvents();
-    await client.sql`COMMIT`;
+  return Response.json({
+    message:
+      'Uncomment this file and remove this line to seed the db.',
+  });
+  // try {
+  //   await client.sql`BEGIN`;
+  //   await createTableEvents();
+  //   await client.sql`COMMIT`;
 
-    return Response.json({ message: 'Success' });
-  } catch (error) {
-    await client.sql`ROLLBACK`;
-    return Response.json({ error }, { status: 500 });
-  }
+  //   return Response.json({ message: 'Success' });
+  // } catch (error) {
+  //   await client.sql`ROLLBACK`;
+  //   return Response.json({ error }, { status: 500 });
+  // }
 }

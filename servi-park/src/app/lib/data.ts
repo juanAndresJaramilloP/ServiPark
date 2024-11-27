@@ -1,7 +1,7 @@
 'use server';
 
 import { sql } from '@vercel/postgres';
-import { Event, Incident, User, ParkingFee, ParkingFeeField, CardStats, InvoiceEvent, InvoiceDataState, InvoiceData, AppContext } from './definitions';
+import { Event, Incident, User, ParkingFee, ParkingFeeField, InvoiceEvent, InvoiceDataState, InvoiceData, AppContext } from './definitions';
 import { formatPostgresInterval } from '@/app/lib/utils';
 import { formatCurrency, formatTimestampToLocale, getCurrentLocalTimestampDate, calculateValueToPay } from '@/app/lib/utils';
 import { z } from 'zod';
