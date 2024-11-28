@@ -1,7 +1,7 @@
 # ServiPark
 
 
-## Instrucciones de ejecucion local
+## Instrucciones de ejecución local
 
 -  Clonar el repositorio en su máquina.
 -  Abrir el repo en su editor de preferencia y en la raiz del proyecto abrir una pestaña del terminal y ejecutar *npm install*.
